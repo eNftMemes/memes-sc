@@ -4,12 +4,6 @@ version = 3
 
 [[package]]
 name = "ahash"
-version = "0.4.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "739f4a8db6605981345c5654f3a85b056ce52f37a39d34da03f25bf2151ea16e"
-
-[[package]]
-name = "ahash"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "43bb833f0bf979d8475d38fbf09ed3b8a55e1885fe93ad3f93239fc6a4f17b98"
@@ -45,36 +39,13 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "elrond-codec"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1288631b4a787425de1a7086c772a4ff5ebc3ed490e528996965d9d8f077b53b"
-dependencies = [
- "arrayvec 0.5.2",
- "elrond-codec-derive 0.4.2",
- "wee_alloc",
-]
-
-[[package]]
-name = "elrond-codec"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2525cc5f69991e57ee79d5418df845b14b7001d00125e9aab8d9f817ae71e728"
 dependencies = [
  "arrayvec 0.5.2",
- "elrond-codec-derive 0.5.3",
+ "elrond-codec-derive",
  "wee_alloc",
-]
-
-[[package]]
-name = "elrond-codec-derive"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8201a62391a4c28e9ae80ed50c615e7768b26b54f1350e789054136f893c19ee"
-dependencies = [
- "hex",
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -91,25 +62,13 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm"
-version = "0.10.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2546b45ab266a42f722bd20f56b0f5e21fc55918da65385416d9fe13868128aa"
-dependencies = [
- "arrayvec 0.5.2",
- "elrond-codec 0.4.2",
- "hashbrown 0.9.1",
- "wee_alloc",
-]
-
-[[package]]
-name = "elrond-wasm"
 version = "0.17.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf94e8b9745c07e1943ecae990888e20f02ea02b407e386f01af24408e585426"
 dependencies = [
  "arrayvec 0.7.1",
- "elrond-codec 0.5.3",
- "hashbrown 0.11.2",
+ "elrond-codec",
+ "hashbrown",
  "hex-literal",
  "wee_alloc",
 ]
@@ -128,29 +87,20 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm-node"
-version = "0.10.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98af6b29c75debb63483a7cc368ab447e6c186778b17c7fb2359feeb471b5390"
-dependencies = [
- "elrond-wasm 0.10.5",
-]
-
-[[package]]
-name = "elrond-wasm-node"
 version = "0.17.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "67458504e3803d1fdc3607c0bb717aafb1b972b11196249299650fe3953902f5"
 dependencies = [
- "elrond-wasm 0.17.3",
+ "elrond-wasm",
 ]
 
 [[package]]
 name = "elrond-wasm-output"
-version = "0.10.5"
+version = "0.17.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "546cb9698275acb334cd88d123ba74023ae00ec9a525de94236f34b6e00c2d6f"
+checksum = "1d0791918450b52980b79ddeb5ff73201d44eedcd14e51ec0e3a8e0e3d945c42"
 dependencies = [
- "elrond-wasm-node 0.10.5",
+ "elrond-wasm-node",
  "wee_alloc",
 ]
 
@@ -167,20 +117,11 @@ dependencies = [
 
 [[package]]
 name = "hashbrown"
-version = "0.9.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
-dependencies = [
- "ahash 0.4.7",
-]
-
-[[package]]
-name = "hashbrown"
 version = "0.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab5ef0d4909ef3724cc8cce6ccc8572c5c817592e9285f5464f8e86f8bd3726e"
 dependencies = [
- "ahash 0.7.4",
+ "ahash",
 ]
 
 [[package]]
@@ -205,9 +146,9 @@ checksum = "12b8adadd720df158f4d70dfe7ccc6adb0472d7c55ca83445f6a5ab3e36f8fb6"
 name = "memes-creator"
 version = "0.0.1"
 dependencies = [
- "elrond-wasm 0.17.3",
+ "elrond-wasm",
  "elrond-wasm-derive",
- "elrond-wasm-node 0.17.3",
+ "elrond-wasm-node",
 ]
 
 [[package]]
