@@ -16,7 +16,6 @@ pub trait Crowdfunding {
 	#[init]
     fn init(&self, target: Self::BigUint, deadline: u64) {
         // let my_address: Address = self.blockchain().get_caller();
-        // self.set_owner(&my_address);
         // self.blockchain().get_owner_address(),
         self.set_target(target);
         self.set_deadline(deadline);

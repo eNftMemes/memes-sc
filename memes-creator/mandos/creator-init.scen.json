@@ -14,7 +14,7 @@
         {
           "creatorAddress": "address:my_address",
           "creatorNonce": "0",
-          "newAddress": "address:the_creator_contract"
+          "newAddress": "sc:the_creator_contract"
         }
       ]
     },
@@ -26,7 +26,7 @@
         "contractCode": "file:../output/memes-creator.wasm",
         "value": "0",
         "arguments": [],
-        "gasLimit": "1,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -43,7 +43,7 @@
           "balance": "1,000,000",
           "storage": {}
         },
-        "address:the_creator_contract": {
+        "sc:the_creator_contract": {
           "nonce": "0",
           "balance": "0",
           "storage": {},

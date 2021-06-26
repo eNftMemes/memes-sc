@@ -8,11 +8,6 @@ publish = false
 [lib]
 crate-type = [ "cdylib",]
 
-[workspace]
-members = [ ".",]
-
-[dev-dependencies]
-
 [profile.release]
 codegen-units = 1
 opt-level = "z"
@@ -28,3 +23,6 @@ path = ".."
 [dependencies.elrond-wasm-output]
 version = "0.17.2"
 features = [ "wasm-output-mode",]
+
+[workspace]
+members = [ ".",]
