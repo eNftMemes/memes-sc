@@ -1,0 +1,164 @@
+{
+  "name": "creator create meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "creator-init.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-1",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:creator_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name",
+          "str:nft-create-uri"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": ["0x01"],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "creator": "sc:creator_contract",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:addressLastMemeTime|address:my_address": "123,000"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-2",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:creator_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name2",
+          "str:nft-create-uri2"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": ["0x02"],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "creator": "sc:creator_contract",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:addressLastMemeTime|address:my_address": "123,000",
+            "str:addressLastMemeTime|address:other_address": "123,000"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [
+                {
+                  "nonce": "2",
+                  "balance": "1",
+                  "creator": "sc:creator_contract",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "",
+                  "uri": [
+                    "str:nft-create-uri2"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    }
+  ]
+}

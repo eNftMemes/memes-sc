@@ -1,0 +1,172 @@
+{
+  "name": "creator create meme error",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "creator-init.json"
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
+          "storage": {
+            "str:addressLastMemeTime|address:my_address": "123,000"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        }
+      },
+      "currentBlockInfo": {
+        "blockTimestamp": "123,600"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-error",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:creator_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name",
+          "str:nft-create-uri"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Address already created a meme in the last 10 minutes",
+        "out": [],
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:addressLastMemeTime|address:my_address": "123,000"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "123,601"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-1",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:creator_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name",
+          "str:nft-create-uri"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": ["0x01"],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "creator": "sc:creator_contract",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:addressLastMemeTime|address:my_address": "123,601"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    }
+  ]
+}

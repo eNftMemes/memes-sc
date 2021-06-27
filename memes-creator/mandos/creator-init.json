@@ -1,0 +1,54 @@
+{
+  "name": "creator deployment test",
+  "steps": [
+    {
+      "step": "setState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
+          "storage": {},
+          "code": "file:../output/memes-creator.wasm"
+        }
+      },
+      "currentBlockInfo": {
+        "blockTimestamp": "123,000"
+      }
+    }
+  ]
+}

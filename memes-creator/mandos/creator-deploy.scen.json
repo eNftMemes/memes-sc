@@ -14,7 +14,7 @@
         {
           "creatorAddress": "address:my_address",
           "creatorNonce": "0",
-          "newAddress": "sc:the_creator_contract"
+          "newAddress": "sc:creator_contract"
         }
       ]
     },
@@ -43,7 +43,7 @@
           "balance": "1,000,000",
           "storage": {}
         },
-        "sc:the_creator_contract": {
+        "sc:creator_contract": {
           "nonce": "0",
           "balance": "0",
           "storage": {},
