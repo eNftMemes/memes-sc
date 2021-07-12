@@ -1,0 +1,109 @@
+{
+  "name": "voting add meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "voting-add_meme_alter_period.scen.json"
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodLength",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_len",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["2"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMeme",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_meme",
+        "arguments": ["1"]
+      },
+      "expect": {
+        "out": [
+          "address:my_address|u64:2|u64:727,800|u8:0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMeme",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_meme",
+        "arguments": ["2"]
+      },
+      "expect": {
+        "out": [
+          "address:creator_contract|u64:3|u64:728,800|u8:0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "periodLength",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "period_len",
+        "arguments": ["123,000"]
+      },
+      "expect": {
+        "out": ["1"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "periodMeme",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "period_meme",
+        "arguments": [
+          "123,000",
+          "1"
+        ]
+      },
+      "expect": {
+        "out": [
+          "address:my_address|u64:1|u64:122,000|u8:0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriod",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["727,800"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "periods",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "periods",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["123,000", "727,800"],
+        "status": "0"
+      }
+    }
+  ]
+}

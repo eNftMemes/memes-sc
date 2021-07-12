@@ -1,0 +1,58 @@
+{
+  "name": "voting add meme creator error",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "voting-deploy.scen.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-1",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "1",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Only creator contract can call this",
+        "out": [],
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes.len": "0"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    }
+  ]
+}

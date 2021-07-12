@@ -1,0 +1,57 @@
+{
+  "name": "voting add meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "voting-deploy.scen.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-1",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "1",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:creator_contract": {
+          "nonce": "1",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "address:my_address|u64:1|u64:122,000|u8:0"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    }
+  ]
+}

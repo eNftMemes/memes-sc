@@ -1,5 +1,5 @@
 {
-  "name": "creator deployment test",
+  "name": "creator claim",
   "steps": [
     {
       "step": "setState",
@@ -43,6 +43,7 @@
             }
           },
           "storage": {},
+          "owner": "address:my_address",
           "code": "file:../output/memes-creator.wasm"
         }
       },

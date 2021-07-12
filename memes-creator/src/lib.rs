@@ -14,6 +14,7 @@ pub trait MemesCreator {
 
 	#[endpoint]
 	fn create_meme(&self, name: BoxedBytes, url: BoxedBytes) -> SCResult<()> {
+		// TODO: Add category
 		let address: Address = self.blockchain().get_caller();
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
 		let address_meme_time: SingleValueMapper<Self::Storage, u64> = self.address_last_meme_time(&address);
@@ -48,4 +49,16 @@ pub trait MemesCreator {
 	#[view]
 	#[storage_mapper("addressLastMemeTime")]
 	fn address_last_meme_time(&self, address: &Address) -> SingleValueMapper<Self::Storage, u64>;
+
+	// Always needed
+	#[endpoint]
+	fn claim(&self) -> SCResult<()> {
+		let caller = self.blockchain().get_caller();
+		require!(
+			caller == self.blockchain().get_owner_address(),
+			"only owner can claim"
+		);
+		self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(), b"claiming success");
+		Ok(())
+	}
 }

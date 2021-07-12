@@ -1,0 +1,93 @@
+{
+  "name": "creator create meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "creator-init.json"
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "1",
+          "owner": "address:my_address",
+          "code": "file:../output/memes-creator.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "claim-1",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:creator_contract",
+        "function": "claim",
+        "arguments": [],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "gas": "*",
+        "refund": "*",
+        "message": "str:only owner can claim"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "0",
+          "balance": "1,000,000"
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "1",
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "claim-2",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:creator_contract",
+        "function": "claim",
+        "arguments": [],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,001"
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        }
+      }
+    }
+  ]
+}

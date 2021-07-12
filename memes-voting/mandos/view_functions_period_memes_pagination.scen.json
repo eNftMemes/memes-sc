@@ -1,0 +1,374 @@
+{
+  "name": "voting add meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "voting-add_meme_alter_period.scen.json"
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "730,000"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-4",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "4",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-5",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "5",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-6",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "6",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-7",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "7",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-8",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "8",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-9",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "9",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-10",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "10",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodLength",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_len",
+        "arguments": []
+      },
+      "expect": {
+        "out": [
+          "9"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["0"]
+      },
+      "expect": {
+        "out": [
+          "address:my_address|u64:10|u64:730,000|u8:0",
+          "address:my_address|u64:9|u64:730,000|u8:0",
+          "address:my_address|u64:8|u64:730,000|u8:0",
+          "address:my_address|u64:7|u64:730,000|u8:0",
+          "address:my_address|u64:6|u64:730,000|u8:0",
+          "address:my_address|u64:5|u64:730,000|u8:0",
+          "address:my_address|u64:4|u64:730,000|u8:0",
+          "address:creator_contract|u64:3|u64:728,800|u8:0",
+          "address:my_address|u64:2|u64:727,800|u8:0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["1"]
+      },
+      "expect": {
+        "out": [],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-11",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "11",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodLength",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_len",
+        "arguments": []
+      },
+      "expect": {
+        "out": [
+          "10"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["0"]
+      },
+      "expect": {
+        "out": [
+          "address:my_address|u64:11|u64:730,000|u8:0",
+          "address:my_address|u64:10|u64:730,000|u8:0",
+          "address:my_address|u64:9|u64:730,000|u8:0",
+          "address:my_address|u64:8|u64:730,000|u8:0",
+          "address:my_address|u64:7|u64:730,000|u8:0",
+          "address:my_address|u64:6|u64:730,000|u8:0",
+          "address:my_address|u64:5|u64:730,000|u8:0",
+          "address:my_address|u64:4|u64:730,000|u8:0",
+          "address:creator_contract|u64:3|u64:728,800|u8:0",
+          "address:my_address|u64:2|u64:727,800|u8:0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["1"]
+      },
+      "expect": {
+        "out": [],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "add-meme-12",
+      "tx": {
+        "from": "address:creator_contract",
+        "to": "sc:voting_contract",
+        "function": "add_meme",
+        "arguments": [
+          "address:my_address",
+          "12",
+          "0"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodLength",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_len",
+        "arguments": []
+      },
+      "expect": {
+        "out": [
+          "11"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["0"]
+      },
+      "expect": {
+        "out": [
+          "address:my_address|u64:12|u64:730,000|u8:0",
+          "address:my_address|u64:11|u64:730,000|u8:0",
+          "address:my_address|u64:10|u64:730,000|u8:0",
+          "address:my_address|u64:9|u64:730,000|u8:0",
+          "address:my_address|u64:8|u64:730,000|u8:0",
+          "address:my_address|u64:7|u64:730,000|u8:0",
+          "address:my_address|u64:6|u64:730,000|u8:0",
+          "address:my_address|u64:5|u64:730,000|u8:0",
+          "address:my_address|u64:4|u64:730,000|u8:0",
+          "address:creator_contract|u64:3|u64:728,800|u8:0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["1"]
+      },
+      "expect": {
+        "out": [
+          "address:my_address|u64:2|u64:727,800|u8:0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["2"]
+      },
+      "expect": {
+        "out": [],
+        "status": "0"
+      }
+    }
+  ]
+}
