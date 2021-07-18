@@ -14,7 +14,8 @@
         "function": "create_meme",
         "arguments": [
           "str:nft-name",
-          "str:nft-create-uri"
+          "str:nft-create-uri",
+          "u8:1"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -41,7 +42,7 @@
                   "creator": "sc:creator_contract",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "",
+                  "attributes": "u8:1",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -57,7 +58,12 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:addressLastMemeTime|address:my_address": "123,000"
+            "str:votingSc": "address:voting_contract",
+            "str:categories|u8:1": "str:funny",
+            "str:categories|u8:2": "str:random",
+            "str:addressLastMemeTime|address:my_address": "123,000",
+            "str:addressMemes|address:my_address|``.len": "1",
+            "str:addressMemes|address:my_address|``.item|u32:1": "1"
           },
           "code": "file:../output/memes-creator.wasm"
         },
@@ -85,7 +91,8 @@
         "function": "create_meme",
         "arguments": [
           "str:nft-name2",
-          "str:nft-create-uri2"
+          "str:nft-create-uri2",
+          "u8:2"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -112,7 +119,7 @@
                   "creator": "sc:creator_contract",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "",
+                  "attributes": "u8:1",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -128,8 +135,15 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:categories|u8:1": "str:funny",
+            "str:categories|u8:2": "str:random",
             "str:addressLastMemeTime|address:my_address": "123,000",
-            "str:addressLastMemeTime|address:other_address": "123,000"
+            "str:addressLastMemeTime|address:other_address": "123,000",
+            "str:addressMemes|address:my_address|``.len": "1",
+            "str:addressMemes|address:my_address|``.item|u32:1": "1",
+            "str:addressMemes|address:other_address|``.len": "1",
+            "str:addressMemes|address:other_address|``.item|u32:1": "2"
           },
           "code": "file:../output/memes-creator.wasm"
         },
@@ -145,7 +159,7 @@
                   "creator": "sc:creator_contract",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "",
+                  "attributes": "u8:2",
                   "uri": [
                     "str:nft-create-uri2"
                   ]

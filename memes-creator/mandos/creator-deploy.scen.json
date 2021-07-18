@@ -8,6 +8,16 @@
           "nonce": "0",
           "balance": "1,000,000",
           "storage": {}
+        },
+        "address:other_address" : {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
         }
       },
       "newAddresses": [
@@ -43,11 +53,117 @@
           "balance": "1,000,000",
           "storage": {}
         },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
         "sc:creator_contract": {
           "nonce": "0",
           "balance": "0",
           "storage": {},
           "code": "file:../output/memes-creator.wasm"
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-voting-sc",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:creator_contract",
+        "function": "set_voting_sc",
+        "arguments": [
+          "address:voting_contract"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": [],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-voting-sc-error",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:creator_contract",
+        "function": "set_voting_sc",
+        "arguments": [
+          "address:voting_contract"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:only owner can call this",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
         }
       }
     }

@@ -6,53 +6,84 @@
       "path": "creator-init.json"
     },
     {
-      "step": "setState",
-      "accounts": {
-        "sc:creator_contract": {
-          "nonce": "0",
-          "balance": "0",
-          "esdt": {
-            "str:TRIPA-bb7f5c": {
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0",
-              "roles": [
-                "ESDTRoleNFTCreate"
-              ]
-            }
-          },
-          "storage": {
-            "str:votingSc": "address:voting_contract",
-            "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
-            "str:addressLastMemeTime|address:my_address": "123,000"
-          },
-          "code": "file:../output/memes-creator.wasm"
-        }
-      },
-      "currentBlockInfo": {
-        "blockTimestamp": "123,600"
-      }
-    },
-    {
       "step": "scCall",
-      "txId": "create-meme-error",
+      "txId": "modify-categories-error",
       "tx": {
-        "from": "address:my_address",
+        "from": "address:other_address",
         "to": "sc:creator_contract",
-        "function": "create_meme",
+        "function": "modify_categories",
         "arguments": [
-          "str:nft-name",
-          "str:nft-create-uri",
-          "1"
+          "u8:1",
+          "str:funny"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {
-        "message": "str:Address already created a meme in the last 10 minutes",
+        "message": "str:only owner can call this",
         "out": [],
         "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:categories|u8:1": "str:funny",
+            "str:categories|u8:2": "str:random"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "modify-categories-add",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:creator_contract",
+        "function": "modify_categories",
+        "arguments": [
+          "u8:3",
+          "str:other"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": [],
+        "status": "0",
         "gas": "*",
         "refund": "*"
       }
@@ -79,12 +110,12 @@
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
             "str:categories|u8:2": "str:random",
-            "str:addressLastMemeTime|address:my_address": "123,000"
+            "str:categories|u8:3": "str:other"
           },
           "code": "file:../output/memes-creator.wasm"
         },
         "address:other_address": {
-          "nonce": "0",
+          "nonce": "1",
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPA-bb7f5c": {
@@ -99,28 +130,21 @@
       }
     },
     {
-      "step": "setState",
-      "currentBlockInfo": {
-        "blockTimestamp": "123,601"
-      }
-    },
-    {
       "step": "scCall",
-      "txId": "create-meme-1",
+      "txId": "modify-categories-remove",
       "tx": {
         "from": "address:my_address",
         "to": "sc:creator_contract",
-        "function": "create_meme",
+        "function": "modify_categories",
         "arguments": [
-          "str:nft-name",
-          "str:nft-create-uri",
-          "u8:1"
+          "u8:3",
+          "str:other"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {
-        "out": ["0x01"],
+        "out": [],
         "status": "0",
         "gas": "*",
         "refund": "*"
@@ -134,19 +158,7 @@
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPA-bb7f5c": {
-              "instances": [
-                {
-                  "nonce": "1",
-                  "balance": "1",
-                  "creator": "sc:creator_contract",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u8:1",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                }
-              ],
+              "instances": [],
               "nonce": "0",
               "balance": "0",
               "lastNonce": "0"
@@ -159,15 +171,75 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
-            "str:addressLastMemeTime|address:my_address": "123,601",
-            "str:addressMemes|address:my_address|``.len": "1",
-            "str:addressMemes|address:my_address|``.item|u32:1": "1"
+            "str:categories|u8:2": "str:random"
           },
           "code": "file:../output/memes-creator.wasm"
         },
         "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-error",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:creator_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name",
+          "str:nft-create-uri",
+          "3"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Category does not exist",
+        "out": [],
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "3",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:creator_contract": {
           "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:categories|u8:1": "str:funny",
+            "str:categories|u8:2": "str:random"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:other_address": {
+          "nonce": "1",
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPA-bb7f5c": {

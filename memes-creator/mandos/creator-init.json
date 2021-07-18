@@ -42,7 +42,11 @@
               ]
             }
           },
-          "storage": {},
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:categories|u8:1": "str:funny",
+            "str:categories|u8:2": "str:random"
+          },
           "owner": "address:my_address",
           "code": "file:../output/memes-creator.wasm"
         }
