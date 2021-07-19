@@ -25,7 +25,7 @@ pub trait MemesCreator {
 	fn init(&self) {}
 
 	#[endpoint]
-	fn create_meme(&self, name: BoxedBytes, url: BoxedBytes, category: &u8) -> SCResult<()> {
+	fn create_meme(&self, name: BoxedBytes, url: BoxedBytes, category: &u8) -> SCResult<AsyncCall<Self::SendApi>> {
 		let address: Address = self.blockchain().get_caller();
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
 		let address_meme_time: SingleValueMapper<Self::Storage, u64> = self.address_last_meme_time(&address);
@@ -42,9 +42,8 @@ pub trait MemesCreator {
 
 		self.address_last_meme_time(&address).set(&block_timestamp);
 
-		self.create_meme_nft(&address, &name, &[url], *category);
-
-		Ok(())
+		// TODO: Check if async call works correctly
+		Ok(self.create_meme_nft(&address, &name, &[url], *category))
 	}
 
 	#[endpoint]
@@ -64,7 +63,7 @@ pub trait MemesCreator {
 		Ok(())
 	}
 
-	fn create_meme_nft(&self, address: &Address, name: &BoxedBytes, urls: &[BoxedBytes], category: u8) {
+	fn create_meme_nft(&self, address: &Address, name: &BoxedBytes, urls: &[BoxedBytes], category: u8) -> AsyncCall<Self::SendApi> {
 		let amount: &Self::BigUint = &Self::BigUint::from(NFT_AMOUNT);
 		let royalties: &Self::BigUint = &Self::BigUint::from(NFT_ROYALTIES);
 
@@ -79,15 +78,13 @@ pub trait MemesCreator {
 		self.send().direct_nft(address, &nft_token, nonce, amount, &[]);
 		self.address_memes(address).push(&nonce);
 
-		self.voting_sc_add_meme(nonce, category);
+		return self.voting_sc_add_meme(nonce, category);
 	}
 
-	// Ignore AsyncCall result
-	#[allow(unused_must_use)]
-	fn voting_sc_add_meme(&self, nft_nonce: u64, _category: u8) {
+	fn voting_sc_add_meme(&self, nft_nonce: u64, _category: u8) -> AsyncCall<Self::SendApi> {
 		let owner: Address = self.blockchain().get_caller();
 
-		self.voting_proxy(self.voting_sc().get())
+		return self.voting_proxy(self.voting_sc().get())
 			.add_meme(owner, nft_nonce, _category)
 			.async_call();
 	}
@@ -121,9 +118,9 @@ pub trait MemesCreator {
 	#[storage_mapper("addressLastMemeTime")]
 	fn address_last_meme_time(&self, address: &Address) -> SingleValueMapper<Self::Storage, u64>;
 
-	// #[view]
-	// #[storage_get("categories")]
-	// fn all_categories(&self) -> MapMapper<Self::Storage, u8, BoxedBytes>;
+	// TODO: Add view for this.
+	#[storage_mapper("categories")]
+	fn get_all_categories(&self) -> MapMapper<Self::Storage, u8, BoxedBytes>;
 
 	#[view]
 	#[storage_mapper("categories")]

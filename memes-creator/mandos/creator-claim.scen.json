@@ -37,6 +37,11 @@
     {
       "step": "checkState",
       "accounts": {
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
         "address:my_address": {
           "nonce": "0",
           "balance": "1,000,000"
@@ -73,6 +78,11 @@
     {
       "step": "checkState",
       "accounts": {
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
         "address:my_address": {
           "nonce": "1",
           "balance": "1,000,001"
