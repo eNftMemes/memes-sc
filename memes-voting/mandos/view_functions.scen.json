@@ -20,7 +20,7 @@
     },
     {
       "step": "scQuery",
-      "txId": "currentPeriodMeme",
+      "txId": "currentPeriodMemeFirst",
       "tx": {
         "to": "sc:voting_contract",
         "function": "current_period_meme",
@@ -35,7 +35,7 @@
     },
     {
       "step": "scQuery",
-      "txId": "currentPeriodMeme",
+      "txId": "currentPeriodMemeSecond",
       "tx": {
         "to": "sc:voting_contract",
         "function": "current_period_meme",

@@ -49,6 +49,29 @@ pub trait MemesVoting {
 		}
 	}
 
+	#[endpoint]
+	fn vote_memes(&self, nft_nonces: &[u64]) -> SCResult<()> {
+		// let caller: Address = self.blockchain().get_caller();
+		// require!(
+		// 	TODO: Add condition,
+		// 	"Not enough votes left currently"
+		// );
+
+		for nonce in nft_nonces {
+			let current_votes: SingleValueMapper<Self::Storage, u32> = self.meme_votes(*nonce);
+
+			let mut votes = 0;
+			if !current_votes.is_empty() {
+				votes = current_votes.get();
+			}
+
+			votes += 1;
+			current_votes.set(&votes);
+		}
+
+		Ok(())
+	}
+
 	#[view]
 	fn current_period_len(&self) -> usize {
 		return self.period_len(self.current_period());
@@ -107,6 +130,14 @@ pub trait MemesVoting {
 	#[view]
 	#[storage_mapper("periods")]
 	fn periods(&self) -> VecMapper<Self::Storage, u64>;
+
+	#[view]
+	#[storage_mapper("memeVotes")]
+	fn meme_votes(&self, nft_nonce: u64) -> SingleValueMapper<Self::Storage, u32>;
+
+	#[view]
+	#[storage_mapper("periodTopMemes")]
+	fn period_top_memes(&self, period: u64) -> VecMapper<Self::Storage, (Meme, u32)>;
 
 	#[storage_mapper("creatorContract")]
 	fn creator_contract(&self) -> SingleValueMapper<Self::Storage, Address>;

@@ -1,0 +1,79 @@
+{
+  "name": "creator create meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "creator-init.json"
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:TRIPA-bb7f5c": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:categories|u8:1": "str:funny",
+            "str:categories|u8:2": "str:random",
+            "str:addressLastMemeTime|address:my_address": "123,000",
+            "str:addressMemes|address:my_address|``.len": "1",
+            "str:addressMemes|address:my_address|``.item|u32:1": "1"
+          },
+          "code": "file:../output/memes-creator.wasm"
+        }
+      },
+      "currentBlockInfo": {
+        "blockTimestamp": "123,600"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "addressMemesLength",
+      "tx": {
+        "to": "sc:creator_contract",
+        "function": "address_memes_len",
+        "arguments": ["address:my_address"]
+      },
+      "expect": {
+        "out": ["1"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "addressMemes",
+      "tx": {
+        "to": "sc:creator_contract",
+        "function": "address_memes_latest",
+        "arguments": ["address:my_address", "0"]
+      },
+      "expect": {
+        "out": ["1"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "addressMemes",
+      "tx": {
+        "to": "sc:creator_contract",
+        "function": "address_memes_latest",
+        "arguments": ["address:my_address", "1"]
+      },
+      "expect": {
+        "out": [],
+        "status": "0"
+      }
+    }
+  ]
+}

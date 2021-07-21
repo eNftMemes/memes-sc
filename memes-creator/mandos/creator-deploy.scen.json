@@ -36,7 +36,7 @@
         "contractCode": "file:../output/memes-creator.wasm",
         "value": "0",
         "arguments": [],
-        "gasLimit": "5,000,000",
+        "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {

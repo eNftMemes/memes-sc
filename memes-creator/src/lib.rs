@@ -8,6 +8,7 @@ const TRIPA_NFT: &[u8] = "TRIPA-bb7f5c".as_bytes();
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
 const NFT_AMOUNT: u32 = 1;
 const NFT_ROYALTIES: u32 = 500;
+const PER_PAGE: usize = 10;
 
 mod voting_proxy {
 	elrond_wasm::imports!();
@@ -48,11 +49,7 @@ pub trait MemesCreator {
 
 	#[endpoint]
 	fn modify_categories(&self, category: &u8, name: &BoxedBytes) -> SCResult<()> {
-		let caller = self.blockchain().get_caller();
-		require!(
-			caller == self.blockchain().get_owner_address(),
-			"only owner can call this"
-		);
+		self.require_permissions()?;
 
 		if self.categories(category).is_empty() {
 			self.categories(category).set(name);
@@ -94,20 +91,44 @@ pub trait MemesCreator {
 
 	#[endpoint]
 	fn set_voting_sc(&self, sc: &Address) -> SCResult<()> {
-		let caller = self.blockchain().get_caller();
-		require!(
-			caller == self.blockchain().get_owner_address(),
-			"only owner can call this"
-		);
+		self.require_permissions()?;
 
 		self.voting_sc().set(sc);
 
 		Ok(())
 	}
 
+	fn require_permissions(&self) -> SCResult<()> {
+		let caller = self.blockchain().get_caller();
+		require!(
+			caller == self.blockchain().get_owner_address(),
+			"only owner can call this"
+		);
+		Ok(())
+	}
+
 	#[view]
 	fn address_memes_len(&self, address: &Address) -> usize {
 		return self.address_memes(address).len();
+	}
+
+	#[view]
+	fn address_memes_latest(&self, address: &Address, page: usize) -> MultiResultVec<u64> {
+		let len = self.address_memes(address).len();
+
+		if len <= page * PER_PAGE {
+			return MultiResultVec::new();
+		}
+
+		let last_index = len - page * PER_PAGE;
+		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
+
+		let mut result: Vec<u64> = Vec::with_capacity(last_index - first_index + 1);
+		for index in (first_index..=last_index).rev() {
+			result.push(self.address_memes(address).get(index));
+		}
+
+		return MultiResultVec::<u64>::from(result);
 	}
 
 	#[view]
@@ -118,26 +139,20 @@ pub trait MemesCreator {
 	#[storage_mapper("addressLastMemeTime")]
 	fn address_last_meme_time(&self, address: &Address) -> SingleValueMapper<Self::Storage, u64>;
 
-	// TODO: Add view for this.
-	#[storage_mapper("categories")]
-	fn get_all_categories(&self) -> MapMapper<Self::Storage, u8, BoxedBytes>;
+	#[view]
+	#[storage_mapper("votingSc")]
+	fn voting_sc(&self) -> SingleValueMapper<Self::Storage, Address>;
 
 	#[view]
 	#[storage_mapper("categories")]
 	fn categories(&self, category: &u8) -> SingleValueMapper<Self::Storage, BoxedBytes>;
 
-	#[view]
-	#[storage_mapper("votingSc")]
-	fn voting_sc(&self) -> SingleValueMapper<Self::Storage, Address>;
-
 	// Always needed
 	#[endpoint]
 	fn claim(&self) -> SCResult<()> {
+		self.require_permissions()?;
+
 		let caller = self.blockchain().get_caller();
-		require!(
-			caller == self.blockchain().get_owner_address(),
-			"only owner can claim"
-		);
 		self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(), b"claiming success");
 		Ok(())
 	}
