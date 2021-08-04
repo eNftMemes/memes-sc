@@ -1,0 +1,223 @@
+{
+  "name": "voting add meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "voting-vote_memes.scen.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "vote-memes-4",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          ["u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1"]
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "4",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:creator_contract": {
+          "nonce": "3",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "2",
+            "str:periods.item|u32:1": "123,000",
+            "str:periods.item|u32:2": "727,800",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "address:my_address|u64:1|u64:122,000|u8:0",
+            "str:periodMemes|u64:727,800|``.len": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:1": "address:my_address|u64:2|u64:727,800|u8:0",
+            "str:periodMemes|u64:727,800|``.item|u32:2": "address:creator_contract|u64:3|u64:728,800|u8:0",
+            "str:memeVotes|u64:0|u64:727,800": "11",
+            "str:memeVotes|u64:1|u64:727,800": "9",
+            "str:addressVotes|address:my_address": "u64:727,800|u8:1",
+            "str:addressVotes|address:other_address": "u64:727,800|u8:19",
+            "str:periodTopMemes|u64:727,800": "u64:0|u32:11|u64:1|u32:9"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "vote-memes-4",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          ["u64:0", "u64:1"]
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "gas": "*",
+        "refund": "*",
+        "message": "str:Not enough votes left currently"
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "1500,000"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "vote-memes-5",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          ["u64:0", "u64:1"]
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "6",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:creator_contract": {
+          "nonce": "3",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "3",
+            "str:periods.item|u32:1": "123,000",
+            "str:periods.item|u32:2": "727,800",
+            "str:periods.item|u32:3": "1500,000",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "address:my_address|u64:1|u64:122,000|u8:0",
+            "str:periodMemes|u64:727,800|``.len": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:1": "address:my_address|u64:2|u64:727,800|u8:0",
+            "str:periodMemes|u64:727,800|``.item|u32:2": "address:creator_contract|u64:3|u64:728,800|u8:0",
+            "str:memeVotes|u64:0|u64:727,800": "11",
+            "str:memeVotes|u64:1|u64:727,800": "9",
+            "str:memeVotes|u64:0|u64:1500,000": "1",
+            "str:memeVotes|u64:1|u64:1500,000": "1",
+            "str:addressVotes|address:my_address": "u64:1500,000|u8:18",
+            "str:addressVotes|address:other_address": "u64:727,800|u8:19",
+            "str:periodTopMemes|u64:727,800": "u64:0|u32:11|u64:1|u32:9",
+            "str:periodTopMemes|u64:1500,000": "u64:1|u32:1|u64:0|u32:1"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "vote-memes-3",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          ["u64:0", "u64:1", "u64:0"]
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "6",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:creator_contract": {
+          "nonce": "3",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "3",
+            "str:periods.item|u32:1": "123,000",
+            "str:periods.item|u32:2": "727,800",
+            "str:periods.item|u32:3": "1500,000",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "address:my_address|u64:1|u64:122,000|u8:0",
+            "str:periodMemes|u64:727,800|``.len": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:1": "address:my_address|u64:2|u64:727,800|u8:0",
+            "str:periodMemes|u64:727,800|``.item|u32:2": "address:creator_contract|u64:3|u64:728,800|u8:0",
+            "str:memeVotes|u64:0|u64:727,800": "11",
+            "str:memeVotes|u64:1|u64:727,800": "9",
+            "str:memeVotes|u64:0|u64:1500,000": "3",
+            "str:memeVotes|u64:1|u64:1500,000": "2",
+            "str:addressVotes|address:my_address": "u64:1500,000|u8:18",
+            "str:addressVotes|address:other_address": "u64:1500,000|u8:17",
+            "str:periodTopMemes|u64:727,800": "u64:0|u32:11|u64:1|u32:9",
+            "str:periodTopMemes|u64:1500,000": "u64:0|u32:3|u64:1|u32:2"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    }
+  ]
+}
