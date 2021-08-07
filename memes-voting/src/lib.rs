@@ -19,7 +19,7 @@ pub trait MemesVoting {
 	}
 
 	#[endpoint]
-	fn add_meme(&self, owner: Address, nft_nonce: u64, category: u8) -> SCResult<()> {
+	fn add_meme(&self, nonce: &u64) -> SCResult<()> {
 		let caller: Address = self.blockchain().get_caller();
 		require!(
 			caller == self.creator_contract().get(),
@@ -28,13 +28,7 @@ pub trait MemesVoting {
 
 		self.alter_period();
 
-		let meme = Meme {
-			owner,
-			nft_nonce,
-			created_at: self.blockchain().get_block_timestamp(),
-			category,
-		};
-		self.period_memes(self.current_period()).push(&meme);
+		self.period_memes(self.current_period()).push(nonce);
 
 		Ok(())
 	}
@@ -73,6 +67,8 @@ pub trait MemesVoting {
 			if !current_votes.is_empty() {
 				votes = current_votes.get();
 			}
+
+            // current_votes.update(|total_votes| *total_votes += 1);
 
 			votes += 1;
 			current_votes.set(&votes);
@@ -123,12 +119,12 @@ pub trait MemesVoting {
 	}
 
 	#[view]
-	fn current_period_meme(&self, index: usize) -> Meme {
+	fn current_period_meme(&self, index: usize) -> u64 {
 		return self.period_meme(self.current_period(), index);
 	}
 
 	#[view]
-	fn current_period_memes_latest(&self, page: usize) -> MultiResultVec<Meme> {
+	fn current_period_memes_latest(&self, page: usize) -> MultiResultVec<u64> {
 		return self.period_memes_latest(self.current_period(), page);
 	}
 
@@ -138,12 +134,12 @@ pub trait MemesVoting {
 	}
 
 	#[view]
-	fn period_meme(&self, period: u64, index: usize) -> Meme {
+	fn period_meme(&self, period: u64, index: usize) -> u64 {
 		return self.period_memes(period).get(index);
 	}
 
 	#[view]
-	fn period_memes_latest(&self, period: u64, page: usize) -> MultiResultVec<Meme> {
+	fn period_memes_latest(&self, period: u64, page: usize) -> MultiResultVec<u64> {
 		let len = self.period_memes(period).len();
 
 		if len <= page * PER_PAGE {
@@ -153,12 +149,12 @@ pub trait MemesVoting {
 		let last_index = len - page * PER_PAGE;
 		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
 
-		let mut result: Vec<Meme> = Vec::with_capacity(last_index - first_index + 1);
+		let mut result: Vec<u64> = Vec::with_capacity(last_index - first_index + 1);
 		for index in (first_index..=last_index).rev() {
 			result.push(self.period_memes(period).get(index));
 		}
 
-		return MultiResultVec::<Meme>::from(result);
+		return MultiResultVec::<u64>::from(result);
 	}
 
 	#[view]
@@ -170,7 +166,7 @@ pub trait MemesVoting {
 
 	#[view]
 	#[storage_mapper("periodMemes")]
-	fn period_memes(&self, period: u64) -> VecMapper<Self::Storage, Meme>;
+	fn period_memes(&self, period: u64) -> VecMapper<Self::Storage, u64>;
 
 	#[view]
 	#[storage_mapper("periods")]

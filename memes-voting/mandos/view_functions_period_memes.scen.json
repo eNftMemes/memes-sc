@@ -30,8 +30,8 @@
       },
       "expect": {
         "out": [
-          "address:creator_contract|u64:3|u64:728,800|u8:0",
-          "address:my_address|u64:2|u64:727,800|u8:0"
+          "3",
+          "2"
         ],
         "status": "0"
       }
@@ -59,7 +59,7 @@
       },
       "expect": {
         "out": [
-          "address:my_address|u64:1|u64:122,000|u8:0"
+          "1"
         ],
         "status": "0"
       }
@@ -74,8 +74,8 @@
       },
       "expect": {
         "out": [
-          "address:my_address|u64:2|u64:727,800|u8:0",
-          "address:creator_contract|u64:3|u64:728,800|u8:0"
+          "2",
+          "3"
         ],
         "status": "0"
       }
@@ -90,7 +90,7 @@
       },
       "expect": {
         "out": [
-          "address:my_address|u64:1|u64:122,000|u8:0"
+          "1"
         ],
         "status": "0"
       }

@@ -19,9 +19,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "4",
-          "0"
+          "4"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -40,9 +38,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "5",
-          "0"
+          "5"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -61,9 +57,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "6",
-          "0"
+          "6"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -82,9 +76,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "7",
-          "0"
+          "7"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -103,9 +95,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "8",
-          "0"
+          "8"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -124,9 +114,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "9",
-          "0"
+          "9"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -145,9 +133,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "10",
-          "0"
+          "10"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -183,15 +169,15 @@
       },
       "expect": {
         "out": [
-          "address:my_address|u64:10|u64:730,000|u8:0",
-          "address:my_address|u64:9|u64:730,000|u8:0",
-          "address:my_address|u64:8|u64:730,000|u8:0",
-          "address:my_address|u64:7|u64:730,000|u8:0",
-          "address:my_address|u64:6|u64:730,000|u8:0",
-          "address:my_address|u64:5|u64:730,000|u8:0",
-          "address:my_address|u64:4|u64:730,000|u8:0",
-          "address:creator_contract|u64:3|u64:728,800|u8:0",
-          "address:my_address|u64:2|u64:727,800|u8:0"
+          "10",
+          "9",
+          "8",
+          "7",
+          "6",
+          "5",
+          "4",
+          "3",
+          "2"
         ],
         "status": "0"
       }
@@ -217,9 +203,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "11",
-          "0"
+          "11"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -255,16 +239,16 @@
       },
       "expect": {
         "out": [
-          "address:my_address|u64:11|u64:730,000|u8:0",
-          "address:my_address|u64:10|u64:730,000|u8:0",
-          "address:my_address|u64:9|u64:730,000|u8:0",
-          "address:my_address|u64:8|u64:730,000|u8:0",
-          "address:my_address|u64:7|u64:730,000|u8:0",
-          "address:my_address|u64:6|u64:730,000|u8:0",
-          "address:my_address|u64:5|u64:730,000|u8:0",
-          "address:my_address|u64:4|u64:730,000|u8:0",
-          "address:creator_contract|u64:3|u64:728,800|u8:0",
-          "address:my_address|u64:2|u64:727,800|u8:0"
+          "11",
+          "10",
+          "9",
+          "8",
+          "7",
+          "6",
+          "5",
+          "4",
+          "3",
+          "2"
         ],
         "status": "0"
       }
@@ -290,9 +274,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "12",
-          "0"
+          "12"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -328,16 +310,16 @@
       },
       "expect": {
         "out": [
-          "address:my_address|u64:12|u64:730,000|u8:0",
-          "address:my_address|u64:11|u64:730,000|u8:0",
-          "address:my_address|u64:10|u64:730,000|u8:0",
-          "address:my_address|u64:9|u64:730,000|u8:0",
-          "address:my_address|u64:8|u64:730,000|u8:0",
-          "address:my_address|u64:7|u64:730,000|u8:0",
-          "address:my_address|u64:6|u64:730,000|u8:0",
-          "address:my_address|u64:5|u64:730,000|u8:0",
-          "address:my_address|u64:4|u64:730,000|u8:0",
-          "address:creator_contract|u64:3|u64:728,800|u8:0"
+          "12",
+          "11",
+          "10",
+          "9",
+          "8",
+          "7",
+          "6",
+          "5",
+          "4",
+          "3"
         ],
         "status": "0"
       }
@@ -352,7 +334,7 @@
       },
       "expect": {
         "out": [
-          "address:my_address|u64:2|u64:727,800|u8:0"
+          "2"
         ],
         "status": "0"
       }

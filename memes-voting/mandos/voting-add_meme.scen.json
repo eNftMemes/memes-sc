@@ -13,9 +13,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "1",
-          "0"
+          "1"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -47,7 +45,7 @@
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
             "str:periodMemes|u64:123,000|``.len": "1",
-            "str:periodMemes|u64:123,000|``.item|u32:1": "address:my_address|u64:1|u64:122,000|u8:0"
+            "str:periodMemes|u64:123,000|``.item|u32:1": "1"
           },
           "code": "file:../output/memes-voting.wasm"
         }

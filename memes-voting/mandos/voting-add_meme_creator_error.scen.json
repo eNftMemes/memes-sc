@@ -13,9 +13,7 @@
         "to": "sc:voting_contract",
         "function": "add_meme",
         "arguments": [
-          "address:my_address",
-          "1",
-          "0"
+          "1"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
