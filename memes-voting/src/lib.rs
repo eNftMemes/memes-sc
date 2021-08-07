@@ -6,6 +6,8 @@ elrond_wasm::imports!();
 pub mod meme;
 use meme::*;
 
+use hashbrown::HashMap;
+
 const PER_PAGE: usize = 10;
 const PERIOD_TIME: u64 = 604800; // 1 week in seconds
 const VOTES_PER_ADDRESS_PER_PERIOD: u8 = 20;
@@ -52,30 +54,27 @@ pub trait MemesVoting {
 		let address_votes: SingleValueMapper<Self::Storage, AddressVotes> = self.address_votes(caller);
 		let current_period: u64 = self.current_period();
 		let nb_nfts: usize = nft_nonces.len();
-		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != self.current_period();
+		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
 
 		require!(
 			reset_address_votes || (address_votes.get().votes >= nb_nfts as u8),
 			"Not enough votes left currently"
 		);
 
-		let mut meme_votes: Vec<MemeVotes> = Vec::new();
+		let mut new_meme_votes: HashMap<u64, u32> = HashMap::new();
 		for nonce in nft_nonces {
+			let votes: &mut u32 = new_meme_votes.entry(*nonce).or_insert(0);
+			*votes += 1;
+		}
+
+		for (nonce, new_votes) in new_meme_votes.iter() {
 			let current_votes: SingleValueMapper<Self::Storage, u32> = self.meme_votes(*nonce, current_period);
 
-			let mut votes = 0;
-			if !current_votes.is_empty() {
-				votes = current_votes.get();
+			if current_votes.is_empty() {
+				current_votes.set(&new_votes);
+			} else {
+				current_votes.update(|votes| *votes += new_votes);
 			}
-
-            // current_votes.update(|total_votes| *total_votes += 1);
-
-			votes += 1;
-			current_votes.set(&votes);
-			meme_votes.push(MemeVotes {
-				nft_nonce: *nonce,
-				votes,
-			});
 		}
 
 		address_votes.set(&AddressVotes {
@@ -83,34 +82,47 @@ pub trait MemesVoting {
 			votes: (if reset_address_votes { VOTES_PER_ADDRESS_PER_PERIOD } else { address_votes.get().votes }) - (nb_nfts as u8),
 		});
 
-		self.alter_period_top_memes(&mut meme_votes);
+		self.alter_period_top_memes(&mut new_meme_votes);
 
 		Ok(())
 	}
 
-	fn alter_period_top_memes(&self, meme_votes: &mut Vec<MemeVotes>) {
+	fn alter_period_top_memes(&self, new_meme_votes: &mut HashMap<u64, u32>) {
 		let current_period: u64 = self.current_period();
 		let top_memes: SingleValueMapper<Self::Storage, Vec<MemeVotes>> = self.period_top_memes(current_period);
 
 		if !top_memes.is_empty() {
-			meme_votes.append(&mut top_memes.get());
-		}
-
-		// Sort first by nonce and then by votes, higher nonce with higher votes first
-		meme_votes.sort_unstable_by(|a, b| b.nft_nonce.cmp(&a.nft_nonce).then_with(|| b.votes.cmp(&a.votes)));
-		// Remove duplicates
-		meme_votes.dedup();
-		// Sort by votes
-		meme_votes.sort_unstable_by(|a, b| b.votes.cmp(&a.votes));
-
-		// Remove memes if more than 10
-		if meme_votes.len() > 10 {
-			for index in (10..meme_votes.len()).rev() {
-				meme_votes.remove(index);
+			let meme_votes: Vec<MemeVotes> = top_memes.get();
+			for meme_vote in meme_votes {
+				let nonce: u64 = meme_vote.nft_nonce;
+				if new_meme_votes.contains_key(&nonce) {
+					let new_votes: &mut u32 = new_meme_votes.get_mut(&nonce).unwrap();
+					*new_votes += meme_vote.votes;
+				} else {
+					new_meme_votes.insert(meme_vote.nft_nonce, meme_vote.votes);
+				}
 			}
 		}
 
-		top_memes.set(&meme_votes);
+		let mut sorted: Vec<MemeVotes> = Vec::new();
+
+		for (nft_nonce, votes) in new_meme_votes.iter() {
+			sorted.push(MemeVotes {
+				nft_nonce: *nft_nonce,
+				votes: *votes,
+			})
+		}
+
+		sorted.sort_unstable_by(|a, b| b.votes.cmp(&a.votes).then(b.nft_nonce.cmp(&a.nft_nonce)));
+
+		// Remove memes if more than 10
+		if sorted.len() > 10 {
+			for index in (10..sorted.len()).rev() {
+				sorted.remove(index);
+			}
+		}
+
+		top_memes.set(&sorted);
 	}
 
 	#[view]

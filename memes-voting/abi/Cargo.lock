@@ -223,6 +223,7 @@ version = "0.0.1"
 dependencies = [
  "elrond-wasm",
  "elrond-wasm-derive",
+ "hashbrown",
 ]
 
 [[package]]

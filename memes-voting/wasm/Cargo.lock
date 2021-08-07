@@ -150,6 +150,7 @@ dependencies = [
  "elrond-wasm",
  "elrond-wasm-derive",
  "elrond-wasm-node",
+ "hashbrown",
 ]
 
 [[package]]
