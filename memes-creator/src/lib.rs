@@ -2,7 +2,6 @@
 #![allow(unused_attributes)]
 
 elrond_wasm::imports!();
-elrond_wasm::derive_imports!();
 
 const TRIPA_NFT: &[u8] = "TRIPA-bb7f5c".as_bytes();
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
@@ -16,11 +15,11 @@ mod voting_proxy {
 	#[elrond_wasm_derive::proxy]
 	pub trait Voting {
 		#[endpoint]
-		fn add_meme(&self, owner: Address, nft_nonce: u64, category: u8) -> SCResult<()>;
+		fn add_meme(&self, nonce: &u64) -> SCResult<()>;
 	}
 }
 
-#[elrond_wasm_derive::contract]
+#[elrond_wasm::contract]
 pub trait MemesCreator {
 	#[init]
 	fn init(&self) {}
@@ -47,10 +46,9 @@ pub trait MemesCreator {
 		Ok(self.create_meme_nft(&address, &name, &[url], *category))
 	}
 
+	#[only_owner]
 	#[endpoint]
 	fn modify_categories(&self, category: &u8, name: &BoxedBytes) -> SCResult<()> {
-		self.require_permissions()?;
-
 		if self.categories(category).is_empty() {
 			self.categories(category).set(name);
 		} else {
@@ -71,39 +69,23 @@ pub trait MemesCreator {
 		self.send().esdt_nft_create(&nft_token, &amount, name, royalties, hash, &{ category }, urls);
 
 		let nonce: u64 = self.blockchain().get_current_esdt_nft_nonce(&sc_address, &nft_token);
-		// TODO: Change to self.send().direct(...) in next version
-		self.send().direct_nft(address, &nft_token, nonce, amount, &[]);
+		self.send().direct(address, &nft_token, nonce, amount, &[]);
 		self.address_memes(address).push(&nonce);
-
-		return self.voting_sc_add_meme(nonce, category);
-	}
-
-	fn voting_sc_add_meme(&self, nft_nonce: u64, _category: u8) -> AsyncCall<Self::SendApi> {
-		let owner: Address = self.blockchain().get_caller();
+		self.meme_creator(&nonce).set(address);
 
 		return self.voting_proxy(self.voting_sc().get())
-			.add_meme(owner, nft_nonce, _category)
+			.add_meme(&nonce)
 			.async_call();
 	}
 
 	#[proxy]
 	fn voting_proxy(&self, to: Address) -> voting_proxy::Proxy<Self::SendApi>;
 
+	#[only_owner]
 	#[endpoint]
 	fn set_voting_sc(&self, sc: &Address) -> SCResult<()> {
-		self.require_permissions()?;
-
 		self.voting_sc().set(sc);
 
-		Ok(())
-	}
-
-	fn require_permissions(&self) -> SCResult<()> {
-		let caller = self.blockchain().get_caller();
-		require!(
-			caller == self.blockchain().get_owner_address(),
-			"only owner can call this"
-		);
 		Ok(())
 	}
 
@@ -136,6 +118,10 @@ pub trait MemesCreator {
 	fn address_memes(&self, address: &Address) -> VecMapper<Self::Storage, u64>;
 
 	#[view]
+	#[storage_mapper("memeCreator")]
+	fn meme_creator(&self, nonce: &u64) -> SingleValueMapper<Self::Storage, Address>;
+
+	#[view]
 	#[storage_mapper("addressLastMemeTime")]
 	fn address_last_meme_time(&self, address: &Address) -> SingleValueMapper<Self::Storage, u64>;
 
@@ -149,11 +135,10 @@ pub trait MemesCreator {
 
 	// Always needed
 	#[endpoint]
+	#[only_owner]
 	fn claim(&self) -> SCResult<()> {
-		self.require_permissions()?;
-
 		let caller = self.blockchain().get_caller();
-		self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(), b"claiming success");
+		self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(&TokenIdentifier::egld(), 0), b"claiming success");
 		Ok(())
 	}
 }

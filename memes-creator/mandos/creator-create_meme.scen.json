@@ -68,7 +68,8 @@
             "str:categories|u8:2": "str:random",
             "str:addressLastMemeTime|address:my_address": "123,000",
             "str:addressMemes|address:my_address|``.len": "1",
-            "str:addressMemes|address:my_address|``.item|u32:1": "1"
+            "str:addressMemes|address:my_address|``.item|u32:1": "1",
+            "str:memeCreator|u64:1": "address:my_address"
           },
           "code": "file:../output/memes-creator.wasm"
         },
@@ -152,8 +153,10 @@
             "str:addressLastMemeTime|address:other_address": "123,000",
             "str:addressMemes|address:my_address|``.len": "1",
             "str:addressMemes|address:my_address|``.item|u32:1": "1",
+            "str:memeCreator|u64:1": "address:my_address",
             "str:addressMemes|address:other_address|``.len": "1",
-            "str:addressMemes|address:other_address|``.item|u32:1": "2"
+            "str:addressMemes|address:other_address|``.item|u32:1": "2",
+            "str:memeCreator|u64:2": "address:other_address"
           },
           "code": "file:../output/memes-creator.wasm"
         },

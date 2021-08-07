@@ -31,7 +31,7 @@
         "status": "4",
         "gas": "*",
         "refund": "*",
-        "message": "str:only owner can call this"
+        "message": "str:Endpoint can olny be called by owner"
       }
     },
     {

@@ -102,9 +102,9 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm"
-version = "0.18.0"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "318ea57ef631650ceace8c1c7dc78bc19249ee36e78e71a4429fb8d7b07b0396"
+checksum = "153750825f526aa0447bf40d51305f9bc3035c7647f474c7ef9e3184f0b0f8df"
 dependencies = [
  "arrayvec 0.7.1",
  "elrond-codec",
@@ -116,9 +116,9 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm-debug"
-version = "0.18.0"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b578821c9382bd9c5e844baf775c2305f29cc7135e6f5b86a309a7a5bfaf088d"
+checksum = "25e560a489c343d512ac84cf0f3658d5ffab59abd426a724d61a8717a2e6e41c"
 dependencies = [
  "elrond-wasm",
  "hex",
@@ -133,9 +133,9 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm-derive"
-version = "0.18.0"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc3415574f8cda1ca56ae7427a9720d0244e2a0ead1ed4d8a514851e3fdf35f8"
+checksum = "5d377598fa25ded6f0ef5ee501084230083c638929b214ba85a6abf2c42d2f7d"
 dependencies = [
  "hex",
  "proc-macro2",

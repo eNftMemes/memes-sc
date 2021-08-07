@@ -20,7 +20,7 @@
         "gasPrice": "0"
       },
       "expect": {
-        "message": "str:only owner can call this",
+        "message": "str:Endpoint can olny be called by owner",
         "out": [],
         "status": "4",
         "gas": "*",
