@@ -3,7 +3,7 @@
 
 elrond_wasm::imports!();
 
-const TRIPA_NFT: &[u8] = "TRIPA-bb7f5c".as_bytes();
+const TRIPA_NFT: &[u8] = "TRIPANFT-745e9b".as_bytes();
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
 const NFT_AMOUNT: u32 = 1;
 const NFT_ROYALTIES: u32 = 500;
@@ -129,6 +129,7 @@ pub trait MemesCreator {
 	#[storage_mapper("votingSc")]
 	fn voting_sc(&self) -> SingleValueMapper<Self::Storage, Address>;
 
+	// TODO: Maybe use SafeMapStorageMapper or similar?
 	#[view]
 	#[storage_mapper("categories")]
 	fn categories(&self, category: &u8) -> SingleValueMapper<Self::Storage, BoxedBytes>;

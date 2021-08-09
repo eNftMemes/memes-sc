@@ -13,7 +13,7 @@
           "nonce": "0",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPA-bb7f5c": {
+            "str:TRIPANFT-745e9b": {
               "instances": [],
               "nonce": "0",
               "balance": "0",
@@ -26,7 +26,7 @@
           "nonce": "0",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPA-bb7f5c": {
+            "str:TRIPANFT-745e9b": {
               "nonce": "0",
               "balance": "0",
               "lastNonce": "0"
@@ -38,7 +38,7 @@
           "nonce": "0",
           "balance": "0",
           "esdt": {
-            "str:TRIPA-bb7f5c": {
+            "str:TRIPANFT-745e9b": {
               "nonce": "0",
               "balance": "0",
               "lastNonce": "0",

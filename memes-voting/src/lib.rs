@@ -184,6 +184,7 @@ pub trait MemesVoting {
 	#[storage_mapper("periods")]
 	fn periods(&self) -> VecMapper<Self::Storage, u64>;
 
+	// TODO: Maybe use SafeMapStorageMapper or similar?
 	#[view]
 	#[storage_mapper("memeVotes")]
 	fn meme_votes(&self, nft_nonce: u64, period: u64) -> SingleValueMapper<Self::Storage, u32>;

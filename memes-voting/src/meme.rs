@@ -12,9 +12,3 @@ pub struct MemeVotes {
     pub nft_nonce: u64,
     pub votes: u32,
 }
-
-impl PartialEq for MemeVotes {
-    fn eq(&self, other: &Self) -> bool {
-        self.nft_nonce == other.nft_nonce
-    }
-}
