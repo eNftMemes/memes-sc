@@ -129,7 +129,7 @@ pub trait MemesCreator {
 	#[storage_mapper("votingSc")]
 	fn voting_sc(&self) -> SingleValueMapper<Self::Storage, Address>;
 
-	// TODO: Maybe use SafeMapStorageMapper or similar?
+	// TODO: Maybe use SafeMapStorageMapper/MapMapper or similar?
 	#[view]
 	#[storage_mapper("categories")]
 	fn categories(&self, category: &u8) -> SingleValueMapper<Self::Storage, BoxedBytes>;

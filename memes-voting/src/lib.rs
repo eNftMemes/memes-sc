@@ -46,15 +46,17 @@ pub trait MemesVoting {
 	}
 
 	#[endpoint]
-	fn vote_memes(&self, nft_nonces: &[u64]) -> SCResult<()> {
+	fn vote_memes(&self, #[var_args] nft_nonces: VarArgs<u64>) -> SCResult<()> {
 		let caller: Address = self.blockchain().get_caller();
 
 		self.alter_period();
 
 		let address_votes: SingleValueMapper<Self::Storage, AddressVotes> = self.address_votes(caller);
 		let current_period: u64 = self.current_period();
-		let nb_nfts: usize = nft_nonces.len();
 		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
+
+		let nft_nonces_vec: Vec<u64> = nft_nonces.into_vec();
+		let nb_nfts: usize = nft_nonces_vec.len();
 
 		require!(
 			reset_address_votes || (address_votes.get().votes >= nb_nfts as u8),
@@ -62,8 +64,8 @@ pub trait MemesVoting {
 		);
 
 		let mut new_meme_votes: HashMap<u64, u32> = HashMap::new();
-		for nonce in nft_nonces {
-			let votes: &mut u32 = new_meme_votes.entry(*nonce).or_insert(0);
+		for nonce in nft_nonces_vec {
+			let votes: &mut u32 = new_meme_votes.entry(nonce).or_insert(0);
 			*votes += 1;
 		}
 

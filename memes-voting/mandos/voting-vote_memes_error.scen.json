@@ -13,7 +13,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          ["u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1"]
+          "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1"
         ],
         "gasLimit": "15,000,000",
         "gasPrice": "0"
@@ -73,7 +73,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          ["u64:0", "u64:1"]
+          "u64:0", "u64:1"
         ],
         "gasLimit": "15,000,000",
         "gasPrice": "0"
@@ -99,7 +99,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          ["u64:0", "u64:1"]
+          "u64:0", "u64:1"
         ],
         "gasLimit": "15,000,000",
         "gasPrice": "0"
@@ -163,7 +163,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          ["u64:0", "u64:1", "u64:0"]
+          "u64:0", "u64:1", "u64:0"
         ],
         "gasLimit": "15,000,000",
         "gasPrice": "0"
