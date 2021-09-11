@@ -55,6 +55,17 @@
             "str:categories|u8:1": "str:funny",
             "str:categories|u8:2": "str:random"
           },
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
           "code": "file:../output/memes-creator.wasm"
         },
         "address:other_address": {
@@ -122,6 +133,17 @@
             "str:categories|u8:2": "str:random",
             "str:categories|u8:3": "str:other"
           },
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
           "code": "file:../output/memes-creator.wasm"
         },
         "address:other_address": {
@@ -187,6 +209,17 @@
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
             "str:categories|u8:2": "str:random"
+          },
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
           },
           "code": "file:../output/memes-creator.wasm"
         },
@@ -255,6 +288,17 @@
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
             "str:categories|u8:2": "str:random"
+          },
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
           },
           "code": "file:../output/memes-creator.wasm"
         },

@@ -71,7 +71,18 @@
             "str:addressMemes|address:my_address|``.item|u32:1": "1",
             "str:memeCreator|u64:1": "address:my_address"
           },
-          "code": "file:../output/memes-creator.wasm"
+          "code": "file:../output/memes-creator.wasm",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "1",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          }
         },
         "address:other_address": {
           "nonce": "0",
@@ -157,6 +168,17 @@
             "str:addressMemes|address:other_address|``.len": "1",
             "str:addressMemes|address:other_address|``.item|u32:1": "2",
             "str:memeCreator|u64:2": "address:other_address"
+          },
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "2",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
           },
           "code": "file:../output/memes-creator.wasm"
         },
