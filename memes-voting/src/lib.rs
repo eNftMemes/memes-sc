@@ -187,6 +187,7 @@ pub trait MemesVoting {
 	fn periods(&self) -> VecMapper<Self::Storage, u64>;
 
 	// TODO: Maybe use SafeMapStorageMapper or similar?
+	// TODO: Maybe add view to get meme votes for multiple nonces at a time?
 	#[view]
 	#[storage_mapper("memeVotes")]
 	fn meme_votes(&self, nft_nonce: u64, period: u64) -> SingleValueMapper<Self::Storage, u32>;
@@ -201,6 +202,8 @@ pub trait MemesVoting {
 
 	#[storage_mapper("creatorContract")]
 	fn creator_contract(&self) -> SingleValueMapper<Self::Storage, Address>;
+
+	// TODO: Add storage for getting period for a meme?Or index that off chain?
 
 	// Always needed
 	#[endpoint]
