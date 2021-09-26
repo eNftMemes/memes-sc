@@ -50,7 +50,8 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random"
+            "str:categories|u8:2": "str:random",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
           },
           "owner": "address:my_address",
           "code": "file:../output/memes-creator.wasm"

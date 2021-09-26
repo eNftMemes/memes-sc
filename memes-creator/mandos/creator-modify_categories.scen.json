@@ -20,7 +20,7 @@
         "gasPrice": "0"
       },
       "expect": {
-        "message": "str:Endpoint can olny be called by owner",
+        "message": "str:Endpoint can only be called by owner",
         "out": [],
         "status": "4",
         "gas": "*",
@@ -53,7 +53,8 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random"
+            "str:categories|u8:2": "str:random",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -131,7 +132,8 @@
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
             "str:categories|u8:2": "str:random",
-            "str:categories|u8:3": "str:other"
+            "str:categories|u8:3": "str:other",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -208,7 +210,8 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random"
+            "str:categories|u8:2": "str:random",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -287,7 +290,8 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random"
+            "str:categories|u8:2": "str:random",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {

@@ -35,7 +35,7 @@
         "from": "address:my_address",
         "contractCode": "file:../output/memes-creator.wasm",
         "value": "0",
-        "arguments": [],
+        "arguments": ["str:TRIPANFT-745e9b"],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
@@ -61,7 +61,9 @@
         "sc:creator_contract": {
           "nonce": "0",
           "balance": "0",
-          "storage": {},
+          "storage": {
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+          },
           "code": "file:../output/memes-creator.wasm"
         },
         "address:voting_contract": {
@@ -108,7 +110,8 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:votingSc": "address:voting_contract"
+            "str:votingSc": "address:voting_contract",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
           },
           "code": "file:../output/memes-creator.wasm"
         },
@@ -134,7 +137,7 @@
       },
       "expect": {
         "status": "4",
-        "message": "str:Endpoint can olny be called by owner",
+        "message": "str:Endpoint can only be called by owner",
         "gas": "*",
         "refund": "*"
       }
@@ -156,7 +159,8 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:votingSc": "address:voting_contract"
+            "str:votingSc": "address:voting_contract",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
           },
           "code": "file:../output/memes-creator.wasm"
         },

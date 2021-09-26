@@ -2,9 +2,7 @@
 
 First create a new NFT token, since once the role has been transferred there is no getting it back (unless implemented in contract).
 
-**IMPORTANT: Update the nft id in the contract after it is created!**
-
-`erdpy --verbose contract deploy --project=memes-creator --pem="devnet.pem" --gas-limit=60000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-creator.json" --recall-nonce --send --chain="D"`
+`erdpy --verbose contract deploy --project=memes-creator --pem="devnet.pem" --gas-limit=60000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-creator.json" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NFT_IDENTIFIER"`
 
 **Afterwards, transfer the NFT create role to the contract, from the old contract with the following transaction:**
 ```

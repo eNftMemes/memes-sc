@@ -25,6 +25,7 @@
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
             "str:categories|u8:2": "str:random",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
             "str:addressLastMemeTime|address:my_address": "123,000"
           },
           "code": "file:../output/memes-creator.wasm"
@@ -84,6 +85,7 @@
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
             "str:categories|u8:2": "str:random",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
             "str:addressLastMemeTime|address:my_address": "123,000"
           },
           "esdt": {
@@ -181,6 +183,7 @@
             "str:votingSc": "address:voting_contract",
             "str:categories|u8:1": "str:funny",
             "str:categories|u8:2": "str:random",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
             "str:addressLastMemeTime|address:my_address": "123,601",
             "str:addressMemes|address:my_address|``.len": "1",
             "str:addressMemes|address:my_address|``.item|u32:1": "1",
