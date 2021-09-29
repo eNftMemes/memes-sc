@@ -6,7 +6,7 @@
       "accounts": {
         "address:my_address": {
           "nonce": "0",
-          "balance": "1,000,000",
+          "balance": "1,000,000,000,000,000,000",
           "storage": {}
         },
         "address:other_address" : {
@@ -35,7 +35,7 @@
         "from": "address:my_address",
         "contractCode": "file:../output/memes-creator.wasm",
         "value": "0",
-        "arguments": ["str:TRIPANFT-745e9b"],
+        "arguments": [],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
@@ -50,7 +50,7 @@
       "accounts": {
         "address:my_address": {
           "nonce": "1",
-          "balance": "1,000,000",
+          "balance": "1,000,000,000,000,000,000",
           "storage": {}
         },
         "address:other_address": {
@@ -61,6 +61,66 @@
         "sc:creator_contract": {
           "nonce": "0",
           "balance": "0",
+          "storage": {},
+          "code": "file:../output/memes-creator.wasm"
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        }
+      }
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
+          "storage": {
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-creator.wasm"
+        }
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000,000,000,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "sc:creator_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
           "storage": {
             "str:tokenIdentifier": "str:TRIPANFT-745e9b"
           },
@@ -98,7 +158,7 @@
       "accounts": {
         "address:my_address": {
           "nonce": "2",
-          "balance": "1,000,000",
+          "balance": "1,000,000,000,000,000,000",
           "storage": {}
         },
         "address:other_address": {
@@ -109,6 +169,16 @@
         "sc:creator_contract": {
           "nonce": "0",
           "balance": "0",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b"
@@ -129,9 +199,44 @@
         "from": "address:other_address",
         "to": "sc:creator_contract",
         "function": "set_voting_sc",
-        "arguments": [
-          "address:voting_contract"
-        ],
+        "arguments": ["address:voting_contract"],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Endpoint can only be called by owner",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "issue-token-error",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:creator_contract",
+        "function": "issue_token",
+        "value": "500,000,000,000,000,000",
+        "arguments": ["str:TripalovskyNFT", "str:TRIPANFT"],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Token already issued",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "issue-token-error",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:creator_contract",
+        "function": "issue_token",
+        "arguments": ["str:TripalovskyNFT", "str:TRIPANFT"],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
@@ -146,18 +251,28 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "2",
-          "balance": "1,000,000",
+          "nonce": "3",
+          "balance": "1,000,000,000,000,000,000",
           "storage": {}
         },
         "address:other_address": {
-          "nonce": "1",
+          "nonce": "2",
           "balance": "1,000,000",
           "storage": {}
         },
         "sc:creator_contract": {
           "nonce": "0",
           "balance": "0",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b"

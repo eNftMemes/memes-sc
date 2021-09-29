@@ -39,6 +39,19 @@
     },
     {
       "step": "scQuery",
+      "txId": "tokenIdentifier",
+      "tx": {
+        "to": "sc:creator_contract",
+        "function": "token_identifier",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["str:EGLD"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
       "txId": "addressMemesLength",
       "tx": {
         "to": "sc:creator_contract",

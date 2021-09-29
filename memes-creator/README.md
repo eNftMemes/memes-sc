@@ -1,19 +1,11 @@
 # Deploy
 
-First create a new NFT token, since once the role has been transferred there is no getting it back (unless implemented in contract).
-
 `erdpy --verbose contract deploy --project=memes-creator --pem="devnet.pem" --gas-limit=60000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-creator.json" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NFT_IDENTIFIER"`
 
-**Afterwards, transfer the NFT create role to the contract, from the old contract with the following transaction:**
-```
-receiver: erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u
-data: transferNFTCreateRole@NFT_IN_HEX@8287406b9ba0a47d327f1288e3460f2cb6bbcbedfd8d449621e6223b4b37f803@NEW_CONTRACT_ADDRESS_HEX
-```
+Contract is upgradable by default.
 
-Decode bech32 address to HEX using:
-`erdpy wallet bech32 --decode erd1qqqqqqqqqqqqqpgqeynfjc4kntv8xkjmtfulgakgy5gluuuzlqpsep9f3j`
-
-**Current contract address: erd1qqqqqqqqqqqqqpgq0new7jhwqyqz6tc84rfuhmn0fs7k9et0lqpsnxz8wc**
+# Issue token
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=5000000000000000 --gas-limit=50000000 --function="issue_token" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
 
 # Linking voting contract
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="set_voting_sc" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_OTHER_CONTRACT"`

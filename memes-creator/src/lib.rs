@@ -22,15 +22,39 @@ mod voting_proxy {
 #[elrond_wasm::contract]
 pub trait MemesCreator {
 	#[init]
-	fn init(&self, token_identifier: TokenIdentifier) -> SCResult<()> {
-		// TODO: Maybe issue NFT here directly?
-		require!(
-            token_identifier.is_valid_esdt_identifier(),
-            "Invalid token provided"
-        );
-		self.token_identifier().set(&token_identifier);
+	fn init(&self) {}
 
-		Ok(())
+	// TODO: Test this function with Mandos after it is supported to issue tokens
+	#[endpoint]
+	#[only_owner]
+	#[payable("EGLD")]
+	fn issue_token(
+		&self,
+		#[payment] issue_cost: BigUint,
+		token_name: &ManagedBuffer,
+		token_ticker: &ManagedBuffer,
+	) -> SCResult<AsyncCall> {
+		require!(self.token_identifier().is_empty(), "Token already issued");
+
+		Ok(
+			self.send()
+				.esdt_system_sc_proxy()
+				.issue_non_fungible(
+					issue_cost,
+					token_name,
+					token_ticker,
+					NonFungibleTokenProperties {
+						can_freeze: true,
+						can_wipe: true,
+						can_pause: true,
+						can_change_owner: false,
+						can_upgrade: false,
+						can_add_special_roles: true,
+					},
+				)
+				.async_call()
+				.with_callback(self.callbacks().init_callback())
+		)
 	}
 
 	#[endpoint]
@@ -92,6 +116,24 @@ pub trait MemesCreator {
 			.async_call();
 	}
 
+	// TODO: Change AsyncCallResult to ManagedAsyncCallResult in new version?
+	#[callback]
+	fn init_callback(&self, #[call_result] result: AsyncCallResult<TokenIdentifier>) {
+		match result {
+			AsyncCallResult::Ok(token_id) => {
+				self.token_identifier().set(&token_id);
+			},
+			AsyncCallResult::Err(_) => {
+				let caller = self.blockchain().get_owner_address();
+				let (returned_tokens, token_id) = self.call_value().payment_token_pair();
+				if token_id.is_egld() && returned_tokens > 0 {
+					self.send()
+						.direct(&caller, &token_id, 0, &returned_tokens, &[]);
+				}
+			},
+		}
+	}
+
 	#[proxy]
 	fn voting_proxy(&self) -> voting_proxy::Proxy<Self::Api>;
 
@@ -143,6 +185,8 @@ pub trait MemesCreator {
 	#[storage_mapper("votingSc")]
 	fn voting_sc(&self) -> SingleValueMapper<ManagedAddress>;
 
+	// TODO: Check if this works properly, since in Mandos tests, this gives EGLD
+	#[view]
 	#[storage_mapper("tokenIdentifier")]
 	fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
 
