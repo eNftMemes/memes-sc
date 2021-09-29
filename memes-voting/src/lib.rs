@@ -15,14 +15,14 @@ const VOTES_PER_ADDRESS_PER_PERIOD: u8 = 20;
 #[elrond_wasm::contract]
 pub trait MemesVoting {
 	#[init]
-	fn init(&self, creator_contract: &Address, period: &u64) {
+	fn init(&self, creator_contract: &ManagedAddress, period: &u64) {
 		self.creator_contract().set(creator_contract);
 		self.periods().push(period);
 	}
 
 	#[endpoint]
 	fn add_meme(&self, nonce: &u64) -> SCResult<()> {
-		let caller: Address = self.blockchain().get_caller();
+		let caller: ManagedAddress = self.blockchain().get_caller();
 		require!(
 			caller == self.creator_contract().get(),
 			"Only creator contract can call this"
@@ -47,11 +47,11 @@ pub trait MemesVoting {
 
 	#[endpoint]
 	fn vote_memes(&self, #[var_args] nft_nonces: VarArgs<u64>) -> SCResult<()> {
-		let caller: Address = self.blockchain().get_caller();
+		let caller: ManagedAddress = self.blockchain().get_caller();
 
 		self.alter_period();
 
-		let address_votes: SingleValueMapper<Self::Storage, AddressVotes> = self.address_votes(caller);
+		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);
 		let current_period: u64 = self.current_period();
 		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
 
@@ -70,7 +70,7 @@ pub trait MemesVoting {
 		}
 
 		for (nonce, new_votes) in new_meme_votes.iter() {
-			let current_votes: SingleValueMapper<Self::Storage, u32> = self.meme_votes(*nonce, current_period);
+			let current_votes: SingleValueMapper<u32> = self.meme_votes(*nonce, current_period);
 
 			if current_votes.is_empty() {
 				current_votes.set(&new_votes);
@@ -91,7 +91,7 @@ pub trait MemesVoting {
 
 	fn alter_period_top_memes(&self, new_meme_votes: &mut HashMap<u64, u32>) {
 		let current_period: u64 = self.current_period();
-		let top_memes: SingleValueMapper<Self::Storage, Vec<MemeVotes>> = self.period_top_memes(current_period);
+		let top_memes: SingleValueMapper<Vec<MemeVotes>> = self.period_top_memes(current_period);
 
 		if !top_memes.is_empty() {
 			let meme_votes: Vec<MemeVotes> = top_memes.get();
@@ -180,37 +180,37 @@ pub trait MemesVoting {
 
 	#[view]
 	#[storage_mapper("periodMemes")]
-	fn period_memes(&self, period: u64) -> VecMapper<Self::Storage, u64>;
+	fn period_memes(&self, period: u64) -> VecMapper<u64>;
 
 	#[view]
 	#[storage_mapper("periods")]
-	fn periods(&self) -> VecMapper<Self::Storage, u64>;
+	fn periods(&self) -> VecMapper<u64>;
 
 	// TODO: Maybe use SafeMapStorageMapper or similar?
 	// TODO: Maybe add view to get meme votes for multiple nonces at a time?
 	#[view]
 	#[storage_mapper("memeVotes")]
-	fn meme_votes(&self, nft_nonce: u64, period: u64) -> SingleValueMapper<Self::Storage, u32>;
+	fn meme_votes(&self, nft_nonce: u64, period: u64) -> SingleValueMapper<u32>;
 
 	#[view]
 	#[storage_mapper("periodTopMemes")]
-	fn period_top_memes(&self, period: u64) -> SingleValueMapper<Self::Storage, Vec<MemeVotes>>;
+	fn period_top_memes(&self, period: u64) -> SingleValueMapper<Vec<MemeVotes>>;
 
 	#[view]
 	#[storage_mapper("addressVotes")]
-	fn address_votes(&self, address: Address) -> SingleValueMapper<Self::Storage, AddressVotes>;
+	fn address_votes(&self, address: ManagedAddress) -> SingleValueMapper<AddressVotes>;
 
 	#[storage_mapper("creatorContract")]
-	fn creator_contract(&self) -> SingleValueMapper<Self::Storage, Address>;
+	fn creator_contract(&self) -> SingleValueMapper<ManagedAddress>;
 
 	// TODO: Add storage for getting period for a meme?Or index that off chain?
 
-	// Always needed
-	#[endpoint]
-	#[only_owner]
-	fn claim(&self) -> SCResult<()> {
-		let caller = self.blockchain().get_caller();
-		self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(&TokenIdentifier::egld(), 0), b"claiming success");
-		Ok(())
-	}
+    // Always needed
+    #[endpoint]
+    #[only_owner]
+    fn claim(&self) -> SCResult<()> {
+        let caller = self.blockchain().get_caller();
+        self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(&self.types().token_identifier_egld(), 0), b"claiming success");
+        Ok(())
+    }
 }

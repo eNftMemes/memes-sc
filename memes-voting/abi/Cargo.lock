@@ -15,12 +15,6 @@ dependencies = [
 
 [[package]]
 name = "arrayvec"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23b62fc65de8e4e7f52534fb52b0f3ed04746ae267519eef2a83941e8085068b"
-
-[[package]]
-name = "arrayvec"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "be4dc07131ffa69b8072d35f5007352af944213cde02545e2103680baed38fcd"
@@ -79,20 +73,20 @@ dependencies = [
 
 [[package]]
 name = "elrond-codec"
-version = "0.5.3"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2525cc5f69991e57ee79d5418df845b14b7001d00125e9aab8d9f817ae71e728"
+checksum = "5f2a23c930e80b6191755612d2ec6fbe36752782ce1fba607398bece93d72267"
 dependencies = [
- "arrayvec 0.5.2",
+ "arrayvec",
  "elrond-codec-derive",
  "wee_alloc",
 ]
 
 [[package]]
 name = "elrond-codec-derive"
-version = "0.5.3"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4375abd7c6ce74e15faaaef8b592a7e8a46b4343cb38c64f30a1ea424660751c"
+checksum = "10a0513c8602cc33acd5b2b657422a0058545e9daffc817b36b34d2ee8d1e553"
 dependencies = [
  "hex",
  "proc-macro2",
@@ -102,11 +96,11 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm"
-version = "0.18.2"
+version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9a652af6dc30652a828f5d41436e88a19d960c0369886b80ce768295619a44a6"
+checksum = "72eea7ffd76953e7c47bd49a586b9e9b58fe133e6190f313f46a11194e8e4d1e"
 dependencies = [
- "arrayvec 0.7.1",
+ "arrayvec",
  "elrond-codec",
  "elrond-wasm-derive",
  "hashbrown",
@@ -116,9 +110,9 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm-debug"
-version = "0.18.2"
+version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d32cfdfa6220c5ebfff38a7ad76665e90f7b7b385d441a29761e7e7e6f9fd7b"
+checksum = "f014f2cbb0a7376c0ef9986139958b08eba8f3ea9866b430a5d5651d828087c8"
 dependencies = [
  "elrond-wasm",
  "hex",
@@ -133,15 +127,22 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm-derive"
-version = "0.18.2"
+version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8989b60ec2a2e275662c96135d8c8c3729389e12d800770f42c44dbc0eeac210"
+checksum = "75b29f7bbb0c8187597a80a1e45f206213e1a21cfe4819ced7e81c5b1ff1d212"
 dependencies = [
  "hex",
  "proc-macro2",
  "quote",
+ "radix_trie",
  "syn",
 ]
+
+[[package]]
+name = "endian-type"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c34f04666d835ff5d62e058c3995147c06f42fe86ff053337632bca83e42702d"
 
 [[package]]
 name = "generic-array"
@@ -205,9 +206,9 @@ checksum = "12b8adadd720df158f4d70dfe7ccc6adb0472d7c55ca83445f6a5ab3e36f8fb6"
 
 [[package]]
 name = "mandos"
-version = "0.8.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b543b9cc89b1794aa56c2439003c3ada40d3a4ba9185091e29c52a875190700"
+checksum = "f378c2437517cd1fb94f0acd9ab10f1537cddc16c2dcd7705ec18abd9e17241d"
 dependencies = [
  "hex",
  "num-bigint",
@@ -242,10 +243,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8452105ba047068f40ff7093dd1d9da90898e63dd61736462e9cdda6a90ad3c3"
 
 [[package]]
-name = "num-bigint"
-version = "0.4.0"
+name = "nibble_vec"
+version = "0.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e0d047c1062aa51e256408c560894e5251f08925980e53cf1aa5bd00eec6512"
+checksum = "c8d77f3db4bce033f4d04db08079b2ef1c3d02b44e86f25d08886fafa7756ffa"
+
+[[package]]
+name = "num-bigint"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "74e768dff5fb39a41b3bcd30bb25cf989706c90d028d1ad71971987aa309d535"
 dependencies = [
  "autocfg",
  "num-integer",
@@ -299,6 +306,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3d0b9745dc2debf507c8422de05d7226cc1f0644216dfdfead988f9b1ab32a7"
 dependencies = [
  "proc-macro2",
+]
+
+[[package]]
+name = "radix_trie"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d3681b28cd95acfb0560ea9441f82d6a4504fa3b15b97bd7b6e952131820e95"
+dependencies = [
+ "endian-type",
+ "nibble_vec",
 ]
 
 [[package]]
