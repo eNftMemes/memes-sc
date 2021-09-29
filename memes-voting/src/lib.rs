@@ -30,7 +30,10 @@ pub trait MemesVoting {
 
 		self.alter_period();
 
-		self.period_memes(self.current_period()).push(nonce);
+		let current_period: u64 = self.current_period();
+
+		self.period_memes(current_period).push(nonce);
+		self.meme_votes(*nonce).insert(current_period, 0);
 
 		Ok(())
 	}
@@ -69,14 +72,16 @@ pub trait MemesVoting {
 			*votes += 1;
 		}
 
-		for (nonce, new_votes) in new_meme_votes.iter() {
-			let current_votes: SingleValueMapper<u32> = self.meme_votes(*nonce, current_period);
+		for (nonce, new_votes) in new_meme_votes.iter_mut() {
+			require!(!self.meme_votes(*nonce).is_empty(), "Meme does not exist");
 
-			if current_votes.is_empty() {
-				current_votes.set(&new_votes);
-			} else {
-				current_votes.update(|votes| *votes += new_votes);
-			}
+			let current_votes: u32 = self.meme_votes(*nonce)
+				.entry(current_period)
+				.and_modify(|value| *value += *new_votes)
+				.or_insert(*new_votes)
+				.get();
+
+			*new_votes = current_votes;
 		}
 
 		address_votes.set(&AddressVotes {
@@ -97,10 +102,7 @@ pub trait MemesVoting {
 			let meme_votes: Vec<MemeVotes> = top_memes.get();
 			for meme_vote in meme_votes {
 				let nonce: u64 = meme_vote.nft_nonce;
-				if new_meme_votes.contains_key(&nonce) {
-					let new_votes: &mut u32 = new_meme_votes.get_mut(&nonce).unwrap();
-					*new_votes += meme_vote.votes;
-				} else {
+				if !new_meme_votes.contains_key(&nonce) {
 					new_meme_votes.insert(meme_vote.nft_nonce, meme_vote.votes);
 				}
 			}
@@ -152,6 +154,7 @@ pub trait MemesVoting {
 		return self.period_memes(period).get(index);
 	}
 
+	// TODO: Maybe add votes for period directly to this endpoint?
 	#[view]
 	fn period_memes_latest(&self, period: u64, page: usize) -> MultiResultVec<u64> {
 		let len = self.period_memes(period).len();
@@ -165,7 +168,7 @@ pub trait MemesVoting {
 
 		let mut result: Vec<u64> = Vec::with_capacity(last_index - first_index + 1);
 		for index in (first_index..=last_index).rev() {
-			result.push(self.period_memes(period).get(index));
+			result.push(self.period_meme(period, index));
 		}
 
 		return MultiResultVec::<u64>::from(result);
@@ -179,18 +182,33 @@ pub trait MemesVoting {
 	}
 
 	#[view]
+	fn meme_votes_all(&self, nonce: u64) -> MultiResultVec<(u64, u32)> {
+		let meme_votes: MapMapper<u64, u32> = self.meme_votes(nonce);
+
+		if 1 > meme_votes.len() {
+			return MultiResultVec::new();
+		}
+
+		let mut result: Vec<(u64, u32)> = Vec::with_capacity(meme_votes.len() + 1);
+		for (key, value) in meme_votes.iter() {
+			result.push((key, value));
+		}
+
+		return MultiResultVec::<(u64, u32)>::from(result);
+	}
+
+	#[view]
+	fn meme_votes_period(&self, nonce: u64, period: &u64) -> u32 {
+		self.meme_votes(nonce).get(period).unwrap_or_default()
+	}
+
+	#[view]
 	#[storage_mapper("periodMemes")]
 	fn period_memes(&self, period: u64) -> VecMapper<u64>;
 
 	#[view]
 	#[storage_mapper("periods")]
 	fn periods(&self) -> VecMapper<u64>;
-
-	// TODO: Maybe use SafeMapStorageMapper or similar?
-	// TODO: Maybe add view to get meme votes for multiple nonces at a time?
-	#[view]
-	#[storage_mapper("memeVotes")]
-	fn meme_votes(&self, nft_nonce: u64, period: u64) -> SingleValueMapper<u32>;
 
 	#[view]
 	#[storage_mapper("periodTopMemes")]
@@ -199,6 +217,9 @@ pub trait MemesVoting {
 	#[view]
 	#[storage_mapper("addressVotes")]
 	fn address_votes(&self, address: ManagedAddress) -> SingleValueMapper<AddressVotes>;
+
+	#[storage_mapper("memeVotes")]
+	fn meme_votes(&self, nft_nonce: u64) -> MapMapper<u64, u32>;
 
 	#[storage_mapper("creatorContract")]
 	fn creator_contract(&self) -> SingleValueMapper<ManagedAddress>;

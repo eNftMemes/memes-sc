@@ -6,6 +6,113 @@
       "path": "voting-vote_memes.scen.json"
     },
     {
+      "step": "setState",
+      "accounts": {
+        "address:last_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "2",
+            "str:periods.item|u32:1": "123,000",
+            "str:periods.item|u32:2": "727,800",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
+            "str:periodMemes|u64:727,800|``.len": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:1": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:2": "3",
+
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:1|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:4|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:4|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:4|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:4|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:4|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:5|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:5|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:5|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:5|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:5|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:6|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:6|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:6|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:6|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:6|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:7|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:7|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:7|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:7|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:7|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:8|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:8|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:8|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:8|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:8|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:9|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:9|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:9|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:9|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:9|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:10|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:10|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:10|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:10|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:10|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:11|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:11|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:11|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:11|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:11|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:12|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:12|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:12|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:12|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:12|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:addressVotes|address:my_address": "u64:727,800|u8:17",
+            "str:addressVotes|address:other_address": "u64:727,800|u8:19",
+            "str:periodTopMemes|u64:727,800": "u64:1|u32:3|u64:2|u32:1"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
       "step": "scCall",
       "txId": "vote-memes-9",
       "tx": {
@@ -13,9 +120,9 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:2", "u64:2", "u64:3", "u64:3", "u64:3", "u64:4", "u64:4", "u64:4", "u64:4", "u64:5", "u64:5", "u64:5", "u64:5", "u64:5", "u64:6", "u64:6", "u64:6"
+          "u64:3", "u64:3", "u64:4", "u64:4", "u64:4", "u64:5", "u64:5", "u64:5", "u64:5", "u64:6", "u64:6", "u64:6", "u64:6", "u64:6", "u64:7", "u64:7", "u64:7"
         ],
-        "gasLimit": "16,000,000",
+        "gasLimit": "30,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -33,6 +140,434 @@
           "storage": {}
         },
         "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:last_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:creator_contract": {
+          "nonce": "3",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "2",
+            "str:periods.item|u32:1": "123,000",
+            "str:periods.item|u32:2": "727,800",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
+            "str:periodMemes|u64:727,800|``.len": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:1": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:2": "3",
+
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:1|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:4|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:4|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:4|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:4|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:4|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:5|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:5|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:5|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:5|``.mapped|u64:727,800": "4",
+            "str:memeVotes|u64:5|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:6|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:6|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:6|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:6|``.mapped|u64:727,800": "5",
+            "str:memeVotes|u64:6|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:7|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:7|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:7|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:7|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:7|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:8|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:8|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:8|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:8|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:8|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:9|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:9|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:9|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:9|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:9|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:10|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:10|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:10|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:10|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:10|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:11|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:11|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:11|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:11|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:11|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:12|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:12|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:12|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:12|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:12|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:addressVotes|address:my_address": "u64:727,800|u8:0",
+            "str:addressVotes|address:other_address": "u64:727,800|u8:19",
+            "str:periodTopMemes|u64:727,800": "u64:6|u32:5|||u64:5|u32:4|||u64:7|u32:3|||u64:4|u32:3|||u64:1|u32:3|||u64:3|u32:2|||u64:2|u32:1"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "vote-memes-10",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          "u64:8", "u64:7", "u64:7", "u64:8", "u64:7", "u64:9", "u64:10", "u64:10", "u64:9"
+        ],
+        "gasLimit": "30,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "4",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:last_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:creator_contract": {
+          "nonce": "3",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "2",
+            "str:periods.item|u32:1": "123,000",
+            "str:periods.item|u32:2": "727,800",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
+            "str:periodMemes|u64:727,800|``.len": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:1": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:2": "3",
+
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:1|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:4|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:4|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:4|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:4|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:4|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:5|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:5|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:5|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:5|``.mapped|u64:727,800": "4",
+            "str:memeVotes|u64:5|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:6|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:6|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:6|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:6|``.mapped|u64:727,800": "5",
+            "str:memeVotes|u64:6|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:7|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:7|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:7|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:7|``.mapped|u64:727,800": "6",
+            "str:memeVotes|u64:7|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:8|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:8|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:8|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:8|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:8|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:9|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:9|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:9|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:9|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:9|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:10|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:10|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:10|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:10|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:10|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:11|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:11|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:11|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:11|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:11|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:12|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:12|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:12|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:12|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:12|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:addressVotes|address:my_address": "u64:727,800|u8:0",
+            "str:addressVotes|address:other_address": "u64:727,800|u8:10",
+            "str:periodTopMemes|u64:727,800": "u64:7|u32:6|||u64:6|u32:5|||u64:5|u32:4|||u64:4|u32:3|||u64:1|u32:3|||u64:10|u32:2|||u64:9|u32:2|||u64:8|u32:2|||u64:3|u32:2|||u64:2|u32:1"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "vote-memes-11",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          "u64:11", "u64:11", "u64:11", "u64:11", "u64:11", "u64:11", "u64:11", "u64:12", "u64:12"
+        ],
+        "gasLimit": "25,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "4",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "3",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:last_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:creator_contract": {
+          "nonce": "3",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:creatorContract": "address:creator_contract",
+            "str:periods.len": "2",
+            "str:periods.item|u32:1": "123,000",
+            "str:periods.item|u32:2": "727,800",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
+            "str:periodMemes|u64:727,800|``.len": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:1": "2",
+            "str:periodMemes|u64:727,800|``.item|u32:2": "3",
+
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:1|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:4|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:4|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:4|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:4|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:4|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:5|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:5|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:5|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:5|``.mapped|u64:727,800": "4",
+            "str:memeVotes|u64:5|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:6|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:6|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:6|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:6|``.mapped|u64:727,800": "5",
+            "str:memeVotes|u64:6|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:7|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:7|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:7|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:7|``.mapped|u64:727,800": "6",
+            "str:memeVotes|u64:7|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:8|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:8|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:8|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:8|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:8|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:9|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:9|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:9|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:9|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:9|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:10|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:10|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:10|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:10|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:10|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:11|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:11|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:11|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:11|``.mapped|u64:727,800": "7",
+            "str:memeVotes|u64:11|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:12|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:12|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:12|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:12|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:12|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:addressVotes|address:my_address": "u64:727,800|u8:0",
+            "str:addressVotes|address:other_address": "u64:727,800|u8:1",
+            "str:periodTopMemes|u64:727,800": "u64:11|u32:7|||u64:7|u32:6|||u64:6|u32:5|||u64:5|u32:4|||u64:4|u32:3|||u64:1|u32:3|||u64:12|u32:2|||u64:10|u32:2|||u64:9|u32:2|||u64:8|u32:2"
+          },
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "vote-memes-11",
+      "tx": {
+        "from": "address:last_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          "u64:2", "u64:2"
+        ],
+        "gasLimit": "25,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "4",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "3",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:last_address": {
           "nonce": "1",
           "balance": "1,000,000",
           "storage": {}
@@ -55,154 +590,88 @@
             "str:periodMemes|u64:727,800|``.len": "2",
             "str:periodMemes|u64:727,800|``.item|u32:1": "2",
             "str:periodMemes|u64:727,800|``.item|u32:2": "3",
-            "str:memeVotes|u64:0|u64:727,800": "3",
-            "str:memeVotes|u64:1|u64:727,800": "1",
-            "str:memeVotes|u64:2|u64:727,800": "2",
-            "str:memeVotes|u64:3|u64:727,800": "3",
-            "str:memeVotes|u64:4|u64:727,800": "4",
-            "str:memeVotes|u64:5|u64:727,800": "5",
-            "str:memeVotes|u64:6|u64:727,800": "3",
-            "str:addressVotes|address:my_address": "u64:727,800|u8:0",
-            "str:addressVotes|address:other_address": "u64:727,800|u8:19",
-            "str:periodTopMemes|u64:727,800": "u64:5|u32:5|u64:4|u32:4|u64:6|u32:3|u64:3|u32:3|u64:0|u32:3|u64:2|u32:2|u64:1|u32:1"
-          },
-          "code": "file:../output/memes-voting.wasm"
-        }
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "vote-memes-10",
-      "tx": {
-        "from": "address:other_address",
-        "to": "sc:voting_contract",
-        "function": "vote_memes",
-        "arguments": [
-          "u64:7", "u64:6", "u64:6", "u64:7", "u64:6", "u64:8", "u64:9", "u64:9", "u64:8"
-        ],
-        "gasLimit": "20,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "0",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "checkState",
-      "accounts": {
-        "address:my_address": {
-          "nonce": "4",
-          "balance": "1,000,000",
-          "storage": {}
-        },
-        "address:other_address": {
-          "nonce": "2",
-          "balance": "1,000,000",
-          "storage": {}
-        },
-        "address:creator_contract": {
-          "nonce": "3",
-          "balance": "0",
-          "owner": "address:my_address"
-        },
-        "sc:voting_contract": {
-          "nonce": "0",
-          "balance": "0",
-          "storage": {
-            "str:creatorContract": "address:creator_contract",
-            "str:periods.len": "2",
-            "str:periods.item|u32:1": "123,000",
-            "str:periods.item|u32:2": "727,800",
-            "str:periodMemes|u64:123,000|``.len": "1",
-            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
-            "str:periodMemes|u64:727,800|``.len": "2",
-            "str:periodMemes|u64:727,800|``.item|u32:1": "2",
-            "str:periodMemes|u64:727,800|``.item|u32:2": "3",
-            "str:memeVotes|u64:0|u64:727,800": "3",
-            "str:memeVotes|u64:1|u64:727,800": "1",
-            "str:memeVotes|u64:2|u64:727,800": "2",
-            "str:memeVotes|u64:3|u64:727,800": "3",
-            "str:memeVotes|u64:4|u64:727,800": "4",
-            "str:memeVotes|u64:5|u64:727,800": "5",
-            "str:memeVotes|u64:6|u64:727,800": "6",
-            "str:memeVotes|u64:7|u64:727,800": "2",
-            "str:memeVotes|u64:8|u64:727,800": "2",
-            "str:memeVotes|u64:9|u64:727,800": "2",
-            "str:addressVotes|address:my_address": "u64:727,800|u8:0",
-            "str:addressVotes|address:other_address": "u64:727,800|u8:10",
-            "str:periodTopMemes|u64:727,800": "u64:6|u32:6|||u64:5|u32:5|||u64:4|u32:4|||u64:3|u32:3|||u64:0|u32:3|||u64:9|u32:2|||u64:8|u32:2|||u64:7|u32:2|||u64:2|u32:2|||u64:1|u32:1"
-          },
-          "code": "file:../output/memes-voting.wasm"
-        }
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "vote-memes-11",
-      "tx": {
-        "from": "address:other_address",
-        "to": "sc:voting_contract",
-        "function": "vote_memes",
-        "arguments": [
-          "u64:10", "u64:10", "u64:10", "u64:10", "u64:10", "u64:10", "u64:10", "u64:11", "u64:11"
-        ],
-        "gasLimit": "20,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "0",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "checkState",
-      "accounts": {
-        "address:my_address": {
-          "nonce": "4",
-          "balance": "1,000,000",
-          "storage": {}
-        },
-        "address:other_address": {
-          "nonce": "3",
-          "balance": "1,000,000",
-          "storage": {}
-        },
-        "address:creator_contract": {
-          "nonce": "3",
-          "balance": "0",
-          "owner": "address:my_address"
-        },
-        "sc:voting_contract": {
-          "nonce": "0",
-          "balance": "0",
-          "storage": {
-            "str:creatorContract": "address:creator_contract",
-            "str:periods.len": "2",
-            "str:periods.item|u32:1": "123,000",
-            "str:periods.item|u32:2": "727,800",
-            "str:periodMemes|u64:123,000|``.len": "1",
-            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
-            "str:periodMemes|u64:727,800|``.len": "2",
-            "str:periodMemes|u64:727,800|``.item|u32:1": "2",
-            "str:periodMemes|u64:727,800|``.item|u32:2": "3",
-            "str:memeVotes|u64:0|u64:727,800": "3",
-            "str:memeVotes|u64:1|u64:727,800": "1",
-            "str:memeVotes|u64:2|u64:727,800": "2",
-            "str:memeVotes|u64:3|u64:727,800": "3",
-            "str:memeVotes|u64:4|u64:727,800": "4",
-            "str:memeVotes|u64:5|u64:727,800": "5",
-            "str:memeVotes|u64:6|u64:727,800": "6",
-            "str:memeVotes|u64:7|u64:727,800": "2",
-            "str:memeVotes|u64:8|u64:727,800": "2",
-            "str:memeVotes|u64:9|u64:727,800": "2",
-            "str:memeVotes|u64:10|u64:727,800": "7",
-            "str:memeVotes|u64:11|u64:727,800": "2",
+
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:1|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:2|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:4|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:4|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:4|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:4|``.mapped|u64:727,800": "3",
+            "str:memeVotes|u64:4|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:5|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:5|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:5|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:5|``.mapped|u64:727,800": "4",
+            "str:memeVotes|u64:5|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:6|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:6|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:6|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:6|``.mapped|u64:727,800": "5",
+            "str:memeVotes|u64:6|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:7|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:7|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:7|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:7|``.mapped|u64:727,800": "6",
+            "str:memeVotes|u64:7|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:8|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:8|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:8|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:8|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:8|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:9|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:9|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:9|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:9|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:9|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:10|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:10|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:10|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:10|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:10|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:11|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:11|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:11|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:11|``.mapped|u64:727,800": "7",
+            "str:memeVotes|u64:11|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:12|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:12|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:12|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:12|``.mapped|u64:727,800": "2",
+            "str:memeVotes|u64:12|``.info": "u32:1|u32:1|u32:1|u32:1",
+
             "str:addressVotes|address:my_address": "u64:727,800|u8:0",
             "str:addressVotes|address:other_address": "u64:727,800|u8:1",
-            "str:periodTopMemes|u64:727,800": "u64:10|u32:7|||u64:6|u32:6|||u64:5|u32:5|||u64:4|u32:4|||u64:3|u32:3|||u64:0|u32:3|||u64:11|u32:2|||u64:9|u32:2|||u64:8|u32:2|||u64:7|u32:2"
+            "str:addressVotes|address:last_address": "u64:727,800|u8:18",
+            "str:periodTopMemes|u64:727,800": "u64:11|u32:7|||u64:7|u32:6|||u64:6|u32:5|||u64:5|u32:4|||u64:4|u32:3|||u64:2|u32:3|||u64:1|u32:3|||u64:12|u32:2|||u64:10|u32:2|||u64:9|u32:2"
           },
           "code": "file:../output/memes-voting.wasm"
         }

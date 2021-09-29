@@ -1,0 +1,77 @@
+{
+  "name": "voting add meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "voting-vote_memes.scen.json"
+    },
+    {
+      "step": "scQuery",
+      "txId": "memesVotesAll",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "meme_votes_all",
+        "arguments": [
+          "u64:1"
+        ]
+      },
+      "expect": {
+        "out": [
+          "u64:123,000|u32:0", "u64:727,800|u32:3"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "memesVotesAll",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "meme_votes_all",
+        "arguments": [
+          "u64:2"
+        ]
+      },
+      "expect": {
+        "out": [
+          "u64:727,800|u32:1"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "memesVotesPeriod",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "meme_votes_period",
+        "arguments": [
+          "u64:1", "u64:123,000"
+        ]
+      },
+      "expect": {
+        "out": [
+          "0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "memesVotesPeriod",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "meme_votes_period",
+        "arguments": [
+          "u64:2", "u64:727,800"
+        ]
+      },
+      "expect": {
+        "out": [
+          "1"
+        ],
+        "status": "0"
+      }
+    }
+  ]
+}

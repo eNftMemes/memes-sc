@@ -45,7 +45,12 @@
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
             "str:periodMemes|u64:123,000|``.len": "1",
-            "str:periodMemes|u64:123,000|``.item|u32:1": "1"
+            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+            "str:memeVotes|u64:1|``.info": "u32:1|u32:1|u32:1|u32:1"
           },
           "code": "file:../output/memes-voting.wasm"
         }

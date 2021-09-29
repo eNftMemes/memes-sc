@@ -7,15 +7,35 @@
     },
     {
       "step": "scCall",
+      "txId": "vote-memes-error",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          "u64:0"
+        ],
+        "gasLimit": "15,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Meme does not exist",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
       "txId": "vote-memes-4",
       "tx": {
         "from": "address:my_address",
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1", "u64:0", "u64:1"
+          "u64:1", "u64:2", "u64:1", "u64:2", "u64:1", "u64:2", "u64:1", "u64:2", "u64:1", "u64:2", "u64:1", "u64:2", "u64:1", "u64:2", "u64:1", "u64:2"
         ],
-        "gasLimit": "15,000,000",
+        "gasLimit": "20,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -28,7 +48,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "4",
+          "nonce": "5",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -55,11 +75,33 @@
             "str:periodMemes|u64:727,800|``.len": "2",
             "str:periodMemes|u64:727,800|``.item|u32:1": "2",
             "str:periodMemes|u64:727,800|``.item|u32:2": "3",
-            "str:memeVotes|u64:0|u64:727,800": "11",
-            "str:memeVotes|u64:1|u64:727,800": "9",
+
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "11",
+            "str:memeVotes|u64:1|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "9",
+            "str:memeVotes|u64:2|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
             "str:addressVotes|address:my_address": "u64:727,800|u8:1",
             "str:addressVotes|address:other_address": "u64:727,800|u8:19",
-            "str:periodTopMemes|u64:727,800": "u64:0|u32:11|u64:1|u32:9"
+            "str:periodTopMemes|u64:727,800": "u64:1|u32:11|u64:2|u32:9"
           },
           "code": "file:../output/memes-voting.wasm"
         }
@@ -67,13 +109,13 @@
     },
     {
       "step": "scCall",
-      "txId": "vote-memes-4",
+      "txId": "vote-memes-41",
       "tx": {
         "from": "address:my_address",
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:0", "u64:1"
+          "u64:1", "u64:2"
         ],
         "gasLimit": "15,000,000",
         "gasPrice": "0"
@@ -99,9 +141,9 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:0", "u64:1"
+          "u64:1", "u64:2"
         ],
-        "gasLimit": "15,000,000",
+        "gasLimit": "25,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -114,7 +156,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "6",
+          "nonce": "7",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -142,14 +184,44 @@
             "str:periodMemes|u64:727,800|``.len": "2",
             "str:periodMemes|u64:727,800|``.item|u32:1": "2",
             "str:periodMemes|u64:727,800|``.item|u32:2": "3",
-            "str:memeVotes|u64:0|u64:727,800": "11",
-            "str:memeVotes|u64:1|u64:727,800": "9",
-            "str:memeVotes|u64:0|u64:1500,000": "1",
-            "str:memeVotes|u64:1|u64:1500,000": "1",
+
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:3",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "11",
+
+            "str:memeVotes|u64:1|``.node_links|u32:3": "u32:2|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:3": "1500,000",
+            "str:memeVotes|u64:1|``.node_id|u64:1500,000": "3",
+            "str:memeVotes|u64:1|``.mapped|u64:1500,000": "1",
+            "str:memeVotes|u64:1|``.info": "u32:3|u32:1|u32:3|u32:3",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "9",
+
+            "str:memeVotes|u64:2|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:2": "1500,000",
+            "str:memeVotes|u64:2|``.node_id|u64:1500,000": "2",
+            "str:memeVotes|u64:2|``.mapped|u64:1500,000": "1",
+            "str:memeVotes|u64:2|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
             "str:addressVotes|address:my_address": "u64:1500,000|u8:18",
             "str:addressVotes|address:other_address": "u64:727,800|u8:19",
-            "str:periodTopMemes|u64:727,800": "u64:0|u32:11|u64:1|u32:9",
-            "str:periodTopMemes|u64:1500,000": "u64:1|u32:1|u64:0|u32:1"
+            "str:periodTopMemes|u64:727,800": "u64:1|u32:11|u64:2|u32:9",
+            "str:periodTopMemes|u64:1500,000": "u64:2|u32:1|u64:1|u32:1"
           },
           "code": "file:../output/memes-voting.wasm"
         }
@@ -163,9 +235,9 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:0", "u64:1", "u64:0"
+          "u64:1", "u64:2", "u64:1"
         ],
-        "gasLimit": "15,000,000",
+        "gasLimit": "20,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -178,7 +250,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "6",
+          "nonce": "7",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -206,14 +278,44 @@
             "str:periodMemes|u64:727,800|``.len": "2",
             "str:periodMemes|u64:727,800|``.item|u32:1": "2",
             "str:periodMemes|u64:727,800|``.item|u32:2": "3",
-            "str:memeVotes|u64:0|u64:727,800": "11",
-            "str:memeVotes|u64:1|u64:727,800": "9",
-            "str:memeVotes|u64:0|u64:1500,000": "3",
-            "str:memeVotes|u64:1|u64:1500,000": "2",
+
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
+
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:3",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "11",
+
+            "str:memeVotes|u64:1|``.node_links|u32:3": "u32:2|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:3": "1500,000",
+            "str:memeVotes|u64:1|``.node_id|u64:1500,000": "3",
+            "str:memeVotes|u64:1|``.mapped|u64:1500,000": "3",
+            "str:memeVotes|u64:1|``.info": "u32:3|u32:1|u32:3|u32:3",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "9",
+
+            "str:memeVotes|u64:2|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:2": "1500,000",
+            "str:memeVotes|u64:2|``.node_id|u64:1500,000": "2",
+            "str:memeVotes|u64:2|``.mapped|u64:1500,000": "2",
+            "str:memeVotes|u64:2|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
             "str:addressVotes|address:my_address": "u64:1500,000|u8:18",
             "str:addressVotes|address:other_address": "u64:1500,000|u8:17",
-            "str:periodTopMemes|u64:727,800": "u64:0|u32:11|u64:1|u32:9",
-            "str:periodTopMemes|u64:1500,000": "u64:0|u32:3|u64:1|u32:2"
+            "str:periodTopMemes|u64:727,800": "u64:1|u32:11|u64:2|u32:9",
+            "str:periodTopMemes|u64:1500,000": "u64:1|u32:3|u64:2|u32:2"
           },
           "code": "file:../output/memes-voting.wasm"
         }
