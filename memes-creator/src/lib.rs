@@ -69,7 +69,7 @@ pub trait MemesCreator {
 			"Address already created a meme in the last 10 minutes"
 		);
 		require!(
-			!self.categories(category).is_empty(),
+			self.categories().contains_key(category),
 			"Category does not exist"
 		);
 
@@ -80,11 +80,11 @@ pub trait MemesCreator {
 
 	#[only_owner]
 	#[endpoint]
-	fn modify_categories(&self, category: &u8, name: &ManagedBuffer) -> SCResult<()> {
-		if self.categories(category).is_empty() {
-			self.categories(category).set(name);
+	fn modify_categories(&self, category: &u8, name: ManagedBuffer) -> SCResult<()> {
+		if !self.categories().contains_key(category) {
+			self.categories().insert(*category, name);
 		} else {
-			self.categories(category).clear();
+			self.categories().remove(category);
 		}
 
 		Ok(())
@@ -169,6 +169,23 @@ pub trait MemesCreator {
 		return MultiResultVec::<u64>::from(result);
 	}
 
+	// TODO: Use ManagedMultiResultVec when in new version: https://github.com/ElrondNetwork/elrond-wasm-rs/blob/master/contracts/feature-tests/basic-features/src/storage_mapper_map_storage.rs#L10
+	#[view]
+	fn categories_all(&self) -> MultiResultVec<MultiResult2<u8, ManagedBuffer>> {
+		let categories_all: MapMapper<u8, ManagedBuffer> = self.categories();
+
+		if 1 > categories_all.len() {
+			return MultiResultVec::new();
+		}
+
+		let mut result: Vec<MultiResult2<u8, ManagedBuffer>> = Vec::with_capacity(categories_all.len() + 1);
+		for (key, value) in categories_all.iter() {
+			result.push((key, value).into());
+		}
+
+		return MultiResultVec::from(result);
+	}
+
 	#[view]
 	#[storage_mapper("addressMemes")]
 	fn address_memes(&self, address: &ManagedAddress) -> VecMapper<u64>;
@@ -185,15 +202,12 @@ pub trait MemesCreator {
 	#[storage_mapper("votingSc")]
 	fn voting_sc(&self) -> SingleValueMapper<ManagedAddress>;
 
-	// TODO: Check if this works properly, since in Mandos tests, this gives EGLD
 	#[view]
 	#[storage_mapper("tokenIdentifier")]
 	fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
 
-	// TODO: Maybe use SafeMapStorageMapper/MapMapper or similar?
-	#[view]
 	#[storage_mapper("categories")]
-	fn categories(&self, category: &u8) -> SingleValueMapper<ManagedBuffer>;
+	fn categories(&self) -> MapMapper<u8, ManagedBuffer>;
 
 	// Always needed
 	#[endpoint]

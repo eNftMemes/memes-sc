@@ -23,9 +23,19 @@
           },
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "1",
+            "str:categories|``.node_id|u8:1": "1",
+            "str:categories|``.mapped|u8:1": "str:funny",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "2",
+            "str:categories|``.node_id|u8:2": "2",
+            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
             "str:addressLastMemeTime|address:my_address": "123,000"
           },
           "code": "file:../output/memes-creator.wasm"
@@ -83,9 +93,19 @@
           "balance": "0",
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "1",
+            "str:categories|``.node_id|u8:1": "1",
+            "str:categories|``.mapped|u8:1": "str:funny",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "2",
+            "str:categories|``.node_id|u8:2": "2",
+            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
             "str:addressLastMemeTime|address:my_address": "123,000"
           },
           "esdt": {
@@ -181,9 +201,19 @@
           "balance": "0",
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "1",
+            "str:categories|``.node_id|u8:1": "1",
+            "str:categories|``.mapped|u8:1": "str:funny",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "2",
+            "str:categories|``.node_id|u8:2": "2",
+            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
             "str:addressLastMemeTime|address:my_address": "123,601",
             "str:addressMemes|address:my_address|``.len": "1",
             "str:addressMemes|address:my_address|``.item|u32:1": "1",

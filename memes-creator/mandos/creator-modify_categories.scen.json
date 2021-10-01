@@ -52,9 +52,17 @@
           "balance": "0",
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "1",
+            "str:categories|``.node_id|u8:1": "1",
+            "str:categories|``.mapped|u8:1": "str:funny",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "2",
+            "str:categories|``.node_id|u8:2": "2",
+            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -130,10 +138,22 @@
           "balance": "0",
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
-            "str:categories|u8:3": "str:other",
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "1",
+            "str:categories|``.node_id|u8:1": "1",
+            "str:categories|``.mapped|u8:1": "str:funny",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:3",
+            "str:categories|``.value|u32:2": "2",
+            "str:categories|``.node_id|u8:2": "2",
+            "str:categories|``.mapped|u8:2": "str:random",
+
+            "str:categories|``.node_links|u32:3": "u32:2|u32:0",
+            "str:categories|``.value|u32:3": "3",
+            "str:categories|``.node_id|u8:3": "3",
+            "str:categories|``.mapped|u8:3": "str:other",
+            "str:categories|``.info": "u32:3|u32:1|u32:3|u32:3"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -209,9 +229,18 @@
           "balance": "0",
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "1",
+            "str:categories|``.node_id|u8:1": "1",
+            "str:categories|``.mapped|u8:1": "str:funny",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "2",
+            "str:categories|``.node_id|u8:2": "2",
+            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:3"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -289,9 +318,18 @@
           "balance": "0",
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:categories|u8:1": "str:funny",
-            "str:categories|u8:2": "str:random",
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "1",
+            "str:categories|``.node_id|u8:1": "1",
+            "str:categories|``.mapped|u8:1": "str:funny",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "2",
+            "str:categories|``.node_id|u8:2": "2",
+            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:3"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {

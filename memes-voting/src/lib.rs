@@ -181,6 +181,7 @@ pub trait MemesVoting {
 		return self.periods().get(len);
 	}
 
+	// TODO: Use ManagedMultiResultVec when in new version: https://github.com/ElrondNetwork/elrond-wasm-rs/blob/master/contracts/feature-tests/basic-features/src/storage_mapper_map_storage.rs#L10
 	#[view]
 	fn meme_votes_all(&self, nonce: u64) -> MultiResultVec<(u64, u32)> {
 		let meme_votes: MapMapper<u64, u32> = self.meme_votes(nonce);
@@ -223,8 +224,6 @@ pub trait MemesVoting {
 
 	#[storage_mapper("creatorContract")]
 	fn creator_contract(&self) -> SingleValueMapper<ManagedAddress>;
-
-	// TODO: Add storage for getting period for a meme?Or index that off chain?
 
     // Always needed
     #[endpoint]
