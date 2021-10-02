@@ -140,7 +140,7 @@ pub trait MemesVoting {
 	}
 
 	#[view]
-	fn current_period_memes_latest(&self, page: usize) -> MultiResultVec<u64> {
+	fn current_period_memes_latest(&self, page: usize) -> MultiResultVec<(u64, u32)> {
 		return self.period_memes_latest(self.current_period(), page);
 	}
 
@@ -154,9 +154,9 @@ pub trait MemesVoting {
 		return self.period_memes(period).get(index);
 	}
 
-	// TODO: Maybe add votes for period directly to this endpoint?
+	// TODO: Use ManagedMultiResultVec when in new version
 	#[view]
-	fn period_memes_latest(&self, period: u64, page: usize) -> MultiResultVec<u64> {
+	fn period_memes_latest(&self, period: u64, page: usize) -> MultiResultVec<(u64, u32)> {
 		let len = self.period_memes(period).len();
 
 		if len <= page * PER_PAGE {
@@ -166,12 +166,15 @@ pub trait MemesVoting {
 		let last_index = len - page * PER_PAGE;
 		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
 
-		let mut result: Vec<u64> = Vec::with_capacity(last_index - first_index + 1);
+		let mut result: Vec<(u64, u32)> = Vec::with_capacity(last_index - first_index + 1);
 		for index in (first_index..=last_index).rev() {
-			result.push(self.period_meme(period, index));
+			let nonce: u64 = self.period_meme(period, index);
+			let votes: u32 = self.meme_votes_period(nonce, &period);
+
+			result.push((nonce, votes));
 		}
 
-		return MultiResultVec::<u64>::from(result);
+		return MultiResultVec::<(u64, u32)>::from(result);
 	}
 
 	#[view]
@@ -204,10 +207,6 @@ pub trait MemesVoting {
 	}
 
 	#[view]
-	#[storage_mapper("periodMemes")]
-	fn period_memes(&self, period: u64) -> VecMapper<u64>;
-
-	#[view]
 	#[storage_mapper("periods")]
 	fn periods(&self) -> VecMapper<u64>;
 
@@ -218,6 +217,9 @@ pub trait MemesVoting {
 	#[view]
 	#[storage_mapper("addressVotes")]
 	fn address_votes(&self, address: ManagedAddress) -> SingleValueMapper<AddressVotes>;
+
+	#[storage_mapper("periodMemes")]
+	fn period_memes(&self, period: u64) -> VecMapper<u64>;
 
 	#[storage_mapper("memeVotes")]
 	fn meme_votes(&self, nft_nonce: u64) -> MapMapper<u64, u32>;
