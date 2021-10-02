@@ -24,6 +24,7 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
             "str:categories|``.value|u32:1": "1",
@@ -126,6 +127,21 @@
       "expect": {
         "out": [
           "u8:1", "str:funny", "u8:2", "str:random"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "nftRoyalties",
+      "tx": {
+        "to": "sc:creator_contract",
+        "function": "nft_royalties",
+        "arguments": []
+      },
+      "expect": {
+        "out": [
+          "u16:500"
         ],
         "status": "0"
       }

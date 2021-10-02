@@ -5,8 +5,6 @@ elrond_wasm::imports!();
 
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
 const NFT_AMOUNT: u32 = 1;
-// TODO: Make royalties configurable; also in voting?
-const NFT_ROYALTIES: u32 = 500;
 const PER_PAGE: usize = 10;
 
 mod voting_proxy {
@@ -22,7 +20,10 @@ mod voting_proxy {
 #[elrond_wasm::contract]
 pub trait MemesCreator {
 	#[init]
-	fn init(&self) {}
+	fn init(&self) {
+		let royalties: u16 = 500;
+		self.nft_royalties().set(&royalties);
+	}
 
 	// TODO: Test this function with Mandos after it is supported to issue tokens
 	#[endpoint]
@@ -92,7 +93,7 @@ pub trait MemesCreator {
 
 	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: u8) -> AsyncCall {
 		let amount: &BigUint = &self.types().big_uint_from(NFT_AMOUNT);
-		let royalties: &BigUint = &BigUint::from(NFT_ROYALTIES);
+		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
 
 		// let sc_address: ManagedAddress = self.blockchain().get_sc_address();
 		let nft_token: &TokenIdentifier = &self.token_identifier().get();
@@ -141,6 +142,16 @@ pub trait MemesCreator {
 	#[endpoint]
 	fn set_voting_sc(&self, sc: &ManagedAddress) -> SCResult<()> {
 		self.voting_sc().set(sc);
+
+		Ok(())
+	}
+
+	#[only_owner]
+	#[endpoint]
+	fn set_nft_royalties(&self, royalties: u16) -> SCResult<()> {
+		require!(royalties > 100 && royalties < 2500, "Royalties can not be less than 1% and greater than 25%");
+
+		self.nft_royalties().set(&royalties);
 
 		Ok(())
 	}
@@ -205,6 +216,10 @@ pub trait MemesCreator {
 	#[view]
 	#[storage_mapper("tokenIdentifier")]
 	fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
+
+	#[view]
+	#[storage_mapper("nftRoyalties")]
+	fn nft_royalties(&self) -> SingleValueMapper<u16>;
 
 	#[storage_mapper("categories")]
 	fn categories(&self) -> MapMapper<u8, ManagedBuffer>;

@@ -61,7 +61,9 @@
         "sc:creator_contract": {
           "nonce": "0",
           "balance": "0",
-          "storage": {},
+          "storage": {
+            "str:nftRoyalties": "500"
+          },
           "code": "file:../output/memes-creator.wasm"
         },
         "address:voting_contract": {
@@ -88,7 +90,8 @@
             }
           },
           "storage": {
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:nftRoyalties": "500"
           },
           "owner": "address:my_address",
           "code": "file:../output/memes-creator.wasm"
@@ -122,7 +125,8 @@
             }
           },
           "storage": {
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:nftRoyalties": "500"
           },
           "code": "file:../output/memes-creator.wasm"
         },
@@ -181,7 +185,8 @@
           },
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:nftRoyalties": "500"
           },
           "code": "file:../output/memes-creator.wasm"
         },
@@ -275,7 +280,8 @@
           },
           "storage": {
             "str:votingSc": "address:voting_contract",
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b"
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:nftRoyalties": "500"
           },
           "code": "file:../output/memes-creator.wasm"
         },
