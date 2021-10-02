@@ -218,14 +218,15 @@ pub trait MemesVoting {
 	#[storage_mapper("addressVotes")]
 	fn address_votes(&self, address: ManagedAddress) -> SingleValueMapper<AddressVotes>;
 
+	#[view]
+	#[storage_mapper("creatorContract")]
+	fn creator_contract(&self) -> SingleValueMapper<ManagedAddress>;
+
 	#[storage_mapper("periodMemes")]
 	fn period_memes(&self, period: u64) -> VecMapper<u64>;
 
 	#[storage_mapper("memeVotes")]
 	fn meme_votes(&self, nft_nonce: u64) -> MapMapper<u64, u32>;
-
-	#[storage_mapper("creatorContract")]
-	fn creator_contract(&self) -> SingleValueMapper<ManagedAddress>;
 
     // Always needed
     #[endpoint]

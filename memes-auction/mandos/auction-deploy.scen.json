@@ -9,6 +9,11 @@
           "balance": "1,000,000",
           "storage": {}
         },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
         "address:voting_contract": {
           "nonce": "0",
           "balance": "0",
@@ -37,7 +42,8 @@
         "contractCode": "file:../output/memes-auction.wasm",
         "value": "0",
         "arguments": [
-          "address:voting_contract"
+          "address:voting_contract",
+          "str:TRIPANFT-745e9b"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -56,6 +62,11 @@
           "balance": "1,000,000",
           "storage": {}
         },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
         "address:voting_contract": {
           "nonce": "0",
           "balance": "0",
@@ -65,7 +76,9 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:votingContract": "address:voting_contract"
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:bidCutPercentage": "500"
           },
           "code": "file:../output/memes-auction.wasm"
         }
