@@ -3,14 +3,20 @@
 
 elrond_wasm::imports!();
 
+pub mod meme;
+use meme::*;
+
+// let min_bid_start: BigUint = BigUint::from("1000000000000000"); // 0.001 EGLD
+
 #[elrond_wasm::contract]
 pub trait MemesAuction {
 	#[init]
-	fn init(&self, voting_contract: &ManagedAddress, token_identifier: &TokenIdentifier) {
+	fn init(&self, voting_contract: &ManagedAddress, token_identifier: &TokenIdentifier, min_bid_start: &BigUint) {
 		self.voting_contract().set(voting_contract);
 		self.token_identifier().set(token_identifier);
 		let bid_cut: u16 = 500;
 		self.bid_cut_percentage().set(&bid_cut);
+		self.min_bid_start().set(&min_bid_start);
 	}
 
 	#[only_owner]
@@ -23,13 +29,45 @@ pub trait MemesAuction {
 		Ok(())
 	}
 
+	#[only_owner]
 	#[endpoint]
-	fn start_auction(&self) -> SCResult<()> {
+	fn set_min_bid_start(&self, min_bid_start: &BigUint) -> SCResult<()> {
+		self.min_bid_start().set(min_bid_start);
+
+		Ok(())
+	}
+
+	#[endpoint]
+	fn start_auction(&self, period: u64, #[var_args] nfts: VarArgs<u64>) -> SCResult<()> {
 		let caller: ManagedAddress = self.blockchain().get_caller();
 		require!(
 			caller == self.voting_contract().get(),
 			"Only voting contract can call this"
 		);
+		require!(
+			nfts.len() <= 10,
+			"There can't be more than 10 nfts in the auction. Something went wrong..."
+		);
+
+		let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
+		let min_bid_start: BigUint = self.min_bid_start().get();
+
+		let memes: Vec<u64> = nfts.into_vec();
+		for index in (0..memes.len()).rev() {
+			let nonce: u64 = memes[index];
+			let mut min_bid: BigUint = BigUint::from(index as u64);
+			min_bid *= &min_bid_start;
+
+			let auction = Auction {
+				min_bid,
+				current_bid: self.types().big_uint_zero(),
+				current_winner: self.types().address_zero(),
+				bid_cut_percentage,
+				owner_payed: false,
+			};
+			self.period_meme_auction(period, nonce).set(&auction);
+			self.period_auctioned_memes(period).push(&nonce);
+		}
 
 		Ok(())
 	}
@@ -45,6 +83,18 @@ pub trait MemesAuction {
 	#[view]
 	#[storage_mapper("bidCutPercentage")]
 	fn bid_cut_percentage(&self) -> SingleValueMapper<u16>;
+
+	#[view]
+	#[storage_mapper("minBidStart")]
+	fn min_bid_start(&self) -> SingleValueMapper<BigUint>;
+
+	#[view]
+	#[storage_mapper("periodAuctionMemes")]
+	fn period_meme_auction(&self, period: u64, nonce: u64) -> SingleValueMapper<Auction<Self::Api>>;
+
+	#[view]
+	#[storage_mapper("periodAuctionedMemes")]
+	fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
 
     // Always needed
     #[endpoint]
