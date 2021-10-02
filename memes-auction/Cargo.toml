@@ -1,0 +1,29 @@
+[package]
+name = "memes-auction"
+version = "0.0.1"
+authors = ["Rares Serban <raresserban96@outlook.com>"]
+edition = "2018"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[features]
+wasm-output-mode = [ "elrond-wasm-node",]
+
+[dependencies.elrond-wasm]
+version = "0.19.1"
+features = ["derive"]
+
+[dependencies.elrond-wasm-derive]
+version = "0.19.1"
+
+[dependencies.elrond-wasm-node]
+version = "0.19.1"
+optional = true
+
+[dependencies]
+hashbrown = "0.11.2"
+
+[dev-dependencies.elrond-wasm-debug]
+version = "0.19.1"

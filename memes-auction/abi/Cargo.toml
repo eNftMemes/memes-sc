@@ -1,0 +1,15 @@
+[package]
+name = "memes-auction-abi"
+version = "0.0.0"
+authors = [ "you",]
+edition = "2018"
+publish = false
+
+[dependencies.memes-auction]
+path = ".."
+
+[dependencies.elrond-wasm]
+version = "0.19.1"
+
+[dependencies.elrond-wasm-debug]
+version = "0.19.1"
