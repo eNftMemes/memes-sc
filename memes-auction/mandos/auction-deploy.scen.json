@@ -43,7 +43,8 @@
         "value": "0",
         "arguments": [
           "address:voting_contract",
-          "str:TRIPANFT-745e9b"
+          "str:TRIPANFT-745e9b",
+          "5"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -78,7 +79,8 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
-            "str:bidCutPercentage": "500"
+            "str:bidCutPercentage": "500",
+            "str:minBidStart": "5"
           },
           "code": "file:../output/memes-auction.wasm"
         }

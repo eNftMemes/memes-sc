@@ -3,8 +3,8 @@
 
 elrond_wasm::imports!();
 
-pub mod meme;
-use meme::*;
+pub mod auction;
+use auction::*;
 
 // let min_bid_start: BigUint = BigUint::from("1000000000000000"); // 0.001 EGLD
 
@@ -16,7 +16,7 @@ pub trait MemesAuction {
 		self.token_identifier().set(token_identifier);
 		let bid_cut: u16 = 500;
 		self.bid_cut_percentage().set(&bid_cut);
-		self.min_bid_start().set(&min_bid_start);
+		self.min_bid_start().set(min_bid_start);
 	}
 
 	#[only_owner]
@@ -55,13 +55,13 @@ pub trait MemesAuction {
 		let memes: Vec<u64> = nfts.into_vec();
 		for index in (0..memes.len()).rev() {
 			let nonce: u64 = memes[index];
-			let mut min_bid: BigUint = BigUint::from(index as u64);
+			let mut min_bid: BigUint = self.types().big_uint_from((index + 1) as u64);
 			min_bid *= &min_bid_start;
 
 			let auction = Auction {
 				min_bid,
 				current_bid: self.types().big_uint_zero(),
-				current_winner: self.types().address_zero(),
+				current_winner: self.types().managed_address_zero(),
 				bid_cut_percentage,
 				owner_payed: false,
 			};

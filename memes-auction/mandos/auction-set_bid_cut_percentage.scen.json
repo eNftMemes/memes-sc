@@ -85,7 +85,8 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
-            "str:bidCutPercentage": "500"
+            "str:bidCutPercentage": "500",
+            "str:minBidStart": "5"
           },
           "code": "file:../output/memes-auction.wasm"
         },
@@ -147,7 +148,8 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
-            "str:bidCutPercentage": "1000"
+            "str:bidCutPercentage": "1000",
+            "str:minBidStart": "5"
           },
           "code": "file:../output/memes-auction.wasm"
         },

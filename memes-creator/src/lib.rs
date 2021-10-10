@@ -97,9 +97,9 @@ pub trait MemesCreator {
 
 		// let sc_address: ManagedAddress = self.blockchain().get_sc_address();
 		let nft_token: &TokenIdentifier = &self.token_identifier().get();
-		let hash: &ManagedBuffer = &self.types().managed_buffer_empty();
+		let hash: &ManagedBuffer = &self.types().managed_buffer_new();
 
-		let mut urls = ManagedVec::new_empty(self.type_manager());
+		let mut urls = self.types().managed_vec_new();
 		urls.push(url);
 
 		let nonce: u64 = self.send().esdt_nft_create(nft_token, &amount, name, royalties, hash, &{ category }, &urls);
@@ -117,14 +117,13 @@ pub trait MemesCreator {
 			.async_call();
 	}
 
-	// TODO: Change AsyncCallResult to ManagedAsyncCallResult in new version?
 	#[callback]
-	fn init_callback(&self, #[call_result] result: AsyncCallResult<TokenIdentifier>) {
+	fn init_callback(&self, #[call_result] result: ManagedAsyncCallResult<TokenIdentifier>) {
 		match result {
-			AsyncCallResult::Ok(token_id) => {
+			ManagedAsyncCallResult::Ok(token_id) => {
 				self.token_identifier().set(&token_id);
 			},
-			AsyncCallResult::Err(_) => {
+			ManagedAsyncCallResult::Err(_) => {
 				let caller = self.blockchain().get_owner_address();
 				let (returned_tokens, token_id) = self.call_value().payment_token_pair();
 				if token_id.is_egld() && returned_tokens > 0 {
@@ -162,39 +161,38 @@ pub trait MemesCreator {
 	}
 
 	#[view]
-	fn address_memes_latest(&self, address: &ManagedAddress, page: usize) -> MultiResultVec<u64> {
+	fn address_memes_latest(&self, address: &ManagedAddress, page: usize) -> ManagedMultiResultVec<u64> {
 		let len = self.address_memes(address).len();
 
 		if len <= page * PER_PAGE {
-			return MultiResultVec::new();
+			return ManagedMultiResultVec::new(self.raw_vm_api());
 		}
 
 		let last_index = len - page * PER_PAGE;
 		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
 
-		let mut result: Vec<u64> = Vec::with_capacity(last_index - first_index + 1);
+		let mut result: ManagedMultiResultVec<u64> = ManagedMultiResultVec::new(self.raw_vm_api());
 		for index in (first_index..=last_index).rev() {
 			result.push(self.address_memes(address).get(index));
 		}
 
-		return MultiResultVec::<u64>::from(result);
+		return result;
 	}
 
-	// TODO: Use ManagedMultiResultVec when in new version: https://github.com/ElrondNetwork/elrond-wasm-rs/blob/master/contracts/feature-tests/basic-features/src/storage_mapper_map_storage.rs#L10
 	#[view]
-	fn categories_all(&self) -> MultiResultVec<MultiResult2<u8, ManagedBuffer>> {
+	fn categories_all(&self) -> ManagedMultiResultVec<(u8, ManagedBuffer)> {
 		let categories_all: MapMapper<u8, ManagedBuffer> = self.categories();
 
 		if 1 > categories_all.len() {
-			return MultiResultVec::new();
+			return ManagedMultiResultVec::new(self.raw_vm_api());
 		}
 
-		let mut result: Vec<MultiResult2<u8, ManagedBuffer>> = Vec::with_capacity(categories_all.len() + 1);
+		let mut result: ManagedMultiResultVec<(u8, ManagedBuffer)> = ManagedMultiResultVec::new(self.raw_vm_api());
 		for (key, value) in categories_all.iter() {
-			result.push((key, value).into());
+			result.push((key, value));
 		}
 
-		return MultiResultVec::from(result);
+		return result;
 	}
 
 	#[view]

@@ -140,7 +140,7 @@ pub trait MemesVoting {
 	}
 
 	#[view]
-	fn current_period_memes_latest(&self, page: usize) -> MultiResultVec<(u64, u32)> {
+	fn current_period_memes_latest(&self, page: usize) -> ManagedMultiResultVec<(u64, u32)> {
 		return self.period_memes_latest(self.current_period(), page);
 	}
 
@@ -154,19 +154,18 @@ pub trait MemesVoting {
 		return self.period_memes(period).get(index);
 	}
 
-	// TODO: Use ManagedMultiResultVec when in new version
 	#[view]
-	fn period_memes_latest(&self, period: u64, page: usize) -> MultiResultVec<(u64, u32)> {
+	fn period_memes_latest(&self, period: u64, page: usize) -> ManagedMultiResultVec<(u64, u32)> {
 		let len = self.period_memes(period).len();
 
 		if len <= page * PER_PAGE {
-			return MultiResultVec::new();
+			return ManagedMultiResultVec::new(self.raw_vm_api());
 		}
 
 		let last_index = len - page * PER_PAGE;
 		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
 
-		let mut result: Vec<(u64, u32)> = Vec::with_capacity(last_index - first_index + 1);
+		let mut result: ManagedMultiResultVec<(u64, u32)> = ManagedMultiResultVec::new(self.raw_vm_api());
 		for index in (first_index..=last_index).rev() {
 			let nonce: u64 = self.period_meme(period, index);
 			let votes: u32 = self.meme_votes_period(nonce, &period);
@@ -174,7 +173,7 @@ pub trait MemesVoting {
 			result.push((nonce, votes));
 		}
 
-		return MultiResultVec::<(u64, u32)>::from(result);
+		return result;
 	}
 
 	#[view]
@@ -184,21 +183,20 @@ pub trait MemesVoting {
 		return self.periods().get(len);
 	}
 
-	// TODO: Use ManagedMultiResultVec when in new version: https://github.com/ElrondNetwork/elrond-wasm-rs/blob/master/contracts/feature-tests/basic-features/src/storage_mapper_map_storage.rs#L10
 	#[view]
-	fn meme_votes_all(&self, nonce: u64) -> MultiResultVec<(u64, u32)> {
+	fn meme_votes_all(&self, nonce: u64) -> ManagedMultiResultVec<(u64, u32)> {
 		let meme_votes: MapMapper<u64, u32> = self.meme_votes(nonce);
 
 		if 1 > meme_votes.len() {
-			return MultiResultVec::new();
+			return ManagedMultiResultVec::new(self.raw_vm_api());
 		}
 
-		let mut result: Vec<(u64, u32)> = Vec::with_capacity(meme_votes.len() + 1);
+		let mut result: ManagedMultiResultVec<(u64, u32)> = ManagedMultiResultVec::new(self.raw_vm_api());
 		for (key, value) in meme_votes.iter() {
 			result.push((key, value));
 		}
 
-		return MultiResultVec::<(u64, u32)>::from(result);
+		return result;
 	}
 
 	#[view]
