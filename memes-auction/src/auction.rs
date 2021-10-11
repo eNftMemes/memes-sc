@@ -7,5 +7,7 @@ pub struct Auction<M: ManagedTypeApi> {
     pub current_bid: BigUint<M>,
     pub current_winner: ManagedAddress<M>,
     pub bid_cut_percentage: u16,
-    pub owner_payed: bool,
+
+    pub original_owner: ManagedAddress<M>,
+    pub ended: bool,
 }

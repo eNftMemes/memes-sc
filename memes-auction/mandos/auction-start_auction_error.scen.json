@@ -1,0 +1,108 @@
+{
+  "name": "auction start auction error",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "auction-deploy.scen.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "start-auction-other-caller-error",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:auction_contract",
+        "function": "start_auction",
+        "arguments": [
+          "u64:123,000",
+          "u64:1",
+          "u64:2"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Only voting contract can call this",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "start-auction-too-many-nfts-error",
+      "tx": {
+        "from": "address:voting_contract",
+        "to": "sc:auction_contract",
+        "function": "start_auction",
+        "arguments": [
+          "u64:123,000",
+          "u64:1",
+          "u64:2",
+          "u64:3",
+          "u64:4",
+          "u64:5",
+          "u64:6",
+          "u64:7",
+          "u64:8",
+          "u64:9",
+          "u64:10",
+          "u64:11"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:There can't be more than 10 nfts",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:voting_contract": {
+          "nonce": "1",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:bidCutPercentage": "500",
+            "str:minBidStart": "5"
+          },
+          "code": "file:../output/memes-auction.wasm"
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    }
+  ]
+}

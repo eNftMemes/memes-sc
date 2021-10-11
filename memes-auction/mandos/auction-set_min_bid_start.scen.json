@@ -1,0 +1,90 @@
+{
+  "name": "auction set min bid start",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "auction-deploy.scen.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "set-min-bid-start-owner-error",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:auction_contract",
+        "function": "set_min_bid_start",
+        "arguments": ["biguint:1"],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Endpoint can only be called by owner",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-min-bid-start",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "set_min_bid_start",
+        "arguments": ["1000"],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:my_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:bidCutPercentage": "500",
+            "str:minBidStart": "1000"
+          },
+          "code": "file:../output/memes-auction.wasm"
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    }
+  ]
+}
