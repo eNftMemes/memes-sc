@@ -17,12 +17,17 @@ eg: (TripalovskyNFT - TRPNFT)
 
 `erdpy contract query $CONTRACT_ADDRESS --function="token_identifier" --proxy="https://devnet-gateway.elrond.com"`
 
+## Add categories
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="modify_categories" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments 0 0xCATEGORY_NAME`
+
+Funny category:
+
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="modify_categories" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments 0 0x66756e6e79`
+
 ## Linking voting contract
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="set_voting_sc" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_OTHER_CONTRACT"`
 
-# Example calls
 
-Add category:
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="modify_categories" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments 0 0xCATEGORY_NAME`
+# Example calls
 
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="create_meme" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments 0x746573742033 0x68747470733a2f2f697066732e6d6f72616c69732e696f3a323035332f697066732f516d645a634b7836374d4571677a64376631774e345755484253454661446f6978777046544b347175567175514d`

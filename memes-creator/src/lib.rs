@@ -58,6 +58,24 @@ pub trait MemesCreator {
 		)
 	}
 
+	// TODO: Properly set roles
+	#[only_owner]
+	#[endpoint]
+	fn set_local_roles(&self) -> SCResult<AsyncCall> {
+		require!(!self.token_identifier().is_empty(), "Token not issued");
+
+		Ok(self
+			.send()
+			.esdt_system_sc_proxy()
+			.set_special_roles(
+				&self.blockchain().get_sc_address(),
+				&self.token_identifier().get(),
+				(&[EsdtLocalRole::NftCreate][..]).into_iter().cloned(),
+			)
+			.async_call()
+		)
+	}
+
 	#[endpoint]
 	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: &u8) -> SCResult<AsyncCall> {
 		let address: ManagedAddress = self.blockchain().get_caller();
