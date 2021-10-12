@@ -1,14 +1,24 @@
+**Current contract address:** erd1qqqqqqqqqqqqqpgqyslvzamgpw7e6dxr946307dpvewygt4qlqpsn689h4
+
 # Deploy
 
-`erdpy --verbose contract deploy --project=memes-creator --pem="devnet.pem" --gas-limit=60000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-creator.json" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NFT_IDENTIFIER"`
+`erdpy --verbose contract deploy --project=memes-creator --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-creator.json" --recall-nonce --send --chain="D"`
 
 Contract is upgradable by default.
 
-# Issue token
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=5000000000000000 --gas-limit=50000000 --function="issue_token" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
+## Issue token
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
 
-# Linking voting contract
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="set_voting_sc" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_OTHER_CONTRACT"`
+eg: (TripalovskyNFT - TRPNFT)
+
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0x54726970616c6f76736b794e4654" "0x5452504e4654"`
+
+## Query token id
+
+`erdpy contract query $CONTRACT_ADDRESS --function="token_identifier" --proxy="https://devnet-gateway.elrond.com"`
+
+## Linking voting contract
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="set_voting_sc" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_OTHER_CONTRACT"`
 
 # Example calls
 
