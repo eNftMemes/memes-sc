@@ -3,7 +3,7 @@
   "steps": [
     {
       "step": "externalSteps",
-      "path": "auction-deploy.scen.json"
+      "path": "auction-start_auction_base.json"
     },
     {
       "step": "scCall",
@@ -13,9 +13,17 @@
         "to": "sc:auction_contract",
         "function": "start_auction",
         "arguments": [
-          "u64:123,000",
-          "u64:1",
-          "u64:2"
+          "u64:727,800",
+          "u64:11",
+          "u64:12",
+          "u64:13",
+          "u64:14",
+          "u64:15",
+          "u64:16",
+          "u64:17",
+          "u64:18",
+          "u64:19",
+          "u64:20"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -30,7 +38,7 @@
       "step": "checkState",
       "accounts": {
         "address:voting_contract": {
-          "nonce": "1",
+          "nonce": "2",
           "balance": "0",
           "owner": "address:my_address"
         },
@@ -55,29 +63,121 @@
             "str:bidCutPercentage": "500",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
-              "00-min_bid": "biguint:1",
-              "01-current_bid": "biguint:2",
+              "00-min_bid": "biguint:10",
+              "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:3",
+              "03-bid_cut_percentage": "u16:500",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "false"
+              "05-ended": "u8:0"
             },
             "str:periodMemeAuction|u64:123,000|u64:2": {
-              "00-min_bid": "biguint:1",
-              "01-current_bid": "biguint:2",
+              "00-min_bid": "biguint:5",
+              "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:3",
+              "03-bid_cut_percentage": "u16:500",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "false"
+              "05-ended": "u8:0"
             },
             "str:periodAuctionedMemes|u64:123,000|``.len": "2",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
-            "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2"
+            "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
+
+            "str:periodMemeAuction|u64:727,800|u64:11": {
+              "00-min_bid": "biguint:50",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:12": {
+              "00-min_bid": "biguint:45",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:13": {
+              "00-min_bid": "biguint:40",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:14": {
+              "00-min_bid": "biguint:35",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:15": {
+              "00-min_bid": "biguint:30",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:16": {
+              "00-min_bid": "biguint:25",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:17": {
+              "00-min_bid": "biguint:20",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:18": {
+              "00-min_bid": "biguint:15",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:19": {
+              "00-min_bid": "biguint:10",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:20": {
+              "00-min_bid": "biguint:5",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodAuctionedMemes|u64:727,800|``.len": "10",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:1": "11",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:2": "12",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:3": "13",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:4": "14",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:5": "15",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:6": "16",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:7": "17",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:8": "18",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:9": "19",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:10": "20"
           },
           "code": "file:../output/memes-auction.wasm"
         },
         "address:other_address": {
-          "nonce": "1",
+          "nonce": "0",
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPANFT-745e9b": {

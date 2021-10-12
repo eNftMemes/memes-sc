@@ -1,0 +1,126 @@
+{
+  "name": "auction view functions",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "auction-start_auction_base.json"
+    },
+    {
+      "step": "scQuery",
+      "txId": "periodAuctionsMemesAll",
+      "tx": {
+        "to": "sc:auction_contract",
+        "function": "period_auctions_memes_all",
+        "arguments": ["123,000"]
+      },
+      "expect": {
+        "out": [
+          {
+            "00-min_bid": "biguint:10",
+            "01-current_bid": "biguint:0",
+            "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "03-bid_cut_percentage": "u16:500",
+            "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "05-ended": "u8:0"
+          },
+          {
+            "00-min_bid": "biguint:5",
+            "01-current_bid": "biguint:0",
+            "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "03-bid_cut_percentage": "u16:500",
+            "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "05-ended": "u8:0"
+          }
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "votingContract",
+      "tx": {
+        "to": "sc:auction_contract",
+        "function": "voting_contract",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["address:voting_contract"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "tokenIdentifier",
+      "tx": {
+        "to": "sc:auction_contract",
+        "function": "token_identifier",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["str:TRIPANFT-745e9b"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "bidCutPercentage",
+      "tx": {
+        "to": "sc:auction_contract",
+        "function": "bid_cut_percentage",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["500"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "minBidStart",
+      "tx": {
+        "to": "sc:auction_contract",
+        "function": "min_bid_start",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["5"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "periodMemeAuction",
+      "tx": {
+        "to": "sc:auction_contract",
+        "function": "period_meme_auction",
+        "arguments": ["123,000", "1"]
+      },
+      "expect": {
+        "out": [
+          {
+            "00-min_bid": "biguint:10",
+            "01-current_bid": "biguint:0",
+            "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "03-bid_cut_percentage": "u16:500",
+            "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "05-ended": "u8:0"
+          }
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "periodAuctionedMemes",
+      "tx": {
+        "to": "sc:auction_contract",
+        "function": "period_auctioned_memes",
+        "arguments": ["123,000"]
+      },
+      "expect": {
+        "out": ["1", "2"],
+        "status": "0"
+      }
+    }
+  ]
+}

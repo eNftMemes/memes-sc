@@ -6,8 +6,6 @@ elrond_wasm::imports!();
 pub mod auction;
 use auction::*;
 
-// let min_bid_start: BigUint = BigUint::from("1000000000000000"); // 0.001 EGLD
-
 const PERCENTAGE_TOTAL: u64 = 10_000; // 100%
 const NFT_AMOUNT: u32 = 1;
 
@@ -54,21 +52,25 @@ pub trait MemesAuction {
 			nfts.len() <= 10,
 			"There can't be more than 10 nfts"
 		);
+		require!(
+			self.period_auctioned_memes(period).is_empty(),
+			"There are already auctioned nfts for this period"
+		);
 
-		// let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
-		// let min_bid_start: BigUint = self.min_bid_start().get();
-		// let mut multiplier: u8 = nfts.len() as u8;
+		let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
+		let min_bid_start: BigUint = self.min_bid_start().get();
+		let mut multiplier: u8 = nfts.len() as u8;
 
 		for nonce in nfts.iter() {
-			// let mut min_bid: BigUint = self.types().big_uint_from(multiplier);
-			// min_bid *= &min_bid_start;
-			// multiplier -= 1;
+			let mut min_bid: BigUint = self.types().big_uint_from(multiplier);
+			min_bid *= &min_bid_start;
+			multiplier -= 1;
 
 			let auction = Auction {
-				min_bid: self.types().big_uint_from(1u64),
-				current_bid: self.types().big_uint_from(2u64),
+				min_bid,
+				current_bid: self.types().big_uint_zero(),
 				current_winner: self.types().managed_address_zero(),
-				bid_cut_percentage: 3,
+				bid_cut_percentage,
 				original_owner: self.types().managed_address_zero(),
 				ended: false,
 			};
@@ -123,6 +125,10 @@ pub trait MemesAuction {
 		require!(
 			block_timestamp > period && block_timestamp - period < BID_TIME,
             "Auction bidding ended already"
+        );
+		require!(
+            auction.original_owner != caller,
+            "Can't bid on your own token"
         );
 		require!(auction.current_winner != caller, "Can't outbid yourself");
 		require!(
@@ -189,7 +195,22 @@ pub trait MemesAuction {
 		let nft_amount_to_send = BigUint::from(NFT_AMOUNT);
 		let bid_cut_percentage = BigUint::from(auction.bid_cut_percentage);
 
-		if auction.current_winner.is_zero() && !auction.original_owner.is_zero() {
+		if auction.original_owner.is_zero() {
+			if auction.current_winner.is_zero() {
+				return;
+			}
+
+			// return money to current winner
+			self.send().direct_egld(
+				&auction.current_winner,
+				&auction.current_bid,
+				b"bid refund",
+			);
+
+			return;
+		}
+
+		if auction.current_winner.is_zero() {
 			// return nft to original owner
 			self.send().direct(
 				&auction.original_owner,
@@ -202,46 +223,46 @@ pub trait MemesAuction {
 			return;
 		}
 
-		if !auction.current_winner.is_zero() {
-			if auction.original_owner.is_zero() {
-				// return money to current winner
-				self.send().direct_egld(
-					&auction.current_winner,
-					&auction.current_bid,
-					b"bid refund",
-				);
+		let bid_cut = &auction.current_bid * &bid_cut_percentage / PERCENTAGE_TOTAL;
+		let mut owner_cut = auction.current_bid.clone();
+		owner_cut -= &bid_cut;
 
-				return;
-			}
+		// send part as cut for contract owner
+		let owner = self.blockchain().get_owner_address();
+		self.send().direct_egld(
+			&owner,
+			&bid_cut,
+			b"bid cut for sold token",
+		);
 
-			let bid_cut = &auction.current_bid * &bid_cut_percentage / PERCENTAGE_TOTAL;
-			let mut owner_cut = auction.current_bid.clone();
-			owner_cut -= &bid_cut;
+		// send rest of the bid to original owner
+		self.send().direct_egld(
+			&auction.original_owner,
+			&owner_cut,
+			b"sold token",
+		);
 
-			// send part as cut for contract owner
-			let owner = self.blockchain().get_owner_address();
-			self.send().direct_egld(
-				&owner,
-				&bid_cut,
-				b"bid cut for sold token",
-			);
+		// send NFT to auction winner
+		self.send().direct(
+			&auction.current_winner,
+			nft_type,
+			nft_nonce,
+			&nft_amount_to_send,
+			b"bought token at auction",
+		);
+	}
 
-			// send rest of the bid to original owner
-			self.send().direct_egld(
-				&auction.original_owner,
-				&owner_cut,
-				b"sold token",
-			);
+	#[view]
+	fn period_auctions_memes_all(&self, period: u64) -> ManagedMultiResultVec<Auction<Self::Api>> {
+		let mut result: ManagedMultiResultVec<Auction<Self::Api>> = ManagedMultiResultVec::new(self.raw_vm_api());
+		for index in 1..=self.period_auctioned_memes(period).len() {
+			let nonce = self.period_auctioned_memes(period).get(index);
+			let auction = self.period_meme_auction(period, nonce).get();
 
-			// send NFT to auction winner
-			self.send().direct(
-				&auction.current_winner,
-				nft_type,
-				nft_nonce,
-				&nft_amount_to_send,
-				b"bought token at auction",
-			);
+			result.push(auction);
 		}
+
+		return result;
 	}
 
 	#[view]

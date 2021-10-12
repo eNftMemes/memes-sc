@@ -1,0 +1,286 @@
+{
+  "name": "auction start auction",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "auction-lock_token_base.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "lock-token-other-type",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "lock_token",
+        "value": "0",
+        "arguments": [
+          "u64:123,000"
+        ],
+        "esdt": {
+          "tokenIdentifier": "str:TRIPANFT-fake",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Nft is not of the correct type",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "lock-token-other-amount",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "lock_token",
+        "value": "0",
+        "arguments": [
+          "u64:123,000"
+        ],
+        "esdt": {
+          "tokenIdentifier": "str:TRIPANFT-745e9b",
+          "nonce": "10",
+          "value": "2"
+        },
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Nft amount should be 1",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "122,000"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "lock-token-timestamp-less-period",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "lock_token",
+        "value": "0",
+        "arguments": [
+          "u64:123,000"
+        ],
+        "esdt": {
+          "tokenIdentifier": "str:TRIPANFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Auction deadline has passed",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "555,000"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "lock-token-auction-ended",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "lock_token",
+        "value": "0",
+        "arguments": [
+          "u64:123,000"
+        ],
+        "esdt": {
+          "tokenIdentifier": "str:TRIPANFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Auction deadline has passed",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "554,000"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "lock-token-no-auction-period",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "lock_token",
+        "value": "0",
+        "arguments": [
+          "u64:124,000"
+        ],
+        "esdt": {
+          "tokenIdentifier": "str:TRIPANFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Auction does not exist",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "lock-token-no-auction-nonce",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "lock_token",
+        "value": "0",
+        "arguments": [
+          "u64:123,000"
+        ],
+        "esdt": {
+          "tokenIdentifier": "str:TRIPANFT-745e9b",
+          "nonce": "10",
+          "value": "1"
+        },
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Auction does not exist",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:voting_contract": {
+          "nonce": "1",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:my_address": {
+          "nonce": "7",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPANFT-fake": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:TRIPANFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "10",
+                  "balance": "2",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                },
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:bidCutPercentage": "500",
+            "str:minBidStart": "5",
+            "str:periodMemeAuction|u64:123,000|u64:1": {
+              "00-min_bid": "biguint:10",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:123,000|u64:2": {
+              "00-min_bid": "biguint:5",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodAuctionedMemes|u64:123,000|``.len": "2",
+            "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
+            "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2"
+          },
+          "code": "file:../output/memes-auction.wasm"
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    }
+  ]
+}

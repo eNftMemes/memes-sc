@@ -1,59 +1,33 @@
 {
-  "name": "auction start auction error",
+  "name": "auction start auction",
   "steps": [
     {
       "step": "externalSteps",
-      "path": "auction-start_auction_base.json"
+      "path": "auction-bid.scen.json"
     },
     {
-      "step": "scCall",
-      "txId": "start-auction-other-caller-error",
-      "tx": {
-        "from": "address:other_address",
-        "to": "sc:auction_contract",
-        "function": "start_auction",
-        "arguments": [
-          "u64:123,000",
-          "u64:1",
-          "u64:2"
-        ],
-        "gasLimit": "100,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "4",
-        "message": "str:Only voting contract can call this",
-        "gas": "*",
-        "refund": "*"
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "555,000"
       }
     },
     {
       "step": "scCall",
-      "txId": "start-auction-too-many-nfts-error",
+      "txId": "end-auction-not-locked-no-bid",
       "tx": {
-        "from": "address:voting_contract",
+        "from": "address:my_address",
         "to": "sc:auction_contract",
-        "function": "start_auction",
+        "function": "end_auction",
+        "value": "0",
         "arguments": [
           "u64:123,000",
-          "u64:1",
-          "u64:2",
-          "u64:3",
-          "u64:4",
-          "u64:5",
-          "u64:6",
-          "u64:7",
-          "u64:8",
-          "u64:9",
-          "u64:10",
-          "u64:11"
+          "u64:2"
         ],
-        "gasLimit": "100,000,000",
+        "gasLimit": "20,000,000",
         "gasPrice": "0"
       },
       "expect": {
-        "status": "4",
-        "message": "str:There can't be more than 10 nfts",
+        "status": "0",
         "gas": "*",
         "refund": "*"
       }
@@ -62,13 +36,13 @@
       "step": "checkState",
       "accounts": {
         "address:voting_contract": {
-          "nonce": "2",
+          "nonce": "1",
           "balance": "0",
           "owner": "address:my_address"
         },
         "address:my_address": {
-          "nonce": "1",
-          "balance": "1,000,000",
+          "nonce": "4",
+          "balance": "999,989",
           "esdt": {
             "str:TRIPANFT-745e9b": {
               "instances": [],
@@ -80,7 +54,7 @@
         },
         "sc:auction_contract": {
           "nonce": "0",
-          "balance": "0",
+          "balance": "11",
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
@@ -88,8 +62,8 @@
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
               "00-min_bid": "biguint:10",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "01-current_bid": "biguint:11",
+              "02-current_winner": "address:my_address",
               "03-bid_cut_percentage": "u16:500",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "05-ended": "u8:0"
@@ -100,7 +74,7 @@
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "03-bid_cut_percentage": "u16:500",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
+              "05-ended": "u8:1"
             },
             "str:periodAuctionedMemes|u64:123,000|``.len": "2",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
@@ -109,7 +83,7 @@
           "code": "file:../output/memes-auction.wasm"
         },
         "address:other_address": {
-          "nonce": "1",
+          "nonce": "2",
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -125,22 +99,21 @@
     },
     {
       "step": "scCall",
-      "txId": "start-auction-period-error",
+      "txId": "end-auction-not-locked-with-bid",
       "tx": {
-        "from": "address:voting_contract",
+        "from": "address:my_address",
         "to": "sc:auction_contract",
-        "function": "start_auction",
+        "function": "end_auction",
+        "value": "0",
         "arguments": [
           "u64:123,000",
-          "u64:2",
-          "u64:3"
+          "u64:1"
         ],
-        "gasLimit": "100,000,000",
+        "gasLimit": "20,000,000",
         "gasPrice": "0"
       },
       "expect": {
-        "status": "4",
-        "message": "str:There are already auctioned nfts for this period",
+        "status": "0",
         "gas": "*",
         "refund": "*"
       }
@@ -149,12 +122,12 @@
       "step": "checkState",
       "accounts": {
         "address:voting_contract": {
-          "nonce": "3",
+          "nonce": "1",
           "balance": "0",
           "owner": "address:my_address"
         },
         "address:my_address": {
-          "nonce": "1",
+          "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -175,11 +148,11 @@
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
               "00-min_bid": "biguint:10",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "01-current_bid": "biguint:11",
+              "02-current_winner": "address:my_address",
               "03-bid_cut_percentage": "u16:500",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
+              "05-ended": "u8:1"
             },
             "str:periodMemeAuction|u64:123,000|u64:2": {
               "00-min_bid": "biguint:5",
@@ -187,7 +160,7 @@
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "03-bid_cut_percentage": "u16:500",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
+              "05-ended": "u8:1"
             },
             "str:periodAuctionedMemes|u64:123,000|``.len": "2",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
@@ -196,7 +169,7 @@
           "code": "file:../output/memes-auction.wasm"
         },
         "address:other_address": {
-          "nonce": "1",
+          "nonce": "2",
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPANFT-745e9b": {
