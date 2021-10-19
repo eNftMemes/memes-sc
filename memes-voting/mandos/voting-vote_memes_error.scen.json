@@ -48,7 +48,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "5",
+          "nonce": "6",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -58,7 +58,12 @@
           "storage": {}
         },
         "address:creator_contract": {
-          "nonce": "3",
+          "nonce": "4",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
           "balance": "0",
           "owner": "address:my_address"
         },
@@ -67,6 +72,7 @@
           "balance": "0",
           "storage": {
             "str:creatorContract": "address:creator_contract",
+            "str:auctionSc": "address:auction_contract",
             "str:periods.len": "2",
             "str:periods.item|u32:1": "123,000",
             "str:periods.item|u32:2": "727,800",
@@ -143,7 +149,7 @@
         "arguments": [
           "u64:1", "u64:2"
         ],
-        "gasLimit": "25,000,000",
+        "gasLimit": "40,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -156,7 +162,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "7",
+          "nonce": "8",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -166,7 +172,12 @@
           "storage": {}
         },
         "address:creator_contract": {
-          "nonce": "3",
+          "nonce": "4",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
           "balance": "0",
           "owner": "address:my_address"
         },
@@ -175,6 +186,7 @@
           "balance": "0",
           "storage": {
             "str:creatorContract": "address:creator_contract",
+            "str:auctionSc": "address:auction_contract",
             "str:periods.len": "3",
             "str:periods.item|u32:1": "123,000",
             "str:periods.item|u32:2": "727,800",
@@ -250,7 +262,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "7",
+          "nonce": "8",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -260,7 +272,12 @@
           "storage": {}
         },
         "address:creator_contract": {
-          "nonce": "3",
+          "nonce": "4",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
           "balance": "0",
           "owner": "address:my_address"
         },
@@ -269,6 +286,7 @@
           "balance": "0",
           "storage": {
             "str:creatorContract": "address:creator_contract",
+            "str:auctionSc": "address:auction_contract",
             "str:periods.len": "3",
             "str:periods.item|u32:1": "123,000",
             "str:periods.item|u32:2": "727,800",

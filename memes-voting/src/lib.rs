@@ -12,6 +12,16 @@ const PER_PAGE: usize = 10;
 const PERIOD_TIME: u64 = 604800; // 1 week in seconds
 const VOTES_PER_ADDRESS_PER_PERIOD: u8 = 20;
 
+mod auction_proxy {
+	elrond_wasm::imports!();
+
+	#[elrond_wasm::proxy]
+	pub trait Auction {
+		#[endpoint]
+		fn start_auction(&self, period: u64, #[var_args] nfts: VarArgs<u64>) -> SCResult<()>;
+	}
+}
+
 #[elrond_wasm::contract]
 pub trait MemesVoting {
 	#[init]
@@ -21,38 +31,64 @@ pub trait MemesVoting {
 	}
 
 	#[endpoint]
-	fn add_meme(&self, nonce: &u64) -> SCResult<()> {
+	fn add_meme(&self, nonce: &u64) -> SCResult<OptionalResult<AsyncCall>> {
 		let caller: ManagedAddress = self.blockchain().get_caller();
 		require!(
 			caller == self.creator_contract().get(),
 			"Only creator contract can call this"
 		);
 
-		self.alter_period();
+		let result = self.alter_period();
 
 		let current_period: u64 = self.current_period();
 
 		self.period_memes(current_period).push(nonce);
 		self.meme_votes(*nonce).insert(current_period, 0);
 
-		Ok(())
+		Ok(result)
 	}
 
-	fn alter_period(&self) {
+	fn alter_period(&self) -> OptionalResult<AsyncCall> {
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
 		let period: u64 = self.current_period();
 
 		if block_timestamp > period && block_timestamp - period >= PERIOD_TIME {
 			self.periods().push(&block_timestamp);
-			// TODO: Send Top memes to other contract
+
+			let top_memes = self.period_top_memes(period).get();
+			let mut top_memes_args: MultiArgVec<u64> = MultiArgVec::new();
+
+			for meme in top_memes.iter() {
+				top_memes_args.push(meme.nft_nonce);
+			}
+
+			return OptionalResult::Some(
+				self.auction_proxy()
+					.contract(self.auction_sc().get())
+					.start_auction(period, top_memes_args)
+					.async_call()
+			);
 		}
+
+		OptionalResult::None
+	}
+
+	#[proxy]
+	fn auction_proxy(&self) -> auction_proxy::Proxy<Self::Api>;
+
+	#[only_owner]
+	#[endpoint]
+	fn set_auction_sc(&self, sc: &ManagedAddress) -> SCResult<()> {
+		self.auction_sc().set(sc);
+
+		Ok(())
 	}
 
 	#[endpoint]
-	fn vote_memes(&self, #[var_args] nft_nonces: VarArgs<u64>) -> SCResult<()> {
+	fn vote_memes(&self, #[var_args] nft_nonces: VarArgs<u64>) -> SCResult<OptionalResult<AsyncCall>> {
 		let caller: ManagedAddress = self.blockchain().get_caller();
 
-		self.alter_period();
+		let result = self.alter_period();
 
 		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);
 		let current_period: u64 = self.current_period();
@@ -91,7 +127,7 @@ pub trait MemesVoting {
 
 		self.alter_period_top_memes(&mut new_meme_votes);
 
-		Ok(())
+		Ok(result)
 	}
 
 	fn alter_period_top_memes(&self, new_meme_votes: &mut HashMap<u64, u32>) {
@@ -203,6 +239,10 @@ pub trait MemesVoting {
 	fn meme_votes_period(&self, nonce: u64, period: &u64) -> u32 {
 		self.meme_votes(nonce).get(period).unwrap_or_default()
 	}
+
+	#[view]
+	#[storage_mapper("auctionSc")]
+	fn auction_sc(&self) -> SingleValueMapper<ManagedAddress>;
 
 	#[view]
 	#[storage_mapper("periods")]

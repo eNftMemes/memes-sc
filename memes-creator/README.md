@@ -4,7 +4,11 @@
 
 `erdpy --verbose contract deploy --project=memes-creator --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-creator.json" --recall-nonce --send --chain="D"`
 
-Contract is upgradable by default.
+# Upgrade
+
+`erdpy --verbose contract upgrade --project=memes-creator --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-creator.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS"`
+
+Contracts are upgradable by default.
 
 ## Issue token
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
@@ -12,6 +16,10 @@ Contract is upgradable by default.
 eg: (TripalovskyNFT - TRPNFT)
 
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D" --arguments "0x54726970616c6f76736b794e4654" "0x5452504e4654"`
+
+## Set local roles
+
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_local_roles" --proxy="https://devnet-api.elrond.com" --recall-nonce --send --chain="D"`
 
 ## Query token id
 

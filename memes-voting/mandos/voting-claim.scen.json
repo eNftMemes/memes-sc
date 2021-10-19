@@ -43,7 +43,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "1",
+          "nonce": "2",
           "balance": "1,000,000"
         },
         "sc:voting_contract": {
@@ -51,13 +51,18 @@
           "balance": "1",
           "code": "file:../output/memes-voting.wasm"
         },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
         "address:other_address": {
           "nonce": "1",
           "balance": "1,000,000",
           "storage": {}
         },
         "address:creator_contract": {
-          "nonce": "0",
+          "nonce": "1",
           "balance": "0",
           "owner": "address:my_address"
         }
@@ -84,7 +89,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "2",
+          "nonce": "3",
           "balance": "1,000,001"
         },
         "sc:voting_contract": {
@@ -92,13 +97,18 @@
           "balance": "0",
           "code": "file:../output/memes-voting.wasm"
         },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
         "address:other_address": {
           "nonce": "1",
           "balance": "1,000,000",
           "storage": {}
         },
         "address:creator_contract": {
-          "nonce": "0",
+          "nonce": "1",
           "balance": "0",
           "owner": "address:my_address"
         }

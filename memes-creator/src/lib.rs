@@ -58,9 +58,9 @@ pub trait MemesCreator {
 		)
 	}
 
-	// TODO: Properly set roles
-	#[only_owner]
+	// TODO: Test this function with Mandos after it is supported to issue tokens
 	#[endpoint]
+	#[only_owner]
 	fn set_local_roles(&self) -> SCResult<AsyncCall> {
 		require!(!self.token_identifier().is_empty(), "Token not issued");
 
