@@ -14,7 +14,7 @@ Then set the address of the voting contract in the creator contract
 
 # Upgrade
 
-`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS"`
+`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-api.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS" --arguments "0xSPECIAL_HEX_ADDRESS_OF_CREATOR_CONTRACT" START_PERIOD_TIMESTAMP`
 
 Contracts are upgradable by default.
 
