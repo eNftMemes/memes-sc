@@ -122,12 +122,9 @@ pub trait MemesCreator {
 
 		let nonce: u64 = self.send().esdt_nft_create(nft_token, &amount, name, royalties, hash, &{ category }, &urls);
 
-		// let nonce: u64 = self.blockchain().get_current_esdt_nft_nonce(&sc_address.to_address(), nft_token);
 		self.send().direct(address, nft_token, nonce, amount, &[]);
 		self.address_memes(address).push(&nonce);
 		self.meme_creator(&nonce).set(address);
-
-		let nonce: u64 = 1;
 
 		return self.voting_proxy()
 	        .contract(self.voting_sc().get())
