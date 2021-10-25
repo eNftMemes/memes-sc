@@ -84,6 +84,7 @@ pub trait MemesVoting {
 		Ok(())
 	}
 
+	// TODO: Use ManagedVarArgs when it works properly
 	#[endpoint]
 	fn vote_memes(&self, #[var_args] nft_nonces: VarArgs<u64>) -> SCResult<OptionalResult<AsyncCall>> {
 		let caller: ManagedAddress = self.blockchain().get_caller();
