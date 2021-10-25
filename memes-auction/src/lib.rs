@@ -253,13 +253,18 @@ pub trait MemesAuction {
 	}
 
 	#[view]
-	fn period_auctions_memes_all(&self, period: u64) -> ManagedMultiResultVec<Auction<Self::Api>> {
-		let mut result: ManagedMultiResultVec<Auction<Self::Api>> = ManagedMultiResultVec::new(self.raw_vm_api());
+	fn period_auctions_memes_all(&self, period: u64) -> ManagedMultiResultVec<FullAuction<Self::Api>> {
+		let mut result: ManagedMultiResultVec<FullAuction<Self::Api>> = ManagedMultiResultVec::new(self.raw_vm_api());
 		for index in 1..=self.period_auctioned_memes(period).len() {
 			let nonce = self.period_auctioned_memes(period).get(index);
 			let auction = self.period_meme_auction(period, nonce).get();
 
-			result.push(auction);
+			let full_auction = FullAuction {
+				nonce,
+				auction,
+			};
+
+			result.push(full_auction);
 		}
 
 		return result;

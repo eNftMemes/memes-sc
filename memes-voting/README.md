@@ -4,7 +4,7 @@
 
 First decode creator contract address to hex using erdpy:
 
-`erdpy wallet bech32 --decode ADDRESS`
+`erdpy wallet bech32 --decode $CONTRACT_ADDRESS`
 
 Then deploy:
 
