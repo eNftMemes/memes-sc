@@ -65,7 +65,7 @@ pub trait MemesVoting {
 			return OptionalResult::Some(
 				self.auction_proxy()
 					.contract(self.auction_sc().get())
-					.start_auction(period, top_memes_args)
+					.start_auction(block_timestamp, top_memes_args)
 					.async_call()
 			);
 		}
