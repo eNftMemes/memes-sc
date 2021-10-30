@@ -120,6 +120,7 @@ pub trait MemesCreator {
 		let mut urls = self.types().managed_vec_new();
 		urls.push(url);
 
+		// TODO: Try to use self.send().execute_on_dest_context_by_caller() so the creator of the NFT is the actual contract caller?
 		let nonce: u64 = self.send().esdt_nft_create(nft_token, &amount, name, royalties, hash, &{ category }, &urls);
 
 		self.send().direct(address, nft_token, nonce, amount, &[]);
