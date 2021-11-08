@@ -96,9 +96,9 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm"
-version = "0.21.2"
+version = "0.22.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a083f14244726defc8e49134ec4211ef61a69f29e7df41e2d2284734befeea87"
+checksum = "9c724a4ecf52cba694c511eff8c89e64babb22fefaf1544dcc6228ed3b39f60e"
 dependencies = [
  "arrayvec",
  "elrond-codec",
@@ -110,9 +110,9 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm-debug"
-version = "0.21.2"
+version = "0.22.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a6f25108436df296b1b8c08336beffc85afa6016b78f941a7e236c81e22672a"
+checksum = "258ebf871cf1655153579919ae54a607f608c19a89750b6fee22a5cd9a2f6e31"
 dependencies = [
  "elrond-wasm",
  "hex",
@@ -128,9 +128,9 @@ dependencies = [
 
 [[package]]
 name = "elrond-wasm-derive"
-version = "0.21.2"
+version = "0.22.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd02d9e5a77816c6d7707173324b9c63e96def95508fbd236bea1f7395f53177"
+checksum = "ddf41e4f9e8715971d66c73c73c3d6847ba2b6cd15690bb7b285dc723867a3e8"
 dependencies = [
  "hex",
  "proc-macro2",
@@ -224,7 +224,6 @@ name = "memes-creator"
 version = "0.0.1"
 dependencies = [
  "elrond-wasm",
- "elrond-wasm-derive",
 ]
 
 [[package]]

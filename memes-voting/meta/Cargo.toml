@@ -1,15 +1,15 @@
 [package]
-name = "memes-creator-abi"
+name = "memes-voting-abi"
 version = "0.0.0"
 authors = [ "you",]
 edition = "2018"
 publish = false
 
-[dependencies.memes-creator]
+[dependencies.memes-voting]
 path = ".."
 
 [dependencies.elrond-wasm]
-version = "0.21.2"
+version = "0.22.2"
 
 [dependencies.elrond-wasm-debug]
-version = "0.21.2"
+version = "0.22.2"
