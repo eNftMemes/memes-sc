@@ -44,7 +44,7 @@
           "nonce": "3",
           "balance": "999,900",
           "esdt": {
-            "str:TRIPANFT-fake": {
+            "str:TRIPANFT-012345": {
               "instances": [
                 {
                   "nonce": "1",
@@ -56,10 +56,7 @@
                     "str:nft-create-uri"
                   ]
                 }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              ]
             },
             "str:TRIPANFT-745e9b": {
               "instances": [
@@ -73,10 +70,7 @@
                     "str:nft-create-uri"
                   ]
                 }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              ]
             }
           }
         },
@@ -141,10 +135,7 @@
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPANFT-745e9b": {
-              "instances": [],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              "instances": []
             }
           },
           "storage": {}
@@ -190,7 +181,7 @@
           "nonce": "3",
           "balance": "999,900",
           "esdt": {
-            "str:TRIPANFT-fake": {
+            "str:TRIPANFT-012345": {
               "instances": [
                 {
                   "nonce": "1",
@@ -202,10 +193,7 @@
                     "str:nft-create-uri"
                   ]
                 }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              ]
             },
             "str:TRIPANFT-745e9b": {
               "instances": [
@@ -229,10 +217,7 @@
                     "str:nft-create-uri"
                   ]
                 }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              ]
             }
           }
         },
@@ -287,10 +272,7 @@
           "balance": "1,000,000",
           "esdt": {
             "str:TRIPANFT-745e9b": {
-              "instances": [],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              "instances": []
             }
           },
           "storage": {}
@@ -330,7 +312,7 @@
           "nonce": "3",
           "balance": "999,905",
           "esdt": {
-            "str:TRIPANFT-fake": {
+            "str:TRIPANFT-012345": {
               "instances": [
                 {
                   "nonce": "1",
@@ -342,10 +324,7 @@
                     "str:nft-create-uri"
                   ]
                 }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              ]
             },
             "str:TRIPANFT-745e9b": {
               "instances": [
@@ -379,10 +358,7 @@
                     "str:nft-create-uri2"
                   ]
                 }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              ]
             }
           }
         },
@@ -426,10 +402,7 @@
           "balance": "1,000,095",
           "esdt": {
             "str:TRIPANFT-745e9b": {
-              "instances": [],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
+              "instances": []
             }
           },
           "storage": {}
