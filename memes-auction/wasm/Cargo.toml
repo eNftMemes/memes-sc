@@ -8,6 +8,9 @@ publish = false
 [lib]
 crate-type = [ "cdylib",]
 
+[workspace]
+members = [ "."]
+
 [profile.release]
 codegen-units = 1
 opt-level = "z"
@@ -16,13 +19,11 @@ debug = false
 panic = "abort"
 
 [dependencies.memes-auction]
-features = [ "wasm-output-mode",]
-default-features = false
 path = ".."
 
-[dependencies.elrond-wasm-output]
-version = "0.21.2"
-features = [ "wasm-output-mode",]
+[dependencies.elrond-wasm-node]
+version = "0.22.2"
 
-[workspace]
-members = [ ".",]
+[dependencies.elrond-wasm-output]
+version = "0.22.2"
+features = [ "wasm-output-mode"]

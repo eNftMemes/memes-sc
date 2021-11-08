@@ -96,26 +96,18 @@ pub trait MemesVoting {
 		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);
 		let current_period: u64 = self.current_period();
 		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
-
-		// let nft_nonces_vec: Vec<u64> = nft_nonces.into_vec();
-		let mut nb_nfts: u8 = 0;
-
-		let mut new_meme_votes: HashMap<u64, u32> = HashMap::new();
-		for nonce in nft_nonces.into_iter() {
-			let votes: &mut u32 = new_meme_votes.entry(nonce).or_insert(0);
-			*votes += 1;
-			nb_nfts += 1;
-
-			// An address can't have more votes than this anyway
-			if nb_nfts >= VOTES_PER_ADDRESS_PER_PERIOD {
-				break;
-			}
-		}
+		let nb_nfts: usize = nft_nonces.len();
 
 		require!(
 			reset_address_votes || (address_votes.get().votes >= nb_nfts as u8),
 			"Not enough votes left currently"
 		);
+
+		let mut new_meme_votes: HashMap<u64, u32> = HashMap::new();
+		for nonce in nft_nonces.into_iter() {
+			let votes: &mut u32 = new_meme_votes.entry(nonce).or_insert(0);
+			*votes += 1;
+		}
 
 		for (nonce, new_votes) in new_meme_votes.iter_mut() {
 			require!(!self.meme_votes(*nonce).is_empty(), "Meme does not exist");

@@ -294,6 +294,9 @@ pub trait MemesAuction {
 	#[storage_mapper("periodAuctionedMemes")]
 	fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
 
+	// TODO: Add storage to get meme auction period from nonce (might be used in the future?)
+	// TODO: Also add view to get an auction by nonce
+
     // Always needed
     #[endpoint]
     #[only_owner]
