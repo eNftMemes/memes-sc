@@ -2,7 +2,7 @@
 
 # Deploy
 
-First decode creator voting address to hex using erdpy:
+First decode voting contract address to hex using erdpy:
 
 `erdpy wallet bech32 --decode $CONTRACT_ADDRESS`
 

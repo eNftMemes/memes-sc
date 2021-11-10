@@ -8,6 +8,7 @@ use auction::*;
 
 const PERCENTAGE_TOTAL: u64 = 10_000; // 100%
 const NFT_AMOUNT: u32 = 1;
+const MAX_TOP_MEMES: usize = 10;
 
 const BID_TIME: u64 = 345600; // 4 days in seconds (time users can bid on NFTs)
 const AUCTION_TIME: u64 = 432000; // 5 days in seconds (time the owner of the NFT has for locking it)
@@ -49,7 +50,7 @@ pub trait MemesAuction {
 			"Only voting contract can call this"
 		);
 		require!(
-			nfts.len() <= 10,
+			nfts.len() <= MAX_TOP_MEMES,
 			"There can't be more than 10 nfts"
 		);
 		require!(
@@ -74,8 +75,10 @@ pub trait MemesAuction {
 				original_owner: self.types().managed_address_zero(),
 				ended: false,
 			};
+
 			self.period_meme_auction(period, *nonce).set(&auction);
 			self.period_auctioned_memes(period).push(nonce);
+			self.meme_auction_period(*nonce).set(&period);
 		}
 
 		Ok(())
@@ -275,6 +278,23 @@ pub trait MemesAuction {
 	}
 
 	#[view]
+	fn meme_get_auction(&self, nonce: u64) -> OptionalResult<FullAuction<Self::Api>> {
+		if self.meme_auction_period(nonce).is_empty() {
+			return OptionalResult::None;
+		}
+
+		let period = self.meme_auction_period(nonce).get();
+		let auction = self.period_meme_auction(period, nonce).get();
+
+		OptionalResult::Some(
+			FullAuction {
+				nonce,
+				auction,
+			}
+		)
+	}
+
+	#[view]
 	#[storage_mapper("votingContract")]
 	fn voting_contract(&self) -> SingleValueMapper<ManagedAddress>;
 
@@ -298,8 +318,9 @@ pub trait MemesAuction {
 	#[storage_mapper("periodAuctionedMemes")]
 	fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
 
-	// TODO: Add storage to get meme auction period from nonce (might be used in the future?)
-	// TODO: Also add view to get an auction by nonce
+	#[view]
+	#[storage_mapper("memeAuctionPeriod")]
+	fn meme_auction_period(&self, nonce: u64) -> SingleValueMapper<u64>;
 
     // Always needed
     #[endpoint]
