@@ -167,6 +167,10 @@ pub trait MemesAuction {
             block_timestamp > period && block_timestamp - period >= AUCTION_TIME,
             "Auction deadline has not passed"
         );
+		require!(
+			!auction.ended,
+			"Auction was already ended"
+		);
 
 		self.distribute_tokens_after_auction_end(nonce, &auction);
 

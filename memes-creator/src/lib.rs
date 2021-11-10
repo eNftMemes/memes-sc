@@ -121,6 +121,7 @@ pub trait MemesCreator {
 		urls.push(url);
 
 		// TODO: Try to use self.send().esdt_nft_create_as_caller() so the creator of the NFT is the actual contract caller?
+		// Also remove contract as payable
 		// https://github.com/ElrondNetwork/elrond-wasm-rs/pull/439/files
 		let nonce: u64 = self.send().esdt_nft_create(nft_token, &amount, name, royalties, hash, &{ category }, &urls);
 
