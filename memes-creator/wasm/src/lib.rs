@@ -14,7 +14,6 @@ elrond_wasm_node::wasm_endpoints! {
         address_memes_latest
         address_memes_len
         categories_all
-        claim
         create_meme
         issue_token
         meme_creator

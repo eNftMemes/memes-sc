@@ -11,7 +11,6 @@ elrond_wasm_node::wasm_endpoints! {
         add_meme
         address_votes
         auction_sc
-        claim
         creator_contract
         current_period
         current_period_len

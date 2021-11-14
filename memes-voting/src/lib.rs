@@ -266,13 +266,4 @@ pub trait MemesVoting {
 
 	#[storage_mapper("memeVotes")]
 	fn meme_votes(&self, nft_nonce: u64) -> MapMapper<u64, u32>;
-
-    // Always needed
-    #[endpoint]
-    #[only_owner]
-    fn claim(&self) -> SCResult<()> {
-        let caller = self.blockchain().get_caller();
-        self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(&self.types().token_identifier_egld(), 0), b"claiming success");
-        Ok(())
-    }
 }

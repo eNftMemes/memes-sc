@@ -10,7 +10,6 @@ elrond_wasm_node::wasm_endpoints! {
         init
         bid
         bid_cut_percentage
-        claim
         end_auction
         lock_token
         meme_auction_period

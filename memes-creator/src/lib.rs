@@ -239,13 +239,4 @@ pub trait MemesCreator {
 
 	#[storage_mapper("categories")]
 	fn categories(&self) -> MapMapper<u8, ManagedBuffer>;
-
-	// Always needed
-	#[endpoint]
-	#[only_owner]
-	fn claim(&self) -> SCResult<()> {
-		let caller = self.blockchain().get_caller();
-		self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(&self.types().token_identifier_egld(), 0), b"claiming success");
-		Ok(())
-	}
 }

@@ -200,7 +200,6 @@ pub trait MemesAuction {
 	fn distribute_tokens_after_auction_end(&self, nft_nonce: u64, auction: &Auction<Self::Api>) {
 		let nft_type = &self.token_identifier().get();
 		let nft_amount_to_send = BigUint::from(NFT_AMOUNT);
-		let bid_cut_percentage = BigUint::from(auction.bid_cut_percentage);
 
 		if auction.original_owner.is_zero() {
 			if auction.current_winner.is_zero() {
@@ -230,6 +229,7 @@ pub trait MemesAuction {
 			return;
 		}
 
+		let bid_cut_percentage = BigUint::from(auction.bid_cut_percentage);
 		let bid_cut = &auction.current_bid * &bid_cut_percentage / PERCENTAGE_TOTAL;
 		let mut owner_cut = auction.current_bid.clone();
 		owner_cut -= &bid_cut;
@@ -321,13 +321,4 @@ pub trait MemesAuction {
 	#[view]
 	#[storage_mapper("memeAuctionPeriod")]
 	fn meme_auction_period(&self, nonce: u64) -> SingleValueMapper<u64>;
-
-    // Always needed
-    #[endpoint]
-    #[only_owner]
-    fn claim(&self) -> SCResult<()> {
-        let caller = self.blockchain().get_caller();
-        self.send().direct_egld(&caller, &self.blockchain().get_sc_balance(&self.types().token_identifier_egld(), 0), b"claiming success");
-        Ok(())
-    }
 }
