@@ -110,20 +110,16 @@ pub trait MemesCreator {
 	}
 
 	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: u8) -> AsyncCall {
-		let amount: &BigUint = &self.types().big_uint_from(NFT_AMOUNT);
+		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
 		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
 
-		// let sc_address: ManagedAddress = self.blockchain().get_sc_address();
 		let nft_token: &TokenIdentifier = &self.token_identifier().get();
-		let hash: &ManagedBuffer = &self.types().managed_buffer_new();
+		let hash: &ManagedBuffer = &ManagedBuffer::new();
 
-		let mut urls = self.types().managed_vec_new();
+		let mut urls = ManagedVec::new();
 		urls.push(url);
 
-		// TODO: Try to use self.send().esdt_nft_create_as_caller() so the creator of the NFT is the actual contract caller?
-		// Also remove contract as payable
-		// https://github.com/ElrondNetwork/elrond-wasm-rs/pull/439/files
-		let nonce: u64 = self.send().esdt_nft_create(nft_token, &amount, name, royalties, hash, &{ category }, &urls);
+		let nonce: u64 = self.send().esdt_nft_create_as_caller(nft_token, &amount, name, royalties, hash, &{ category }, &urls);
 
 		self.send().direct(address, nft_token, nonce, amount, &[]);
 		self.address_memes(address).push(&nonce);
@@ -183,13 +179,13 @@ pub trait MemesCreator {
 		let len = self.address_memes(address).len();
 
 		if len <= page * PER_PAGE {
-			return ManagedMultiResultVec::new(self.raw_vm_api());
+			return ManagedMultiResultVec::new();
 		}
 
 		let last_index = len - page * PER_PAGE;
 		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
 
-		let mut result: ManagedMultiResultVec<u64> = ManagedMultiResultVec::new(self.raw_vm_api());
+		let mut result: ManagedMultiResultVec<u64> = ManagedMultiResultVec::new();
 		for index in (first_index..=last_index).rev() {
 			result.push(self.address_memes(address).get(index));
 		}
@@ -202,10 +198,10 @@ pub trait MemesCreator {
 		let categories_all: MapMapper<u8, ManagedBuffer> = self.categories();
 
 		if 1 > categories_all.len() {
-			return ManagedMultiResultVec::new(self.raw_vm_api());
+			return ManagedMultiResultVec::new();
 		}
 
-		let mut result: ManagedMultiResultVec<(u8, ManagedBuffer)> = ManagedMultiResultVec::new(self.raw_vm_api());
+		let mut result: ManagedMultiResultVec<(u8, ManagedBuffer)> = ManagedMultiResultVec::new();
 		for (key, value) in categories_all.iter() {
 			result.push((key, value));
 		}

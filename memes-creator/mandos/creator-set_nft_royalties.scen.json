@@ -247,7 +247,7 @@
                 {
                   "nonce": "1",
                   "balance": "1",
-                  "creator": "sc:creator_contract",
+                  "creator": "address:my_address",
                   "royalties": "1000",
                   "hash": "",
                   "attributes": "u8:1",
