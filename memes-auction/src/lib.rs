@@ -63,16 +63,16 @@ pub trait MemesAuction {
 		let mut multiplier: u8 = nfts.len() as u8;
 
 		for nonce in nfts.iter() {
-			let mut min_bid: BigUint = self.types().big_uint_from(multiplier);
+			let mut min_bid: BigUint = BigUint::from(multiplier);
 			min_bid *= &min_bid_start;
 			multiplier -= 1;
 
 			let auction = Auction {
 				min_bid,
-				current_bid: self.types().big_uint_zero(),
-				current_winner: self.types().managed_address_zero(),
+				current_bid: BigUint::zero(),
+				current_winner: ManagedAddress::zero(),
 				bid_cut_percentage,
-				original_owner: self.types().managed_address_zero(),
+				original_owner: ManagedAddress::zero(),
 				ended: false,
 			};
 
@@ -261,7 +261,7 @@ pub trait MemesAuction {
 
 	#[view]
 	fn period_auctions_memes_all(&self, period: u64) -> ManagedMultiResultVec<FullAuction<Self::Api>> {
-		let mut result: ManagedMultiResultVec<FullAuction<Self::Api>> = ManagedMultiResultVec::new(self.raw_vm_api());
+		let mut result: ManagedMultiResultVec<FullAuction<Self::Api>> = ManagedMultiResultVec::new();
 		for index in 1..=self.period_auctioned_memes(period).len() {
 			let nonce = self.period_auctioned_memes(period).get(index);
 			let auction = self.period_meme_auction(period, nonce).get();
