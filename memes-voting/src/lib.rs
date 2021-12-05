@@ -56,7 +56,9 @@ pub trait MemesVoting {
 		let period: u64 = self.current_period();
 
 		if block_timestamp > period && block_timestamp - period >= PERIOD_TIME {
-			self.periods().push(&block_timestamp);
+			let new_period: u64 = period + PERIOD_TIME;
+
+			self.periods().push(&new_period);
 
 			let top_memes = self.period_top_memes(period).get();
 			let mut top_memes_args: MultiArgVec<u64> = MultiArgVec::new();
@@ -68,7 +70,7 @@ pub trait MemesVoting {
 			return OptionalResult::Some(
 				self.auction_proxy()
 					.contract(self.auction_sc().get())
-					.start_auction(block_timestamp, top_memes_args)
+					.start_auction(new_period, top_memes_args)
 					.async_call()
 			);
 		}
@@ -196,13 +198,13 @@ pub trait MemesVoting {
 		let len = self.period_memes(period).len();
 
 		if len <= page * PER_PAGE {
-			return ManagedMultiResultVec::new(self.raw_vm_api());
+			return ManagedMultiResultVec::new();
 		}
 
 		let last_index = len - page * PER_PAGE;
 		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
 
-		let mut result: ManagedMultiResultVec<(u64, u32)> = ManagedMultiResultVec::new(self.raw_vm_api());
+		let mut result: ManagedMultiResultVec<(u64, u32)> = ManagedMultiResultVec::new();
 		for index in (first_index..=last_index).rev() {
 			let nonce: u64 = self.period_meme(period, index);
 			let votes: u32 = self.meme_votes_period(nonce, &period);
@@ -225,10 +227,10 @@ pub trait MemesVoting {
 		let meme_votes: MapMapper<u64, u32> = self.meme_votes(nonce);
 
 		if 1 > meme_votes.len() {
-			return ManagedMultiResultVec::new(self.raw_vm_api());
+			return ManagedMultiResultVec::new();
 		}
 
-		let mut result: ManagedMultiResultVec<(u64, u32)> = ManagedMultiResultVec::new(self.raw_vm_api());
+		let mut result: ManagedMultiResultVec<(u64, u32)> = ManagedMultiResultVec::new();
 		for (key, value) in meme_votes.iter() {
 			result.push((key, value));
 		}
