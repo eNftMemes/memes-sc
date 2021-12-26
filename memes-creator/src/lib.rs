@@ -76,7 +76,7 @@ pub trait MemesCreator {
 	}
 
 	#[endpoint]
-	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: &u8) -> SCResult<AsyncCall> {
+	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> SCResult<AsyncCall> {
 		let address: ManagedAddress = self.blockchain().get_caller();
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
 		let address_meme_time: SingleValueMapper<u64> = self.address_last_meme_time(&address);
@@ -87,28 +87,28 @@ pub trait MemesCreator {
 			"Address already created a meme in the last 10 minutes"
 		);
 		require!(
-			self.categories().contains_key(category),
+			self.categories().contains(&category),
 			"Category does not exist"
 		);
 
 		self.address_last_meme_time(&address).set(&block_timestamp);
 
-		Ok(self.create_meme_nft(&address, &name, url, *category))
+		Ok(self.create_meme_nft(&address, &name, url, category))
 	}
 
 	#[only_owner]
 	#[endpoint]
-	fn modify_categories(&self, category: &u8, name: ManagedBuffer) -> SCResult<()> {
-		if !self.categories().contains_key(category) {
-			self.categories().insert(*category, name);
+	fn modify_categories(&self, category: ManagedBuffer) -> SCResult<()> {
+		if !self.categories().contains(&category) {
+			self.categories().insert(category);
 		} else {
-			self.categories().remove(category);
+			self.categories().remove(&category);
 		}
 
 		Ok(())
 	}
 
-	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: u8) -> AsyncCall {
+	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> AsyncCall {
 		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
 		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
 
@@ -119,7 +119,7 @@ pub trait MemesCreator {
 		urls.push(url);
 
 		// TODO: Maybe use `tags` instead of `category`?
-		let nonce: u64 = self.send().esdt_nft_create_as_caller(nft_token, &amount, name, royalties, hash, &{ category }, &urls);
+		let nonce: u64 = self.send().esdt_nft_create_as_caller(nft_token, &amount, name, royalties, hash, & { category }, &urls);
 
 		self.send().direct(address, nft_token, nonce, amount, &[]);
 
@@ -168,22 +168,6 @@ pub trait MemesCreator {
 	}
 
 	#[view]
-	fn categories_all(&self) -> ManagedMultiResultVec<(u8, ManagedBuffer)> {
-		let categories_all: MapMapper<u8, ManagedBuffer> = self.categories();
-
-		if 1 > categories_all.len() {
-			return ManagedMultiResultVec::new();
-		}
-
-		let mut result: ManagedMultiResultVec<(u8, ManagedBuffer)> = ManagedMultiResultVec::new();
-		for (key, value) in categories_all.iter() {
-			result.push((key, value));
-		}
-
-		return result;
-	}
-
-	#[view]
 	#[storage_mapper("addressLastMemeTime")]
 	fn address_last_meme_time(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
 
@@ -199,6 +183,7 @@ pub trait MemesCreator {
 	#[storage_mapper("nftRoyalties")]
 	fn nft_royalties(&self) -> SingleValueMapper<u16>;
 
+	#[view]
 	#[storage_mapper("categories")]
-	fn categories(&self) -> MapMapper<u8, ManagedBuffer>;
+	fn categories(&self) -> SetMapper<ManagedBuffer>;
 }

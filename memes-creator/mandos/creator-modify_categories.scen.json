@@ -13,7 +13,6 @@
         "to": "sc:creator_contract",
         "function": "modify_categories",
         "arguments": [
-          "u8:1",
           "str:funny"
         ],
         "gasLimit": "100,000,000",
@@ -56,14 +55,12 @@
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
-            "str:categories|``.value|u32:1": "1",
-            "str:categories|``.node_id|u8:1": "1",
-            "str:categories|``.mapped|u8:1": "str:funny",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
 
             "str:categories|``.node_links|u32:2": "u32:1|u32:0",
-            "str:categories|``.value|u32:2": "2",
-            "str:categories|``.node_id|u8:2": "2",
-            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2"
           },
           "esdt": {
@@ -102,7 +99,6 @@
         "to": "sc:creator_contract",
         "function": "modify_categories",
         "arguments": [
-          "u8:3",
           "str:other"
         ],
         "gasLimit": "100,000,000",
@@ -144,19 +140,16 @@
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
-            "str:categories|``.value|u32:1": "1",
-            "str:categories|``.node_id|u8:1": "1",
-            "str:categories|``.mapped|u8:1": "str:funny",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
 
             "str:categories|``.node_links|u32:2": "u32:1|u32:3",
-            "str:categories|``.value|u32:2": "2",
-            "str:categories|``.node_id|u8:2": "2",
-            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
 
             "str:categories|``.node_links|u32:3": "u32:2|u32:0",
-            "str:categories|``.value|u32:3": "3",
-            "str:categories|``.node_id|u8:3": "3",
-            "str:categories|``.mapped|u8:3": "str:other",
+            "str:categories|``.value|u32:3": "str:other",
+            "str:categories|``.node_id|nested:str:other": "3",
             "str:categories|``.info": "u32:3|u32:1|u32:3|u32:3"
           },
           "esdt": {
@@ -195,7 +188,6 @@
         "to": "sc:creator_contract",
         "function": "modify_categories",
         "arguments": [
-          "u8:3",
           "str:other"
         ],
         "gasLimit": "100,000,000",
@@ -237,14 +229,12 @@
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
-            "str:categories|``.value|u32:1": "1",
-            "str:categories|``.node_id|u8:1": "1",
-            "str:categories|``.mapped|u8:1": "str:funny",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
 
             "str:categories|``.node_links|u32:2": "u32:1|u32:0",
-            "str:categories|``.value|u32:2": "2",
-            "str:categories|``.node_id|u8:2": "2",
-            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:3"
           },
           "esdt": {
@@ -285,7 +275,7 @@
         "arguments": [
           "str:nft-name",
           "str:nft-create-uri",
-          "3"
+          "str:other"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
@@ -327,14 +317,12 @@
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
-            "str:categories|``.value|u32:1": "1",
-            "str:categories|``.node_id|u8:1": "1",
-            "str:categories|``.mapped|u8:1": "str:funny",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
 
             "str:categories|``.node_links|u32:2": "u32:1|u32:0",
-            "str:categories|``.value|u32:2": "2",
-            "str:categories|``.node_id|u8:2": "2",
-            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:3"
           },
           "esdt": {

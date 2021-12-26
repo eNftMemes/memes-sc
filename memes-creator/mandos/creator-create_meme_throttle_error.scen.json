@@ -27,14 +27,12 @@
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
-            "str:categories|``.value|u32:1": "1",
-            "str:categories|``.node_id|u8:1": "1",
-            "str:categories|``.mapped|u8:1": "str:funny",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
 
             "str:categories|``.node_links|u32:2": "u32:1|u32:0",
-            "str:categories|``.value|u32:2": "2",
-            "str:categories|``.node_id|u8:2": "2",
-            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
 
             "str:addressLastMemeTime|address:my_address": "123,000"
@@ -56,7 +54,7 @@
         "arguments": [
           "str:nft-name",
           "str:nft-create-uri",
-          "1"
+          "str:funny"
         ],
         "gasLimit": "15,000,000",
         "gasPrice": "0"
@@ -98,14 +96,12 @@
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
-            "str:categories|``.value|u32:1": "1",
-            "str:categories|``.node_id|u8:1": "1",
-            "str:categories|``.mapped|u8:1": "str:funny",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
 
             "str:categories|``.node_links|u32:2": "u32:1|u32:0",
-            "str:categories|``.value|u32:2": "2",
-            "str:categories|``.node_id|u8:2": "2",
-            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
 
             "str:addressLastMemeTime|address:my_address": "123,000"
@@ -154,7 +150,7 @@
         "arguments": [
           "str:nft-name",
           "str:nft-create-uri",
-          "u8:1"
+          "str:funny"
         ],
         "gasLimit": "15,000,000",
         "gasPrice": "0"
@@ -186,7 +182,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "str:funny",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -207,14 +203,12 @@
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
-            "str:categories|``.value|u32:1": "1",
-            "str:categories|``.node_id|u8:1": "1",
-            "str:categories|``.mapped|u8:1": "str:funny",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
 
             "str:categories|``.node_links|u32:2": "u32:1|u32:0",
-            "str:categories|``.value|u32:2": "2",
-            "str:categories|``.node_id|u8:2": "2",
-            "str:categories|``.mapped|u8:2": "str:random",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
 
             "str:addressLastMemeTime|address:my_address": "123,601"

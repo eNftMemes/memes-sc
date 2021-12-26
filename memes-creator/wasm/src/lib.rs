@@ -10,7 +10,7 @@ elrond_wasm_node::wasm_endpoints! {
         init
         callBack
         address_last_meme_time
-        categories_all
+        categories
         create_meme
         issue_token
         modify_categories
