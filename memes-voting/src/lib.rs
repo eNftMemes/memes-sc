@@ -46,6 +46,8 @@ pub trait MemesVoting {
 		let current_period: u64 = self.current_period();
 
 		self.period_memes(current_period).push(nonce);
+
+		// TODO: Remove this and add checks to other code?
 		self.meme_votes(*nonce).insert(current_period, 0);
 
 		Ok(result)
@@ -90,10 +92,8 @@ pub trait MemesVoting {
 	}
 
 	#[endpoint]
-	fn vote_memes(&self, #[var_args] nft_nonces: ManagedVarArgs<u64>) -> SCResult<OptionalResult<AsyncCall>> {
+	fn vote_memes(&self, #[var_args] nft_nonces: ManagedVarArgs<u64>) -> SCResult<()> {
 		let caller: ManagedAddress = self.blockchain().get_caller();
-
-		let result = self.alter_period();
 
 		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);
 		let current_period: u64 = self.current_period();
@@ -112,6 +112,7 @@ pub trait MemesVoting {
 		}
 
 		for (nonce, new_votes) in new_meme_votes.iter_mut() {
+			// TODO: Maybe check this after merging contracts by checking the last nft nonce?
 			require!(!self.meme_votes(*nonce).is_empty(), "Meme does not exist");
 
 			let current_votes: u32 = self.meme_votes(*nonce)
@@ -130,7 +131,7 @@ pub trait MemesVoting {
 
 		self.alter_period_top_memes(&mut new_meme_votes);
 
-		Ok(result)
+		Ok(())
 	}
 
 	fn alter_period_top_memes(&self, new_meme_votes: &mut HashMap<u64, u32>) {
@@ -266,6 +267,9 @@ pub trait MemesVoting {
 	#[storage_mapper("periodMemes")]
 	fn period_memes(&self, period: u64) -> VecMapper<u64>;
 
+	// TODO: Improve this?
+	// Make 2 storage mappers, one for storing the total amount of votes a meme has for all periods,
+	// and another one to store the amount of votes for a period?
 	#[storage_mapper("memeVotes")]
 	fn meme_votes(&self, nft_nonce: u64) -> MapMapper<u64, u32>;
 }

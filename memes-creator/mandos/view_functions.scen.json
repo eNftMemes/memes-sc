@@ -37,10 +37,7 @@
             "str:categories|``.mapped|u8:2": "str:random",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
 
-            "str:addressLastMemeTime|address:my_address": "123,000",
-            "str:addressMemes|address:my_address|``.len": "1",
-            "str:addressMemes|address:my_address|``.item|u32:1": "1",
-            "str:memeCreator|u64:1": "address:my_address"
+            "str:addressLastMemeTime|address:my_address": "123,000"
           },
           "code": "file:../output/memes-creator.wasm"
         }
@@ -59,60 +56,6 @@
       },
       "expect": {
         "out": ["str:TRIPANFT-745e9b"],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "addressMemesLength",
-      "tx": {
-        "to": "sc:creator_contract",
-        "function": "address_memes_len",
-        "arguments": ["address:my_address"]
-      },
-      "expect": {
-        "out": ["1"],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "addressMemes",
-      "tx": {
-        "to": "sc:creator_contract",
-        "function": "address_memes_latest",
-        "arguments": ["address:my_address", "0"]
-      },
-      "expect": {
-        "out": ["1"],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "addressMemes",
-      "tx": {
-        "to": "sc:creator_contract",
-        "function": "address_memes_latest",
-        "arguments": ["address:my_address", "1"]
-      },
-      "expect": {
-        "out": [],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "memeCreator",
-      "tx": {
-        "to": "sc:creator_contract",
-        "function": "meme_creator",
-        "arguments": ["1"]
-      },
-      "expect": {
-        "out": [
-          "address:my_address"
-        ],
         "status": "0"
       }
     },

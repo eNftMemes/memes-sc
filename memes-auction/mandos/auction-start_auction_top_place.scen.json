@@ -7,7 +7,7 @@
     },
     {
       "step": "scCall",
-      "txId": "start-auction",
+      "txId": "start-auction-rarity-lower",
       "tx": {
         "from": "address:voting_contract",
         "to": "sc:auction_contract",
@@ -15,15 +15,8 @@
         "arguments": [
           "u64:727,800",
           "u64:11",
-          "u64:12",
-          "u64:13",
-          "u64:14",
-          "u64:15",
-          "u64:16",
-          "u64:17",
-          "u64:18",
-          "u64:19",
-          "u64:20"
+          "u64:1",
+          "u64:2"
         ],
         "gasLimit": "20,000,000",
         "gasPrice": "0"
@@ -86,62 +79,6 @@
             "str:memeRarity|u64:2": "1",
 
             "str:periodMemeAuction|u64:727,800|u64:11": {
-              "00-min_bid": "biguint:50",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
-              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
-            },
-            "str:periodMemeAuction|u64:727,800|u64:12": {
-              "00-min_bid": "biguint:45",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
-              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
-            },
-            "str:periodMemeAuction|u64:727,800|u64:13": {
-              "00-min_bid": "biguint:40",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
-              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
-            },
-            "str:periodMemeAuction|u64:727,800|u64:14": {
-              "00-min_bid": "biguint:35",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
-              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
-            },
-            "str:periodMemeAuction|u64:727,800|u64:15": {
-              "00-min_bid": "biguint:30",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
-              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
-            },
-            "str:periodMemeAuction|u64:727,800|u64:16": {
-              "00-min_bid": "biguint:25",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
-              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
-            },
-            "str:periodMemeAuction|u64:727,800|u64:17": {
-              "00-min_bid": "biguint:20",
-              "01-current_bid": "biguint:0",
-              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
-              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
-            },
-            "str:periodMemeAuction|u64:727,800|u64:18": {
               "00-min_bid": "biguint:15",
               "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -149,7 +86,7 @@
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "05-ended": "u8:0"
             },
-            "str:periodMemeAuction|u64:727,800|u64:19": {
+            "str:periodMemeAuction|u64:727,800|u64:1": {
               "00-min_bid": "biguint:10",
               "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -157,7 +94,7 @@
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "05-ended": "u8:0"
             },
-            "str:periodMemeAuction|u64:727,800|u64:20": {
+            "str:periodMemeAuction|u64:727,800|u64:2": {
               "00-min_bid": "biguint:5",
               "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -165,28 +102,185 @@
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "05-ended": "u8:0"
             },
-            "str:periodAuctionedMemes|u64:727,800|``.len": "10",
+            "str:periodAuctionedMemes|u64:727,800|``.len": "3",
             "str:periodAuctionedMemes|u64:727,800|``.item|u32:1": "11",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:2": "12",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:3": "13",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:4": "14",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:5": "15",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:6": "16",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:7": "17",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:8": "18",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:9": "19",
-            "str:periodAuctionedMemes|u64:727,800|``.item|u32:10": "20",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:2": "1",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:3": "2",
 
-            "str:memeRarity|u64:11": "10",
-            "str:memeRarity|u64:12": "9",
-            "str:memeRarity|u64:13": "8",
-            "str:memeRarity|u64:14": "7",
-            "str:memeRarity|u64:15": "6",
-            "str:memeRarity|u64:16": "5",
-            "str:memeRarity|u64:17": "4",
-            "str:memeRarity|u64:18": "3",
-            "str:memeRarity|u64:19": "2",
-            "str:memeRarity|u64:20": "1"
+            "str:memeRarity|u64:11": "3"
+          },
+          "code": "file:../output/memes-auction.wasm"
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "start-auction-rarity-higher",
+      "tx": {
+        "from": "address:voting_contract",
+        "to": "sc:auction_contract",
+        "function": "start_auction",
+        "arguments": [
+          "u64:1,332,600",
+          "u64:11",
+          "u64:12",
+          "u64:1",
+          "u64:2",
+          "u64:13"
+        ],
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:voting_contract": {
+          "nonce": "3",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:TRIPANFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:bidCutPercentage": "500",
+            "str:minBidStart": "5",
+            "str:periodMemeAuction|u64:123,000|u64:1": {
+              "00-min_bid": "biguint:10",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:123,000|u64:2": {
+              "00-min_bid": "biguint:5",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodAuctionedMemes|u64:123,000|``.len": "2",
+            "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
+            "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
+
+            "str:memeRarity|u64:1": "3",
+            "str:memeRarity|u64:2": "2",
+
+            "str:periodMemeAuction|u64:727,800|u64:11": {
+              "00-min_bid": "biguint:15",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:1": {
+              "00-min_bid": "biguint:10",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:727,800|u64:2": {
+              "00-min_bid": "biguint:5",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodAuctionedMemes|u64:727,800|``.len": "3",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:1": "11",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:2": "1",
+            "str:periodAuctionedMemes|u64:727,800|``.item|u32:3": "2",
+
+            "str:memeRarity|u64:11": "5",
+
+            "str:periodMemeAuction|u64:1,332,600|u64:11": {
+              "00-min_bid": "biguint:25",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:1,332,600|u64:12": {
+              "00-min_bid": "biguint:20",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:1,332,600|u64:1": {
+              "00-min_bid": "biguint:15",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:1,332,600|u64:2": {
+              "00-min_bid": "biguint:10",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodMemeAuction|u64:1,332,600|u64:13": {
+              "00-min_bid": "biguint:5",
+              "01-current_bid": "biguint:0",
+              "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "03-bid_cut_percentage": "u16:500",
+              "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "05-ended": "u8:0"
+            },
+            "str:periodAuctionedMemes|u64:1,332,600|``.len": "5",
+            "str:periodAuctionedMemes|u64:1,332,600|``.item|u32:1": "11",
+            "str:periodAuctionedMemes|u64:1,332,600|``.item|u32:2": "12",
+            "str:periodAuctionedMemes|u64:1,332,600|``.item|u32:3": "1",
+            "str:periodAuctionedMemes|u64:1,332,600|``.item|u32:4": "2",
+            "str:periodAuctionedMemes|u64:1,332,600|``.item|u32:5": "13",
+
+            "str:memeRarity|u64:13": "1",
+            "str:memeRarity|u64:12": "4"
           },
           "code": "file:../output/memes-auction.wasm"
         },

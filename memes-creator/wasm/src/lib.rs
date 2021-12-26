@@ -10,13 +10,9 @@ elrond_wasm_node::wasm_endpoints! {
         init
         callBack
         address_last_meme_time
-        address_memes
-        address_memes_latest
-        address_memes_len
         categories_all
         create_meme
         issue_token
-        meme_creator
         modify_categories
         nft_royalties
         set_local_roles

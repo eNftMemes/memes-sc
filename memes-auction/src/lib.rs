@@ -62,10 +62,10 @@ pub trait MemesAuction {
 		let min_bid_start: BigUint = self.min_bid_start().get();
 		let mut multiplier: u8 = nfts.len() as u8;
 
+		// 1st meme is the one on 1st place etc
 		for nonce in nfts.iter() {
 			let mut min_bid: BigUint = BigUint::from(multiplier);
 			min_bid *= &min_bid_start;
-			multiplier -= 1;
 
 			let auction = Auction {
 				min_bid,
@@ -78,7 +78,14 @@ pub trait MemesAuction {
 
 			self.period_meme_auction(period, *nonce).set(&auction);
 			self.period_auctioned_memes(period).push(nonce);
-			self.meme_auction_period(*nonce).set(&period);
+
+			let meme_rarity = self.meme_rarity(*nonce);
+			if meme_rarity.is_empty() || multiplier > meme_rarity.get() {
+				let rarity: u8 = multiplier;
+				meme_rarity.set(&rarity);
+			}
+
+			multiplier -= 1;
 		}
 
 		Ok(())
@@ -278,23 +285,6 @@ pub trait MemesAuction {
 	}
 
 	#[view]
-	fn meme_get_auction(&self, nonce: u64) -> OptionalResult<FullAuction<Self::Api>> {
-		if self.meme_auction_period(nonce).is_empty() {
-			return OptionalResult::None;
-		}
-
-		let period = self.meme_auction_period(nonce).get();
-		let auction = self.period_meme_auction(period, nonce).get();
-
-		OptionalResult::Some(
-			FullAuction {
-				nonce,
-				auction,
-			}
-		)
-	}
-
-	#[view]
 	#[storage_mapper("votingContract")]
 	fn voting_contract(&self) -> SingleValueMapper<ManagedAddress>;
 
@@ -318,7 +308,11 @@ pub trait MemesAuction {
 	#[storage_mapper("periodAuctionedMemes")]
 	fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
 
+	// The rarity of a meme depending on the place the meme was in an auction, to be used in the future
+	// If an auction has less than 10 memes, the max rarity is < 10
+	// 10 - 1st place, most rare
+	// 1 - 10th place, most common
 	#[view]
-	#[storage_mapper("memeAuctionPeriod")]
-	fn meme_auction_period(&self, nonce: u64) -> SingleValueMapper<u64>;
+	#[storage_mapper("memeRarity")]
+	fn meme_rarity(&self, nonce: u64) -> SingleValueMapper<u8>;
 }

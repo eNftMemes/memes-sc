@@ -105,8 +105,9 @@
             "str:periodAuctionedMemes|u64:123,000|``.len": "2",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
-            "str:memeAuctionPeriod|u64:1": "123,000",
-            "str:memeAuctionPeriod|u64:2": "123,000"
+
+            "str:memeRarity|u64:1": "2",
+            "str:memeRarity|u64:2": "1"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {
@@ -263,8 +264,9 @@
             "str:periodAuctionedMemes|u64:123,000|``.len": "2",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
-            "str:memeAuctionPeriod|u64:1": "123,000",
-            "str:memeAuctionPeriod|u64:2": "123,000"
+
+            "str:memeRarity|u64:1": "2",
+            "str:memeRarity|u64:2": "1"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {

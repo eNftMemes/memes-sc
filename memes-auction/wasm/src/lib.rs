@@ -12,8 +12,7 @@ elrond_wasm_node::wasm_endpoints! {
         bid_cut_percentage
         end_auction
         lock_token
-        meme_auction_period
-        meme_get_auction
+        meme_rarity
         min_bid_start
         period_auctioned_memes
         period_auctions_memes_all

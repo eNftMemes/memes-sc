@@ -280,10 +280,7 @@
             "str:categories|``.mapped|u8:2": "str:random",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
 
-            "str:addressLastMemeTime|address:my_address": "123,000",
-            "str:addressMemes|address:my_address|``.len": "1",
-            "str:addressMemes|address:my_address|``.item|u32:1": "1",
-            "str:memeCreator|u64:1": "address:my_address"
+            "str:addressLastMemeTime|address:my_address": "123,000"
           },
           "code": "file:../output/memes-creator.wasm",
           "esdt": {

@@ -5,7 +5,6 @@ elrond_wasm::imports!();
 
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
 const NFT_AMOUNT: u32 = 1;
-const PER_PAGE: usize = 10;
 
 mod voting_proxy {
 	elrond_wasm::imports!();
@@ -119,11 +118,10 @@ pub trait MemesCreator {
 		let mut urls = ManagedVec::new();
 		urls.push(url);
 
+		// TODO: Maybe use `tags` instead of `category`?
 		let nonce: u64 = self.send().esdt_nft_create_as_caller(nft_token, &amount, name, royalties, hash, &{ category }, &urls);
 
 		self.send().direct(address, nft_token, nonce, amount, &[]);
-		self.address_memes(address).push(&nonce);
-		self.meme_creator(&nonce).set(address);
 
 		return self.voting_proxy()
 	        .contract(self.voting_sc().get())
@@ -170,30 +168,6 @@ pub trait MemesCreator {
 	}
 
 	#[view]
-	fn address_memes_len(&self, address: &ManagedAddress) -> usize {
-		return self.address_memes(address).len();
-	}
-
-	#[view]
-	fn address_memes_latest(&self, address: &ManagedAddress, page: usize) -> ManagedMultiResultVec<u64> {
-		let len = self.address_memes(address).len();
-
-		if len <= page * PER_PAGE {
-			return ManagedMultiResultVec::new();
-		}
-
-		let last_index = len - page * PER_PAGE;
-		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
-
-		let mut result: ManagedMultiResultVec<u64> = ManagedMultiResultVec::new();
-		for index in (first_index..=last_index).rev() {
-			result.push(self.address_memes(address).get(index));
-		}
-
-		return result;
-	}
-
-	#[view]
 	fn categories_all(&self) -> ManagedMultiResultVec<(u8, ManagedBuffer)> {
 		let categories_all: MapMapper<u8, ManagedBuffer> = self.categories();
 
@@ -208,14 +182,6 @@ pub trait MemesCreator {
 
 		return result;
 	}
-
-	#[view]
-	#[storage_mapper("addressMemes")]
-	fn address_memes(&self, address: &ManagedAddress) -> VecMapper<u64>;
-
-	#[view]
-	#[storage_mapper("memeCreator")]
-	fn meme_creator(&self, nonce: &u64) -> SingleValueMapper<ManagedAddress>;
 
 	#[view]
 	#[storage_mapper("addressLastMemeTime")]

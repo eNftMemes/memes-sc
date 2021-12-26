@@ -43,42 +43,6 @@
     },
     {
       "step": "scQuery",
-      "txId": "memeGetAuctionNone",
-      "tx": {
-        "to": "sc:auction_contract",
-        "function": "meme_get_auction",
-        "arguments": ["u64:1234"]
-      },
-      "expect": {
-        "out": [],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "memeGetAuction",
-      "tx": {
-        "to": "sc:auction_contract",
-        "function": "meme_get_auction",
-        "arguments": ["u64:1"]
-      },
-      "expect": {
-        "out": [{
-          "00-nonce": "u64:1",
-          "01-auction": {
-            "00-min_bid": "biguint:10",
-            "01-current_bid": "biguint:0",
-            "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-            "03-bid_cut_percentage": "u16:500",
-            "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-            "05-ended": "u8:0"
-          }
-        }],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scQuery",
       "txId": "votingContract",
       "tx": {
         "to": "sc:auction_contract",

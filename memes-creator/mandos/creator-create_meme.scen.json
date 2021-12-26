@@ -17,7 +17,7 @@
           "str:nft-create-uri",
           "u8:1"
         ],
-        "gasLimit": "100,000,000",
+        "gasLimit": "15,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -78,10 +78,7 @@
             "str:categories|``.mapped|u8:2": "str:random",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
 
-            "str:addressLastMemeTime|address:my_address": "123,000",
-            "str:addressMemes|address:my_address|``.len": "1",
-            "str:addressMemes|address:my_address|``.item|u32:1": "1",
-            "str:memeCreator|u64:1": "address:my_address"
+            "str:addressLastMemeTime|address:my_address": "123,000"
           },
           "code": "file:../output/memes-creator.wasm",
           "esdt": {
@@ -123,7 +120,7 @@
           "str:nft-create-uri2",
           "u8:2"
         ],
-        "gasLimit": "100,000,000",
+        "gasLimit": "15,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -185,13 +182,7 @@
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
 
             "str:addressLastMemeTime|address:my_address": "123,000",
-            "str:addressLastMemeTime|address:other_address": "123,000",
-            "str:addressMemes|address:my_address|``.len": "1",
-            "str:addressMemes|address:my_address|``.item|u32:1": "1",
-            "str:memeCreator|u64:1": "address:my_address",
-            "str:addressMemes|address:other_address|``.len": "1",
-            "str:addressMemes|address:other_address|``.item|u32:1": "2",
-            "str:memeCreator|u64:2": "address:other_address"
+            "str:addressLastMemeTime|address:other_address": "123,000"
           },
           "esdt": {
             "str:TRIPANFT-745e9b": {
