@@ -3,7 +3,7 @@
   "steps": [
     {
       "step": "externalSteps",
-      "path": "voting-vote_memes.scen.json"
+      "path": "voting-vote_memes_total.scen.json"
     },
     {
       "step": "scQuery",
@@ -12,12 +12,13 @@
         "to": "sc:voting_contract",
         "function": "meme_votes_all",
         "arguments": [
-          "u64:1"
+          "u64:1",
+          "u64:727,800"
         ]
       },
       "expect": {
         "out": [
-          "u64:123,000|u32:0", "u64:727,800|u32:3"
+          "u32:3|u32:3"
         ],
         "status": "0"
       }
@@ -29,22 +30,59 @@
         "to": "sc:voting_contract",
         "function": "meme_votes_all",
         "arguments": [
-          "u64:2"
+          "u64:2",
+          "u64:727,800"
         ]
       },
       "expect": {
         "out": [
-          "u64:727,800|u32:1"
+          "u32:1|u32:1"
         ],
         "status": "0"
       }
     },
     {
       "step": "scQuery",
-      "txId": "memesVotesPeriod",
+      "txId": "memesVotesAllDifferent",
       "tx": {
         "to": "sc:voting_contract",
-        "function": "meme_votes_period",
+        "function": "meme_votes_all",
+        "arguments": [
+          "u64:11",
+          "u64:727,800"
+        ]
+      },
+      "expect": {
+        "out": [
+          "u32:7|u32:15"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "memesVotesAllDifferentPeriod",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "meme_votes_all",
+        "arguments": [
+          "u64:11",
+          "u64:1,332,600"
+        ]
+      },
+      "expect": {
+        "out": [
+          "u32:8|u32:15"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "memeVotes",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "meme_votes",
         "arguments": [
           "u64:1", "u64:123,000"
         ]
@@ -58,10 +96,10 @@
     },
     {
       "step": "scQuery",
-      "txId": "memesVotesPeriod",
+      "txId": "memeVotes",
       "tx": {
         "to": "sc:voting_contract",
-        "function": "meme_votes_period",
+        "function": "meme_votes",
         "arguments": [
           "u64:2", "u64:727,800"
         ]

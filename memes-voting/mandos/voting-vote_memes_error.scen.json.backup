@@ -7,6 +7,26 @@
     },
     {
       "step": "scCall",
+      "txId": "vote-memes-error",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          "u64:0"
+        ],
+        "gasLimit": "15,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Meme does not exist",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
       "txId": "vote-memes-4",
       "tx": {
         "from": "address:my_address",
@@ -28,7 +48,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "5",
+          "nonce": "6",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -62,11 +82,28 @@
             "str:periodMemes|u64:727,800|``.item|u32:1": "2",
             "str:periodMemes|u64:727,800|``.item|u32:2": "3",
 
-            "str:memeVotesTotal|u64:1": "11",
-            "str:memeVotesTotal|u64:2": "9",
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
 
-            "str:memeVotes|u64:1|u64:727,800": "11",
-            "str:memeVotes|u64:2|u64:727,800": "9",
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "11",
+            "str:memeVotes|u64:1|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "9",
+            "str:memeVotes|u64:2|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
 
             "str:addressVotes|address:my_address": "u64:727,800|u8:1",
             "str:addressVotes|address:other_address": "u64:727,800|u8:19",
@@ -144,7 +181,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "7",
+          "nonce": "8",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -183,14 +220,44 @@
             "str:periodMemes|u64:1,332,600|``.len": "1",
             "str:periodMemes|u64:1,332,600|``.item|u32:1": "4",
 
-            "str:memeVotesTotal|u64:1": "12",
-            "str:memeVotesTotal|u64:2": "10",
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
 
-            "str:memeVotes|u64:1|u64:727,800": "11",
-            "str:memeVotes|u64:2|u64:727,800": "9",
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:3",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "11",
 
-            "str:memeVotes|u64:1|u64:1,332,600": "1",
-            "str:memeVotes|u64:2|u64:1,332,600": "1",
+            "str:memeVotes|u64:1|``.node_links|u32:3": "u32:2|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:3": "1,332,600",
+            "str:memeVotes|u64:1|``.node_id|u64:1,332,600": "3",
+            "str:memeVotes|u64:1|``.mapped|u64:1,332,600": "1",
+            "str:memeVotes|u64:1|``.info": "u32:3|u32:1|u32:3|u32:3",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "9",
+
+            "str:memeVotes|u64:2|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:2": "1,332,600",
+            "str:memeVotes|u64:2|``.node_id|u64:1,332,600": "2",
+            "str:memeVotes|u64:2|``.mapped|u64:1,332,600": "1",
+            "str:memeVotes|u64:2|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:4|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:4|``.value|u32:1": "1,332,600",
+            "str:memeVotes|u64:4|``.node_id|u64:1,332,600": "1",
+            "str:memeVotes|u64:4|``.mapped|u64:1,332,600": "0",
+            "str:memeVotes|u64:4|``.info": "u32:1|u32:1|u32:1|u32:1",
 
             "str:addressVotes|address:my_address": "u64:1,332,600|u8:18",
             "str:addressVotes|address:other_address": "u64:727,800|u8:19",
@@ -224,7 +291,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "7",
+          "nonce": "8",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -263,14 +330,44 @@
             "str:periodMemes|u64:1,332,600|``.len": "1",
             "str:periodMemes|u64:1,332,600|``.item|u32:1": "4",
 
-            "str:memeVotesTotal|u64:1": "14",
-            "str:memeVotesTotal|u64:2": "11",
+            "str:memeVotes|u64:1|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:1|``.value|u32:1": "123,000",
+            "str:memeVotes|u64:1|``.node_id|u64:123,000": "1",
+            "str:memeVotes|u64:1|``.mapped|u64:123,000": "0",
 
-            "str:memeVotes|u64:1|u64:727,800": "11",
-            "str:memeVotes|u64:2|u64:727,800": "9",
+            "str:memeVotes|u64:1|``.node_links|u32:2": "u32:1|u32:3",
+            "str:memeVotes|u64:1|``.value|u32:2": "727,800",
+            "str:memeVotes|u64:1|``.node_id|u64:727,800": "2",
+            "str:memeVotes|u64:1|``.mapped|u64:727,800": "11",
 
-            "str:memeVotes|u64:1|u64:1,332,600": "3",
-            "str:memeVotes|u64:2|u64:1,332,600": "2",
+            "str:memeVotes|u64:1|``.node_links|u32:3": "u32:2|u32:0",
+            "str:memeVotes|u64:1|``.value|u32:3": "1,332,600",
+            "str:memeVotes|u64:1|``.node_id|u64:1,332,600": "3",
+            "str:memeVotes|u64:1|``.mapped|u64:1,332,600": "3",
+            "str:memeVotes|u64:1|``.info": "u32:3|u32:1|u32:3|u32:3",
+
+            "str:memeVotes|u64:2|``.node_links|u32:1": "u32:0|u32:2",
+            "str:memeVotes|u64:2|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:2|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:2|``.mapped|u64:727,800": "9",
+
+            "str:memeVotes|u64:2|``.node_links|u32:2": "u32:1|u32:0",
+            "str:memeVotes|u64:2|``.value|u32:2": "1,332,600",
+            "str:memeVotes|u64:2|``.node_id|u64:1,332,600": "2",
+            "str:memeVotes|u64:2|``.mapped|u64:1,332,600": "2",
+            "str:memeVotes|u64:2|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:memeVotes|u64:3|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:3|``.value|u32:1": "727,800",
+            "str:memeVotes|u64:3|``.node_id|u64:727,800": "1",
+            "str:memeVotes|u64:3|``.mapped|u64:727,800": "0",
+            "str:memeVotes|u64:3|``.info": "u32:1|u32:1|u32:1|u32:1",
+
+            "str:memeVotes|u64:4|``.node_links|u32:1": "u32:0|u32:0",
+            "str:memeVotes|u64:4|``.value|u32:1": "1,332,600",
+            "str:memeVotes|u64:4|``.node_id|u64:1,332,600": "1",
+            "str:memeVotes|u64:4|``.mapped|u64:1,332,600": "0",
+            "str:memeVotes|u64:4|``.info": "u32:1|u32:1|u32:1|u32:1",
 
             "str:addressVotes|address:my_address": "u64:1,332,600|u8:18",
             "str:addressVotes|address:other_address": "u64:1,332,600|u8:17",

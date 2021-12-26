@@ -16,8 +16,9 @@ elrond_wasm_node::wasm_endpoints! {
         current_period_len
         current_period_meme
         current_period_memes_latest
+        meme_votes
         meme_votes_all
-        meme_votes_period
+        meme_votes_total
         period_len
         period_meme
         period_memes_latest
