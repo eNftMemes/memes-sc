@@ -13,7 +13,7 @@
         "to": "sc:auction_contract",
         "function": "set_min_bid_start",
         "arguments": ["biguint:1"],
-        "gasLimit": "100,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -31,7 +31,7 @@
         "to": "sc:auction_contract",
         "function": "set_min_bid_start",
         "arguments": ["1000"],
-        "gasLimit": "100,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
