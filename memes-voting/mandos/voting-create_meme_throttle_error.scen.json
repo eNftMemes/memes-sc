@@ -61,7 +61,7 @@
           "str:nft-create-uri",
           "str:funny"
         ],
-        "gasLimit": "15,000,000",
+        "gasLimit": "20,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -162,7 +162,7 @@
           "str:nft-create-uri",
           "str:funny"
         ],
-        "gasLimit": "15,000,000",
+        "gasLimit": "20,000,000",
         "gasPrice": "0"
       },
       "expect": {

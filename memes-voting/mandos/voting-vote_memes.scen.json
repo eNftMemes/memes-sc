@@ -15,7 +15,7 @@
         "arguments": [
           "u64:2", "u64:1"
         ],
-        "gasLimit": "30,000,000",
+        "gasLimit": "10,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -168,7 +168,7 @@
         "arguments": [
           "u64:1"
         ],
-        "gasLimit": "15,000,000",
+        "gasLimit": "10,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -321,7 +321,7 @@
         "arguments": [
           "u64:1"
         ],
-        "gasLimit": "15,000,000",
+        "gasLimit": "10,000,000",
         "gasPrice": "0"
       },
       "expect": {
