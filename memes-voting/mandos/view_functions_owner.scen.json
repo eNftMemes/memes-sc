@@ -3,12 +3,12 @@
   "steps": [
     {
       "step": "externalSteps",
-      "path": "creator-init.json"
+      "path": "voting-init.json"
     },
     {
       "step": "setState",
       "accounts": {
-        "sc:creator_contract": {
+        "sc:voting_contract": {
           "nonce": "0",
           "balance": "0",
           "esdt": {
@@ -22,7 +22,6 @@
             }
           },
           "storage": {
-            "str:votingSc": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
             "str:nftRoyalties": "500",
 
@@ -35,9 +34,14 @@
             "str:categories|``.node_id|nested:str:random": "2",
             "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
 
-            "str:addressLastMemeTime|address:my_address": "123,000"
+            "str:addressLastMemeTime|address:my_address": "123,000",
+
+            "str:auctionSc": "address:auction_contract",
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes.len": "0"
           },
-          "code": "file:../output/memes-creator.wasm"
+          "code": "file:../output/memes-voting.wasm"
         }
       },
       "currentBlockInfo": {
@@ -48,7 +52,7 @@
       "step": "scQuery",
       "txId": "tokenIdentifier",
       "tx": {
-        "to": "sc:creator_contract",
+        "to": "sc:voting_contract",
         "function": "token_identifier",
         "arguments": []
       },
@@ -59,9 +63,24 @@
     },
     {
       "step": "scQuery",
+      "txId": "nftRoyalties",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "nft_royalties",
+        "arguments": []
+      },
+      "expect": {
+        "out": [
+          "u16:500"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
       "txId": "categories",
       "tx": {
-        "to": "sc:creator_contract",
+        "to": "sc:voting_contract",
         "function": "categories",
         "arguments": []
       },
@@ -74,15 +93,15 @@
     },
     {
       "step": "scQuery",
-      "txId": "nftRoyalties",
+      "txId": "auctionSc",
       "tx": {
-        "to": "sc:creator_contract",
-        "function": "nft_royalties",
+        "to": "sc:voting_contract",
+        "function": "auction_sc",
         "arguments": []
       },
       "expect": {
         "out": [
-          "u16:500"
+          "address:auction_contract"
         ],
         "status": "0"
       }

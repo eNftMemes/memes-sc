@@ -13,18 +13,21 @@
     },
     {
       "step": "scCall",
-      "txId": "add-meme-4",
+      "txId": "create-meme-5",
       "tx": {
-        "from": "address:creator_contract",
+        "from": "address:my_address",
         "to": "sc:voting_contract",
-        "function": "add_meme",
+        "function": "create_meme",
         "arguments": [
-          "4"
+          "str:nft-name5",
+          "str:nft-create-uri5",
+          "str:random"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {
+        "out": ["0x05"],
         "status": "0",
         "gas": "*",
         "refund": "*"
@@ -32,18 +35,49 @@
     },
     {
       "step": "scCall",
-      "txId": "add-meme-5",
+      "txId": "create-meme-6",
       "tx": {
-        "from": "address:creator_contract",
+        "from": "address:other_address",
         "to": "sc:voting_contract",
-        "function": "add_meme",
+        "function": "create_meme",
         "arguments": [
-          "5"
+          "str:nft-name6",
+          "str:nft-create-uri6",
+          "str:random"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {
+        "out": ["0x06"],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "730,601"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-7",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name7",
+          "str:nft-create-uri7",
+          "str:random"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": ["0x07"],
         "status": "0",
         "gas": "*",
         "refund": "*"
@@ -51,18 +85,49 @@
     },
     {
       "step": "scCall",
-      "txId": "add-meme-6",
+      "txId": "create-meme-8",
       "tx": {
-        "from": "address:creator_contract",
+        "from": "address:other_address",
         "to": "sc:voting_contract",
-        "function": "add_meme",
+        "function": "create_meme",
         "arguments": [
-          "6"
+          "str:nft-name8",
+          "str:nft-create-uri8",
+          "str:random"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {
+        "out": ["0x08"],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "731,202"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-9",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name9",
+          "str:nft-create-uri9",
+          "str:random"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": ["0x09"],
         "status": "0",
         "gas": "*",
         "refund": "*"
@@ -70,75 +135,49 @@
     },
     {
       "step": "scCall",
-      "txId": "add-meme-7",
+      "txId": "create-meme-10",
       "tx": {
-        "from": "address:creator_contract",
+        "from": "address:other_address",
         "to": "sc:voting_contract",
-        "function": "add_meme",
+        "function": "create_meme",
         "arguments": [
-          "7"
+          "str:nft-name10",
+          "str:nft-create-uri10",
+          "str:random"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {
+        "out": ["0x0a"],
         "status": "0",
         "gas": "*",
         "refund": "*"
       }
     },
     {
-      "step": "scCall",
-      "txId": "add-meme-8",
-      "tx": {
-        "from": "address:creator_contract",
-        "to": "sc:voting_contract",
-        "function": "add_meme",
-        "arguments": [
-          "8"
-        ],
-        "gasLimit": "100,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "0",
-        "gas": "*",
-        "refund": "*"
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "731,803"
       }
     },
     {
       "step": "scCall",
-      "txId": "add-meme-9",
+      "txId": "create-meme-11",
       "tx": {
-        "from": "address:creator_contract",
+        "from": "address:my_address",
         "to": "sc:voting_contract",
-        "function": "add_meme",
+        "function": "create_meme",
         "arguments": [
-          "9"
+          "str:nft-name11",
+          "str:nft-create-uri11",
+          "str:random"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {
-        "status": "0",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "add-meme-10",
-      "tx": {
-        "from": "address:creator_contract",
-        "to": "sc:voting_contract",
-        "function": "add_meme",
-        "arguments": [
-          "10"
-        ],
-        "gasLimit": "100,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
+        "out": ["0x0b"],
         "status": "0",
         "gas": "*",
         "refund": "*"
@@ -155,76 +194,6 @@
       "expect": {
         "out": [
           "9"
-        ],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "currentPeriodMemesLatest",
-      "tx": {
-        "to": "sc:voting_contract",
-        "function": "current_period_memes_latest",
-        "arguments": ["0"]
-      },
-      "expect": {
-        "out": [
-          "u64:10|u32:0",
-          "u64:9|u32:0",
-          "u64:8|u32:0",
-          "u64:7|u32:0",
-          "u64:6|u32:0",
-          "u64:5|u32:0",
-          "u64:4|u32:0",
-          "u64:3|u32:0",
-          "u64:2|u32:1"
-        ],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "currentPeriodMemesLatest",
-      "tx": {
-        "to": "sc:voting_contract",
-        "function": "current_period_memes_latest",
-        "arguments": ["1"]
-      },
-      "expect": {
-        "out": [],
-        "status": "0"
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "add-meme-11",
-      "tx": {
-        "from": "address:creator_contract",
-        "to": "sc:voting_contract",
-        "function": "add_meme",
-        "arguments": [
-          "11"
-        ],
-        "gasLimit": "100,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "0",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "currentPeriodLength",
-      "tx": {
-        "to": "sc:voting_contract",
-        "function": "current_period_len",
-        "arguments": []
-      },
-      "expect": {
-        "out": [
-          "10"
         ],
         "status": "0"
       }
@@ -247,8 +216,7 @@
           "u64:6|u32:0",
           "u64:5|u32:0",
           "u64:4|u32:0",
-          "u64:3|u32:0",
-          "u64:2|u32:1"
+          "u64:3|u32:0"
         ],
         "status": "0"
       }
@@ -268,18 +236,21 @@
     },
     {
       "step": "scCall",
-      "txId": "add-meme-12",
+      "txId": "create-meme-12",
       "tx": {
-        "from": "address:creator_contract",
+        "from": "address:other_address",
         "to": "sc:voting_contract",
-        "function": "add_meme",
+        "function": "create_meme",
         "arguments": [
-          "12"
+          "str:nft-name12",
+          "str:nft-create-uri12",
+          "str:random"
         ],
         "gasLimit": "100,000,000",
         "gasPrice": "0"
       },
       "expect": {
+        "out": ["0x0c"],
         "status": "0",
         "gas": "*",
         "refund": "*"
@@ -295,7 +266,7 @@
       },
       "expect": {
         "out": [
-          "11"
+          "10"
         ],
         "status": "0"
       }
@@ -333,8 +304,88 @@
         "arguments": ["1"]
       },
       "expect": {
+        "out": [],
+        "status": "0"
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockTimestamp": "732,404"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-13",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name13",
+          "str:nft-create-uri13",
+          "str:random"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": ["0x0d"],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodLength",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_len",
+        "arguments": []
+      },
+      "expect": {
         "out": [
-          "u64:2|u32:1"
+          "11"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["0"]
+      },
+      "expect": {
+        "out": [
+          "u64:13|u32:0",
+          "u64:12|u32:0",
+          "u64:11|u32:0",
+          "u64:10|u32:0",
+          "u64:9|u32:0",
+          "u64:8|u32:0",
+          "u64:7|u32:0",
+          "u64:6|u32:0",
+          "u64:5|u32:0",
+          "u64:4|u32:0"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "currentPeriodMemesLatest",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "current_period_memes_latest",
+        "arguments": ["1"]
+      },
+      "expect": {
+        "out": [
+          "u64:3|u32:0"
         ],
         "status": "0"
       }

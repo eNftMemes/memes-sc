@@ -1,14 +1,9 @@
 {
-  "name": "creator claim",
+  "name": "creator init",
   "steps": [
     {
       "step": "setState",
       "accounts": {
-        "address:voting_contract": {
-          "nonce": "0",
-          "balance": "0",
-          "owner": "address:my_address"
-        },
         "address:my_address": {
           "nonce": "0",
           "balance": "1,000,000",
@@ -34,7 +29,12 @@
           },
           "storage": {}
         },
-        "sc:creator_contract": {
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
           "nonce": "0",
           "balance": "0",
           "esdt": {
@@ -48,7 +48,6 @@
             }
           },
           "storage": {
-            "str:votingSc": "address:voting_contract",
             "str:tokenIdentifier": "str:TRIPANFT-745e9b",
             "str:nftRoyalties": "500",
 
@@ -59,10 +58,15 @@
             "str:categories|``.node_links|u32:2": "u32:1|u32:0",
             "str:categories|``.value|u32:2": "str:random",
             "str:categories|``.node_id|nested:str:random": "2",
-            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2"
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:auctionSc": "address:auction_contract",
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes.len": "0"
           },
           "owner": "address:my_address",
-          "code": "file:../output/memes-creator.wasm"
+          "code": "file:../output/memes-voting.wasm"
         }
       },
       "currentBlockInfo": {

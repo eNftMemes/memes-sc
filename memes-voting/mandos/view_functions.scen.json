@@ -3,7 +3,7 @@
   "steps": [
     {
       "step": "externalSteps",
-      "path": "voting-add_meme_alter_period.scen.json"
+      "path": "voting-create_meme_alter_period.scen.json"
     },
     {
       "step": "scQuery",
@@ -28,7 +28,7 @@
       },
       "expect": {
         "out": [
-          "2"
+          "3"
         ],
         "status": "0"
       }
@@ -43,7 +43,7 @@
       },
       "expect": {
         "out": [
-          "3"
+          "4"
         ],
         "status": "0"
       }
@@ -57,13 +57,13 @@
         "arguments": ["123,000"]
       },
       "expect": {
-        "out": ["1"],
+        "out": ["2"],
         "status": "0"
       }
     },
     {
       "step": "scQuery",
-      "txId": "periodMeme",
+      "txId": "oldPeriodMemeFirst",
       "tx": {
         "to": "sc:voting_contract",
         "function": "period_meme",
@@ -75,6 +75,24 @@
       "expect": {
         "out": [
           "1"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "oldPeriodMemeSecond",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "period_meme",
+        "arguments": [
+          "123,000",
+          "2"
+        ]
+      },
+      "expect": {
+        "out": [
+          "2"
         ],
         "status": "0"
       }

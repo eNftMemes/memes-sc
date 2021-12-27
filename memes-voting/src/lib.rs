@@ -3,11 +3,14 @@
 
 elrond_wasm::imports!();
 
+mod owner;
 pub mod meme;
 use meme::*;
 
 use hashbrown::HashMap;
 
+const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
+const NFT_AMOUNT: u32 = 1;
 const PER_PAGE: usize = 10;
 const PERIOD_TIME: u64 = 604800; // 1 week in seconds
 const VOTES_PER_ADDRESS_PER_PERIOD: u8 = 20;
@@ -23,31 +26,66 @@ mod auction_proxy {
 }
 
 #[elrond_wasm::contract]
-pub trait MemesVoting {
+pub trait MemesVoting: owner::OwnerModule {
 	#[init]
-	fn init(&self, creator_contract: &ManagedAddress, period: &u64) {
-		self.creator_contract().set(creator_contract);
-
+	fn init(&self, period: &u64) {
 		if self.periods().len() == 0 {
+			let royalties: u16 = 500;
+			self.nft_royalties().set(&royalties);
+
 			self.periods().push(period);
 		}
 	}
 
 	#[endpoint]
-	fn add_meme(&self, nonce: &u64) -> SCResult<OptionalResult<AsyncCall>> {
-		let caller: ManagedAddress = self.blockchain().get_caller();
+	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> SCResult<OptionalResult<AsyncCall>> {
+		let address: ManagedAddress = self.blockchain().get_caller();
+		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
+		let address_meme_time: SingleValueMapper<u64> = self.address_last_meme_time(&address);
+
 		require!(
-			caller == self.creator_contract().get(),
-			"Only creator contract can call this"
+			address_meme_time.is_empty()
+				|| address_meme_time.get() < block_timestamp - THROTTLE_MEME_TIME,
+			"Address already created a meme in the last 10 minutes"
+		);
+		require!(
+			self.categories().contains(&category),
+			"Category does not exist"
 		);
 
-		let result = self.alter_period();
+		self.address_last_meme_time(&address).set(&block_timestamp);
 
+		Ok(self.create_meme_nft(&address, &name, url, category))
+	}
+
+	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> OptionalResult<AsyncCall> {
+		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
+		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
+
+		let nft_token: &TokenIdentifier = &self.token_identifier().get();
+		let hash: &ManagedBuffer = &ManagedBuffer::new();
+
+		let mut urls = ManagedVec::new();
+		urls.push(url);
+
+		let result = self.alter_period();
 		let current_period: u64 = self.current_period();
 
-		self.period_memes(current_period).push(nonce);
+		let nonce: u64 = self.send().esdt_nft_create_as_caller(
+			nft_token,
+			&amount,
+			name,
+			royalties,
+			hash,
+			&MemeAttributes { period: current_period, category },
+			&urls
+		);
 
-		Ok(result)
+		self.send().direct(address, nft_token, nonce, amount, &[]);
+
+		self.period_memes(current_period).push(&nonce);
+
+		return result;
 	}
 
 	fn alter_period(&self) -> OptionalResult<AsyncCall> {
@@ -77,17 +115,6 @@ pub trait MemesVoting {
 		OptionalResult::None
 	}
 
-	#[proxy]
-	fn auction_proxy(&self) -> auction_proxy::Proxy<Self::Api>;
-
-	#[only_owner]
-	#[endpoint]
-	fn set_auction_sc(&self, sc: &ManagedAddress) -> SCResult<()> {
-		self.auction_sc().set(sc);
-
-		Ok(())
-	}
-
 	#[endpoint]
 	fn vote_memes(&self, #[var_args] nft_nonces: ManagedVarArgs<u64>) -> SCResult<()> {
 		let caller: ManagedAddress = self.blockchain().get_caller();
@@ -108,10 +135,13 @@ pub trait MemesVoting {
 			*votes += 1;
 		}
 
+		let last_nonce = self.blockchain().get_current_esdt_nft_nonce(
+			&self.blockchain().get_sc_address(),
+			&self.token_identifier().get()
+		);
+
 		for (nonce, new_votes) in new_meme_votes.iter_mut() {
-			// TODO: Re-add this check by comparing the latest nonce of the NFT after merging with creator contract
-			// by using the function `get_current_esdt_nft_nonce`
-			// require!(!self.meme_votes_total(*nonce).is_empty(), "Meme does not exist");
+			require!(*nonce > 0 && *nonce <= last_nonce, "Meme does not exist");
 
 			// Update total votes before updating new_votes variable
 			self.meme_votes_total(*nonce)
@@ -170,6 +200,9 @@ pub trait MemesVoting {
 
 		top_memes.set(&sorted);
 	}
+
+	#[proxy]
+	fn auction_proxy(&self) -> auction_proxy::Proxy<Self::Api>;
 
 	#[view]
 	fn current_period_len(&self) -> usize {
@@ -234,8 +267,8 @@ pub trait MemesVoting {
 	}
 
 	#[view]
-	#[storage_mapper("auctionSc")]
-	fn auction_sc(&self) -> SingleValueMapper<ManagedAddress>;
+	#[storage_mapper("addressLastMemeTime")]
+	fn address_last_meme_time(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
 
 	#[view]
 	#[storage_mapper("periods")]
@@ -249,10 +282,7 @@ pub trait MemesVoting {
 	#[storage_mapper("addressVotes")]
 	fn address_votes(&self, address: ManagedAddress) -> SingleValueMapper<AddressVotes>;
 
-	#[view]
-	#[storage_mapper("creatorContract")]
-	fn creator_contract(&self) -> SingleValueMapper<ManagedAddress>;
-
+	// TODO: Remove this if data is indexed on microservice side?
 	#[storage_mapper("periodMemes")]
 	fn period_memes(&self, period: u64) -> VecMapper<u64>;
 
