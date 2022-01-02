@@ -15,9 +15,9 @@ Contracts are upgradable by default. START_PERIOD_TIMESTAMP will be ignored for 
 ## Issue token
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
 
-eg: (TripalovskyNFT - TRPNFT)
+eg: (MemeNFT - MEMENFT)
 
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0x54726970616c6f76736b794e4654" "0x5452504e4654"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0x4d656d654e4654" "0x4d454d454e4654"`
 
 ## Set local roles
 
@@ -47,3 +47,5 @@ s://devnet-gateway.elrond.com"`
 Create Meme:
 
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="create_meme" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments 0x746573742033 0x68747470733a2f2f697066732e6d6f72616c69732e696f3a323035332f697066732f516d645a634b7836374d4571677a64376631774e345755484253454661446f6978777046544b347175567175514d`
+
+# TODO: Update contract on devnet after `esdt_nft_create_as_caller` function works properly.

@@ -63,7 +63,7 @@
         "arguments": []
       },
       "expect": {
-        "out": ["str:TRIPANFT-745e9b"],
+        "out": ["str:MEMENFT-745e9b"],
         "status": "0"
       }
     },

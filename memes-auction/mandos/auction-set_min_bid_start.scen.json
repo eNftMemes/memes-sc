@@ -52,7 +52,7 @@
           "nonce": "2",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [],
               "nonce": "0",
               "balance": "0",
@@ -65,7 +65,7 @@
           "balance": "0",
           "storage": {
             "str:votingContract": "address:voting_contract",
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:bidCutPercentage": "500",
             "str:minBidStart": "1000"
           },
@@ -75,7 +75,7 @@
           "nonce": "1",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [],
               "nonce": "0",
               "balance": "0",

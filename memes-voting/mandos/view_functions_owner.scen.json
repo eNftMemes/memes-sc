@@ -12,7 +12,7 @@
           "nonce": "0",
           "balance": "0",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "nonce": "0",
               "balance": "0",
               "lastNonce": "0",
@@ -22,7 +22,7 @@
             }
           },
           "storage": {
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
@@ -57,7 +57,7 @@
         "arguments": []
       },
       "expect": {
-        "out": ["str:TRIPANFT-745e9b"],
+        "out": ["str:MEMENFT-745e9b"],
         "status": "0"
       }
     },

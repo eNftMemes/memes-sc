@@ -17,7 +17,7 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
@@ -57,7 +57,7 @@
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [],
               "nonce": "0",
               "balance": "0",
@@ -96,7 +96,7 @@
           "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "1",
@@ -131,7 +131,7 @@
           "nonce": "3",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "2",
@@ -175,7 +175,7 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
@@ -225,7 +225,7 @@
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [],
               "nonce": "0",
               "balance": "0",
@@ -264,7 +264,7 @@
           "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "1",
@@ -299,7 +299,7 @@
           "nonce": "4",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "2",
@@ -344,7 +344,7 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
@@ -400,7 +400,7 @@
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [],
               "nonce": "0",
               "balance": "0",
@@ -439,7 +439,7 @@
           "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "1",
@@ -474,7 +474,7 @@
           "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "2",
@@ -519,7 +519,7 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
@@ -579,7 +579,7 @@
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [],
               "nonce": "0",
               "balance": "0",
@@ -618,7 +618,7 @@
           "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "1",
@@ -653,7 +653,7 @@
           "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "2",
@@ -698,7 +698,7 @@
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
@@ -759,7 +759,7 @@
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [],
               "nonce": "0",
               "balance": "0",

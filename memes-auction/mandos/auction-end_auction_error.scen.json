@@ -101,7 +101,7 @@
           "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-012345": {
+            "str:MEMENFT-012345": {
               "instances": [
                 {
                   "nonce": "1",
@@ -115,7 +115,7 @@
                 }
               ]
             },
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "10",
@@ -136,7 +136,7 @@
           "balance": "0",
           "storage": {
             "str:votingContract": "address:voting_contract",
-            "str:tokenIdentifier": "str:TRIPANFT-745e9b",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:bidCutPercentage": "500",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -163,7 +163,7 @@
             "str:memeRarity|u64:2": "1"
           },
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": [
                 {
                   "nonce": "1",
@@ -194,7 +194,7 @@
           "nonce": "2",
           "balance": "1,000,000",
           "esdt": {
-            "str:TRIPANFT-745e9b": {
+            "str:MEMENFT-745e9b": {
               "instances": []
             }
           },
