@@ -3,6 +3,7 @@
 
 elrond_wasm::imports!();
 
+mod owner;
 pub mod auction;
 use auction::*;
 
@@ -14,32 +15,17 @@ const BID_TIME: u64 = 345600; // 4 days in seconds (time users can bid on NFTs)
 const AUCTION_TIME: u64 = 432000; // 5 days in seconds (time the owner of the NFT has for locking it)
 
 #[elrond_wasm::contract]
-pub trait MemesAuction {
+pub trait MemesAuction: owner::OwnerModule {
 	#[init]
 	fn init(&self, voting_contract: &ManagedAddress, token_identifier: &TokenIdentifier, min_bid_start: &BigUint) {
 		self.voting_contract().set(voting_contract);
 		self.token_identifier().set(token_identifier);
-		let bid_cut: u16 = 500;
-		self.bid_cut_percentage().set(&bid_cut);
-		self.min_bid_start().set(min_bid_start);
-	}
-
-	#[only_owner]
-	#[endpoint]
-	fn set_bid_cut_percentage(&self, bid_cut: u16) -> SCResult<()> {
-		require!(bid_cut > 100 && bid_cut < 2500, "Bid cut percentage can not be less than 1% and greater than 25%");
-
-		self.bid_cut_percentage().set(&bid_cut);
-
-		Ok(())
-	}
-
-	#[only_owner]
-	#[endpoint]
-	fn set_min_bid_start(&self, min_bid_start: &BigUint) -> SCResult<()> {
 		self.min_bid_start().set(min_bid_start);
 
-		Ok(())
+		if self.bid_cut_percentage().is_empty() {
+			let bid_cut: u16 = 500;
+			self.bid_cut_percentage().set(&bid_cut);
+		}
 	}
 
 	#[endpoint]
@@ -205,9 +191,6 @@ pub trait MemesAuction {
 	}
 
 	fn distribute_tokens_after_auction_end(&self, nft_nonce: u64, auction: &Auction<Self::Api>) {
-		let nft_type = &self.token_identifier().get();
-		let nft_amount_to_send = BigUint::from(NFT_AMOUNT);
-
 		if auction.original_owner.is_zero() {
 			if auction.current_winner.is_zero() {
 				return;
@@ -225,13 +208,7 @@ pub trait MemesAuction {
 
 		if auction.current_winner.is_zero() {
 			// return nft to original owner
-			self.send().direct(
-				&auction.original_owner,
-				nft_type,
-				nft_nonce,
-				&nft_amount_to_send,
-				b"returned token",
-			);
+			self.convert_to_top_nft(&auction.original_owner, nft_nonce, b"returned token");
 
 			return;
 		}
@@ -257,12 +234,35 @@ pub trait MemesAuction {
 		);
 
 		// send NFT to auction winner
+		self.convert_to_top_nft(&auction.current_winner, nft_nonce, b"bought token at auction");
+	}
+
+	fn convert_to_top_nft(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) {
+		let nft_token = &self.token_identifier().get();
+		let nft_token_top: &TokenIdentifier = &self.token_identifier_top().get();
+		let amount = BigUint::from(NFT_AMOUNT);
+
+		let own_address: &ManagedAddress = &self.blockchain().get_sc_address();
+		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(own_address, nft_token, nft_nonce);
+
+		let nft_nonce_top: u64 = self.send().esdt_nft_create(
+			nft_token_top,
+			&amount,
+			&token_data.name,
+			&token_data.royalties,
+			&token_data.hash,
+			&token_data.attributes,
+			&token_data.uris
+		);
+
+		self.send().esdt_local_burn(nft_token, nft_nonce, &amount);
+
 		self.send().direct(
-			&auction.current_winner,
-			nft_type,
-			nft_nonce,
-			&nft_amount_to_send,
-			b"bought token at auction",
+			send_to,
+			nft_token_top,
+			nft_nonce_top,
+			&amount,
+			text,
 		);
 	}
 
@@ -291,14 +291,6 @@ pub trait MemesAuction {
 	#[view]
 	#[storage_mapper("tokenIdentifier")]
 	fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
-
-	#[view]
-	#[storage_mapper("bidCutPercentage")]
-	fn bid_cut_percentage(&self) -> SingleValueMapper<u16>;
-
-	#[view]
-	#[storage_mapper("minBidStart")]
-	fn min_bid_start(&self) -> SingleValueMapper<BigUint>;
 
 	#[view]
 	#[storage_mapper("periodMemeAuction")]
