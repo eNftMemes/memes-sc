@@ -7,7 +7,6 @@
 elrond_wasm_node::wasm_endpoints! {
     memes_auction
     (
-        init
         bid
         bid_cut_percentage
         end_auction

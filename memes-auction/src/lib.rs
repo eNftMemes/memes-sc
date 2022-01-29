@@ -308,6 +308,8 @@ pub trait MemesAuction {
 	#[storage_mapper("periodAuctionedMemes")]
 	fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
 
+	// TODO: Maybe add the rarity directly in the NFT attributes by using ESDTNFTUpdateAttributes?
+	// https://docs.elrond.com/developers/nft-tokens/#change-nft-attributes
 	// The rarity of a meme depending on the place the meme was in an auction, to be used in the future
 	// If an auction has less than 10 memes, the max rarity is < 10
 	// 10 - 1st place, most rare

@@ -130,7 +130,7 @@ pub trait MemesVoting: owner::OwnerModule {
 		);
 
 		let mut new_meme_votes: HashMap<u64, u32> = HashMap::new();
-		for nonce in nft_nonces.into_iter() {
+		for nonce in nft_nonces.iter() {
 			let votes: &mut u32 = new_meme_votes.entry(nonce).or_insert(0);
 			*votes += 1;
 		}

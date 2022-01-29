@@ -7,7 +7,6 @@
 elrond_wasm_node::wasm_endpoints! {
     memes_voting
     (
-        init
         callBack
         address_last_meme_time
         address_votes

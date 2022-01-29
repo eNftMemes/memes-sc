@@ -15,9 +15,9 @@ Contracts are upgradable by default. START_PERIOD_TIMESTAMP will be ignored for 
 ## Issue token
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
 
-eg: (MemeNFT - MEMENFT)
+eg: (NftMeme - NFTMEME and for other "Top NftMeme" - TNFTMEME?)
 
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0x4d656d654e4654" "0x4d454d454e4654"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0x4e66744d656d65" "0x4e46544d454d45"`
 
 ## Set local roles
 

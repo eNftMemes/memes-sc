@@ -48,7 +48,7 @@ pub trait OwnerModule {
             .set_special_roles(
                 &self.blockchain().get_sc_address(),
                 &self.token_identifier().get(),
-                (&[EsdtLocalRole::NftCreate][..]).into_iter().cloned(),
+                (&[EsdtLocalRole::NftCreate][..]).iter().cloned(),
             )
             .async_call()
         )
