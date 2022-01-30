@@ -168,13 +168,11 @@ pub trait MemesAuction: owner::OwnerModule {
 			"Auction was already ended"
 		);
 
-		self.distribute_tokens_after_auction_end(nonce, &auction);
-
 		auction.ended = true;
 
 		self.period_meme_auction(period, nonce).set(&auction);
 
-		Ok(())
+		self.distribute_tokens_after_auction_end(nonce, &auction)
 	}
 
 	// private
@@ -190,10 +188,10 @@ pub trait MemesAuction: owner::OwnerModule {
 		Ok(auction.get())
 	}
 
-	fn distribute_tokens_after_auction_end(&self, nft_nonce: u64, auction: &Auction<Self::Api>) {
+	fn distribute_tokens_after_auction_end(&self, nft_nonce: u64, auction: &Auction<Self::Api>) -> SCResult<()> {
 		if auction.original_owner.is_zero() {
 			if auction.current_winner.is_zero() {
-				return;
+				return Ok(());
 			}
 
 			// return money to current winner
@@ -203,14 +201,12 @@ pub trait MemesAuction: owner::OwnerModule {
 				b"bid refund",
 			);
 
-			return;
+			return Ok(());
 		}
 
 		if auction.current_winner.is_zero() {
 			// return nft to original owner
-			self.convert_to_top_nft(&auction.original_owner, nft_nonce, b"returned token");
-
-			return;
+			return self.update_nft_attributes(&auction.original_owner, nft_nonce, b"returned token");
 		}
 
 		let bid_cut_percentage = BigUint::from(auction.bid_cut_percentage);
@@ -234,36 +230,40 @@ pub trait MemesAuction: owner::OwnerModule {
 		);
 
 		// send NFT to auction winner
-		self.convert_to_top_nft(&auction.current_winner, nft_nonce, b"bought token at auction");
+		return self.update_nft_attributes(&auction.current_winner, nft_nonce, b"bought token at auction");
 	}
 
-	fn convert_to_top_nft(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) {
+	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) -> SCResult<()> {
 		let nft_token = &self.token_identifier().get();
-		let nft_token_top: &TokenIdentifier = &self.token_identifier_top().get();
 		let amount = BigUint::from(NFT_AMOUNT);
 
-		let own_address: &ManagedAddress = &self.blockchain().get_sc_address();
-		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(own_address, nft_token, nft_nonce);
+		let own_address: ManagedAddress = self.blockchain().get_sc_address();
+		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
+		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>()?;
 
-		let nft_nonce_top: u64 = self.send().esdt_nft_create(
-			nft_token_top,
-			&amount,
-			&token_data.name,
-			&token_data.royalties,
-			&token_data.hash,
-			&token_data.attributes,
-			&token_data.uris
+		new_attributes.rarity = self.meme_rarity(nft_nonce).get();
+
+		// TODO: Use built in function when it exists?
+		let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
+			own_address,
+			ManagedBuffer::new_from_bytes(b"ESDTNFTUpdateAttributes"),
 		);
 
-		self.send().esdt_local_burn(nft_token, nft_nonce, &amount);
+		contract_call.push_endpoint_arg(&self.token_identifier().get());
+		contract_call.push_endpoint_arg(&nft_nonce);
+		contract_call.push_endpoint_arg(&new_attributes);
+
+		contract_call.execute_on_dest_context();
 
 		self.send().direct(
 			send_to,
-			nft_token_top,
-			nft_nonce_top,
+			nft_token,
+			nft_nonce,
 			&amount,
 			text,
 		);
+
+		Ok(())
 	}
 
 	#[view]

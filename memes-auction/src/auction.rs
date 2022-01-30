@@ -17,3 +17,10 @@ pub struct FullAuction<M: ManagedTypeApi> {
     pub nonce: u64,
     pub auction: Auction<M>,
 }
+
+#[derive(TopEncode, TopDecode, TypeAbi)]
+pub struct MemeAttributes<M: ManagedTypeApi> {
+    pub period: u64,
+    pub category: ManagedBuffer<M>,
+    pub rarity: u8,
+}

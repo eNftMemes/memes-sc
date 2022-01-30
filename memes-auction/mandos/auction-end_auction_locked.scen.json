@@ -17,7 +17,6 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:tokenIdentifierTop": "str:TMEMENFT-745e9c",
             "str:bidCutPercentage": "500",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -51,7 +50,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -61,22 +60,14 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
                 }
               ],
               "roles": [
-                "ESDTRoleNFTBurn"
-              ]
-            },
-            "str:TMEMENFT-745e9c": {
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0",
-              "roles": [
-                "ESDTRoleNFTCreate"
+                "ESDTRoleNFTUpdateAttributes"
               ]
             }
           },
@@ -124,7 +115,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -138,7 +129,7 @@
                   "balance": "2",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -153,7 +144,6 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:tokenIdentifierTop": "str:TMEMENFT-745e9c",
             "str:bidCutPercentage": "500",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -187,7 +177,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -197,22 +187,14 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
                 }
               ],
               "roles": [
-                "ESDTRoleNFTBurn"
-              ]
-            },
-            "str:TMEMENFT-745e9c": {
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0",
-              "roles": [
-                "ESDTRoleNFTCreate"
+                "ESDTRoleNFTUpdateAttributes"
               ]
             }
           },
@@ -252,7 +234,6 @@
         "gasPrice": "0"
       },
       "expect": {
-        "out": ["0x01"],
         "status": "0",
         "gas": "*",
         "refund": "*"
@@ -277,7 +258,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -287,25 +268,21 @@
             "str:MEMENFT-745e9b": {
               "instances": [
                 {
-                  "nonce": "10",
-                  "balance": "2",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u8:1",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                }
-              ]
-            },
-            "str:TMEMENFT-745e9c": {
-              "instances": [
-                {
                   "nonce": "1",
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:2",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                },
+                {
+                  "nonce": "10",
+                  "balance": "2",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -320,7 +297,6 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:tokenIdentifierTop": "str:TMEMENFT-745e9c",
             "str:bidCutPercentage": "500",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -354,22 +330,14 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
                 }
               ],
               "roles": [
-                "ESDTRoleNFTBurn"
-              ]
-            },
-            "str:TMEMENFT-745e9c": {
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "1",
-              "roles": [
-                "ESDTRoleNFTCreate"
+                "ESDTRoleNFTUpdateAttributes"
               ]
             }
           },
@@ -403,7 +371,6 @@
         "gasPrice": "0"
       },
       "expect": {
-        "out": ["0x02"],
         "status": "0",
         "gas": "*",
         "refund": "*"
@@ -428,7 +395,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -438,25 +405,11 @@
             "str:MEMENFT-745e9b": {
               "instances": [
                 {
-                  "nonce": "10",
-                  "balance": "2",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u8:1",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                }
-              ]
-            },
-            "str:TMEMENFT-745e9c": {
-              "instances": [
-                {
                   "nonce": "1",
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:2",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -466,9 +419,19 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:1",
                   "uri": [
                     "str:nft-create-uri2"
+                  ]
+                },
+                {
+                  "nonce": "10",
+                  "balance": "2",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
+                  "uri": [
+                    "str:nft-create-uri"
                   ]
                 }
               ]
@@ -481,7 +444,6 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:tokenIdentifierTop": "str:TMEMENFT-745e9c",
             "str:bidCutPercentage": "500",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -511,15 +473,7 @@
             "str:MEMENFT-745e9b": {
               "instances": [],
               "roles": [
-                "ESDTRoleNFTBurn"
-              ]
-            },
-            "str:TMEMENFT-745e9c": {
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "2",
-              "roles": [
-                "ESDTRoleNFTCreate"
+                "ESDTRoleNFTUpdateAttributes"
               ]
             }
           },
@@ -579,7 +533,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -589,25 +543,11 @@
             "str:MEMENFT-745e9b": {
               "instances": [
                 {
-                  "nonce": "10",
-                  "balance": "2",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u8:1",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                }
-              ]
-            },
-            "str:TMEMENFT-745e9c": {
-              "instances": [
-                {
                   "nonce": "1",
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:2",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -617,9 +557,19 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u8:1",
+                  "attributes": "u64:1|nested:str:funny|u8:1",
                   "uri": [
                     "str:nft-create-uri2"
+                  ]
+                },
+                {
+                  "nonce": "10",
+                  "balance": "2",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u64:1|nested:str:funny|u8:0",
+                  "uri": [
+                    "str:nft-create-uri"
                   ]
                 }
               ]
@@ -632,7 +582,6 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:tokenIdentifierTop": "str:TMEMENFT-745e9c",
             "str:bidCutPercentage": "500",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -661,15 +610,7 @@
             "str:MEMENFT-745e9b": {
               "instances": [],
               "roles": [
-                "ESDTRoleNFTBurn"
-              ]
-            },
-            "str:TMEMENFT-745e9c": {
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "2",
-              "roles": [
-                "ESDTRoleNFTCreate"
+                "ESDTRoleNFTUpdateAttributes"
               ]
             }
           },

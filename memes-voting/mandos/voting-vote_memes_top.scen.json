@@ -104,7 +104,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny",
+                  "attributes": "u64:123,000|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -115,7 +115,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri3"
                   ]
@@ -139,7 +139,7 @@
                   "creator": "address:other_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:random",
+                  "attributes": "u64:123,000|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
@@ -150,7 +150,7 @@
                   "creator": "address:other_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri4"
                   ]
@@ -272,7 +272,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny",
+                  "attributes": "u64:123,000|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -283,7 +283,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri3"
                   ]
@@ -307,7 +307,7 @@
                   "creator": "address:other_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:random",
+                  "attributes": "u64:123,000|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
@@ -318,7 +318,7 @@
                   "creator": "address:other_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri4"
                   ]
@@ -447,7 +447,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny",
+                  "attributes": "u64:123,000|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -458,7 +458,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri3"
                   ]
@@ -482,7 +482,7 @@
                   "creator": "address:other_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:random",
+                  "attributes": "u64:123,000|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
@@ -493,7 +493,7 @@
                   "creator": "address:other_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri4"
                   ]
@@ -626,7 +626,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny",
+                  "attributes": "u64:123,000|nested:str:funny|u8:0",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -637,7 +637,7 @@
                   "creator": "address:my_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri3"
                   ]
@@ -661,7 +661,7 @@
                   "creator": "address:other_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:random",
+                  "attributes": "u64:123,000|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
@@ -672,7 +672,7 @@
                   "creator": "address:other_address",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|u8:0",
                   "uri": [
                     "str:nft-create-uri4"
                   ]
