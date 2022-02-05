@@ -1,22 +1,6 @@
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
 
-// const ESDT_ROLE_NFT_UPDATE_ATTRIBUTES: &[u8] = b"ESDTRoleNFTUpdateAttributes";
-//
-// // TODO: ^ Use EsdtLocalRole when it is created for ESDTNFTUpdateAttributes
-// let esdt_system_sc_address = self.send().esdt_system_sc_proxy().esdt_system_sc_address();
-// let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
-// esdt_system_sc_address,
-// ManagedBuffer::new_from_bytes(b"setSpecialRole"),
-// );
-//
-// contract_call.push_endpoint_arg(&self.token_identifier_top().get());
-// contract_call.push_endpoint_arg(&self.blockchain().get_sc_address());
-// contract_call.push_argument_raw_bytes(EsdtLocalRole::NftCreate.as_role_name());
-// contract_call.push_argument_raw_bytes(ESDT_ROLE_NFT_UPDATE_ATTRIBUTES);
-//
-// Ok(contract_call.async_call())
-
 #[elrond_wasm::module]
 pub trait OwnerModule {
     #[only_owner]

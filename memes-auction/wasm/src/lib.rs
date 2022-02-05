@@ -20,6 +20,7 @@ elrond_wasm_node::wasm_endpoints! {
         set_min_bid_start
         start_auction
         token_identifier
+        upgrade_token
         voting_contract
     )
 }

@@ -175,6 +175,25 @@ pub trait MemesAuction: owner::OwnerModule {
 		self.distribute_tokens_after_auction_end(nonce, &auction)
 	}
 
+	#[payable("*")]
+	#[endpoint]
+	fn upgrade_token(
+		&self,
+		#[payment_token] nft_type: TokenIdentifier,
+		#[payment_nonce] nonce: u64,
+		#[payment_amount] nft_amount: BigUint,
+	) -> SCResult<()> {
+		require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
+		require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
+		require!(!self.meme_rarity(nonce).is_empty(), "Nft can't be upgraded");
+
+		return self.update_nft_attributes(
+			&self.blockchain().get_caller(),
+			nonce,
+			b"nft upgraded"
+		);
+	}
+
 	// private
 
 	fn try_get_auction(&self, period: u64, nonce: u64) -> SCResult<Auction<Self::Api>> {
