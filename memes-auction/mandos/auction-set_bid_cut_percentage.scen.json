@@ -85,7 +85,7 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:bidCutPercentage": "500",
+            "str:bidCutPercentage": "1000",
             "str:minBidStart": "5"
           },
           "code": "file:../output/memes-auction.wasm"
@@ -112,7 +112,7 @@
         "from": "address:my_address",
         "to": "sc:auction_contract",
         "function": "set_bid_cut_percentage",
-        "arguments": ["u16:1000"],
+        "arguments": ["u16:2000"],
         "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
@@ -148,7 +148,7 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:bidCutPercentage": "1000",
+            "str:bidCutPercentage": "2000",
             "str:minBidStart": "5"
           },
           "code": "file:../output/memes-auction.wasm"

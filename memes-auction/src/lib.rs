@@ -23,7 +23,7 @@ pub trait MemesAuction: owner::OwnerModule {
 		self.min_bid_start().set(min_bid_start);
 
 		if self.bid_cut_percentage().is_empty() {
-			let bid_cut: u16 = 500;
+			let bid_cut: u16 = 1000;
 			self.bid_cut_percentage().set(&bid_cut);
 		}
 	}

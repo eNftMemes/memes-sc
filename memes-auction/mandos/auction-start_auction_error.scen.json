@@ -84,13 +84,13 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:bidCutPercentage": "500",
+            "str:bidCutPercentage": "1000",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
               "00-min_bid": "biguint:10",
               "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
+              "03-bid_cut_percentage": "u16:1000",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "05-ended": "u8:0"
             },
@@ -98,7 +98,7 @@
               "00-min_bid": "biguint:5",
               "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
+              "03-bid_cut_percentage": "u16:1000",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "05-ended": "u8:0"
             },
@@ -174,13 +174,13 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:bidCutPercentage": "500",
+            "str:bidCutPercentage": "1000",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
               "00-min_bid": "biguint:10",
               "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
+              "03-bid_cut_percentage": "u16:1000",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "05-ended": "u8:0"
             },
@@ -188,7 +188,7 @@
               "00-min_bid": "biguint:5",
               "01-current_bid": "biguint:0",
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "03-bid_cut_percentage": "u16:500",
+              "03-bid_cut_percentage": "u16:1000",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "05-ended": "u8:0"
             },
