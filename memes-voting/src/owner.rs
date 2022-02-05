@@ -1,6 +1,8 @@
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
 
+const ESDT_ROLE_NFT_UPDATE_ATTRIBUTES: &[u8] = b"ESDTRoleNFTUpdateAttributes";
+
 #[elrond_wasm::module]
 pub trait OwnerModule {
     // TODO: Test this function with Mandos after it is supported to issue tokens
@@ -95,10 +97,21 @@ pub trait OwnerModule {
 
     #[only_owner]
     #[endpoint]
-    fn set_auction_sc(&self, sc: &ManagedAddress) -> SCResult<()> {
+    fn set_auction_sc(&self, sc: &ManagedAddress) -> SCResult<AsyncCall> {
         self.auction_sc().set(sc);
 
-        Ok(())
+        // TODO: ^ Use EsdtLocalRole when it is created for ESDTNFTUpdateAttributes
+        let esdt_system_sc_address = self.send().esdt_system_sc_proxy().esdt_system_sc_address();
+        let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
+            esdt_system_sc_address,
+            ManagedBuffer::new_from_bytes(b"setSpecialRole"),
+        );
+
+        contract_call.push_endpoint_arg(&self.token_identifier().get());
+        contract_call.push_endpoint_arg(sc);
+        contract_call.push_argument_raw_bytes(ESDT_ROLE_NFT_UPDATE_ATTRIBUTES);
+
+        Ok(contract_call.async_call())
     }
 
     #[view]
