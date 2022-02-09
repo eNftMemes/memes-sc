@@ -29,7 +29,7 @@ pub trait MemesAuction: owner::OwnerModule {
 	}
 
 	#[endpoint]
-	fn start_auction(&self, period: u64, #[var_args] nfts: VarArgs<u64>) -> SCResult<()> {
+	fn start_auction(&self, period: u64, #[var_args] nfts: VarArgs<u64>) {
 		let caller: ManagedAddress = self.blockchain().get_caller();
 		require!(
 			caller == self.voting_contract().get(),
@@ -73,8 +73,6 @@ pub trait MemesAuction: owner::OwnerModule {
 
 			multiplier -= 1;
 		}
-
-		Ok(())
 	}
 
 	#[payable("*")]
@@ -85,7 +83,7 @@ pub trait MemesAuction: owner::OwnerModule {
 		#[payment_token] nft_type: TokenIdentifier,
 		#[payment_nonce] nonce: u64,
 		#[payment_amount] nft_amount: BigUint,
-	) -> SCResult<()> {
+	) {
 		require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
 		require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
 
@@ -96,14 +94,12 @@ pub trait MemesAuction: owner::OwnerModule {
             "Auction deadline has passed"
         );
 
-		let mut auction = self.try_get_auction(period, nonce)?;
+		let mut auction = self.try_get_auction(period, nonce);
 		let caller = self.blockchain().get_caller();
 
 		auction.original_owner = caller;
 
 		self.period_meme_auction(period, nonce).set(&auction);
-
-		Ok(())
 	}
 
 	#[payable("EGLD")]
@@ -113,8 +109,8 @@ pub trait MemesAuction: owner::OwnerModule {
 		#[payment_amount] payment_amount: BigUint,
 		period: u64,
 		nonce: u64
-	) -> SCResult<()> {
-		let mut auction = self.try_get_auction(period, nonce)?;
+	) {
+		let mut auction = self.try_get_auction(period, nonce);
 		let caller = self.blockchain().get_caller();
 		let block_timestamp = self.blockchain().get_block_timestamp();
 
@@ -150,13 +146,11 @@ pub trait MemesAuction: owner::OwnerModule {
 		auction.current_winner = caller;
 
 		self.period_meme_auction(period, nonce).set(&auction);
-
-		Ok(())
 	}
 
 	#[endpoint]
-	fn end_auction(&self, period: u64, nonce: u64) -> SCResult<()> {
-		let mut auction = self.try_get_auction(period, nonce)?;
+	fn end_auction(&self, period: u64, nonce: u64) {
+		let mut auction = self.try_get_auction(period, nonce);
 		let block_timestamp = self.blockchain().get_block_timestamp();
 
 		require!(
@@ -172,7 +166,7 @@ pub trait MemesAuction: owner::OwnerModule {
 
 		self.period_meme_auction(period, nonce).set(&auction);
 
-		self.distribute_tokens_after_auction_end(nonce, &auction)
+		self.distribute_tokens_after_auction_end(nonce, &auction);
 	}
 
 	#[payable("*")]
@@ -182,12 +176,12 @@ pub trait MemesAuction: owner::OwnerModule {
 		#[payment_token] nft_type: TokenIdentifier,
 		#[payment_nonce] nonce: u64,
 		#[payment_amount] nft_amount: BigUint,
-	) -> SCResult<()> {
+	) {
 		require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
 		require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
 		require!(!self.meme_rarity(nonce).is_empty(), "Nft can't be upgraded");
 
-		return self.update_nft_attributes(
+		self.update_nft_attributes(
 			&self.blockchain().get_caller(),
 			nonce,
 			b"nft upgraded"
@@ -196,7 +190,7 @@ pub trait MemesAuction: owner::OwnerModule {
 
 	// private
 
-	fn try_get_auction(&self, period: u64, nonce: u64) -> SCResult<Auction<Self::Api>> {
+	fn try_get_auction(&self, period: u64, nonce: u64) -> Auction<Self::Api> {
 		let auction = self.period_meme_auction(period, nonce);
 
 		require!(
@@ -204,13 +198,13 @@ pub trait MemesAuction: owner::OwnerModule {
             "Auction does not exist"
         );
 
-		Ok(auction.get())
+		auction.get()
 	}
 
-	fn distribute_tokens_after_auction_end(&self, nft_nonce: u64, auction: &Auction<Self::Api>) -> SCResult<()> {
+	fn distribute_tokens_after_auction_end(&self, nft_nonce: u64, auction: &Auction<Self::Api>) {
 		if auction.original_owner.is_zero() {
 			if auction.current_winner.is_zero() {
-				return Ok(());
+				return;
 			}
 
 			// return money to current winner
@@ -220,12 +214,14 @@ pub trait MemesAuction: owner::OwnerModule {
 				b"bid refund",
 			);
 
-			return Ok(());
+			return;
 		}
 
 		if auction.current_winner.is_zero() {
 			// return nft to original owner
-			return self.update_nft_attributes(&auction.original_owner, nft_nonce, b"returned token");
+			self.update_nft_attributes(&auction.original_owner, nft_nonce, b"returned token");
+
+			return;
 		}
 
 		let bid_cut_percentage = BigUint::from(auction.bid_cut_percentage);
@@ -249,16 +245,16 @@ pub trait MemesAuction: owner::OwnerModule {
 		);
 
 		// send NFT to auction winner
-		return self.update_nft_attributes(&auction.current_winner, nft_nonce, b"bought token at auction");
+		self.update_nft_attributes(&auction.current_winner, nft_nonce, b"bought token at auction");
 	}
 
-	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) -> SCResult<()> {
+	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) {
 		let nft_token = &self.token_identifier().get();
 		let amount = BigUint::from(NFT_AMOUNT);
 
 		let own_address: ManagedAddress = self.blockchain().get_sc_address();
 		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
-		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>()?;
+		let mut new_attributes = token_data.decode_attributes_or_exit::<MemeAttributes<Self::Api>>();
 
 		new_attributes.rarity = self.meme_rarity(nft_nonce).get();
 
@@ -281,9 +277,9 @@ pub trait MemesAuction: owner::OwnerModule {
 			&amount,
 			text,
 		);
-
-		Ok(())
 	}
+
+	// views/storage
 
 	#[view]
 	fn period_auctions_memes_all(&self, period: u64) -> ManagedMultiResultVec<FullAuction<Self::Api>> {

@@ -5,12 +5,10 @@ elrond_wasm::derive_imports!();
 pub trait OwnerModule {
     #[only_owner]
     #[endpoint]
-    fn set_bid_cut_percentage(&self, bid_cut: u16) -> SCResult<()> {
+    fn set_bid_cut_percentage(&self, bid_cut: u16) {
         require!(bid_cut > 100 && bid_cut < 2500, "Bid cut percentage can not be less than 1% and greater than 25%");
 
         self.bid_cut_percentage().set(&bid_cut);
-
-        Ok(())
     }
 
     #[only_owner]

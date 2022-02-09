@@ -3,6 +3,12 @@ elrond_wasm::derive_imports!();
 
 const ESDT_ROLE_NFT_UPDATE_ATTRIBUTES: &[u8] = b"ESDTRoleNFTUpdateAttributes";
 
+#[derive(TopEncode, TopDecode, TypeAbi)]
+pub struct CustomMemeAttributes<M: ManagedTypeApi> {
+    pub category: ManagedBuffer<M>,
+    pub rarity: u8,
+}
+
 #[elrond_wasm::module]
 pub trait OwnerModule {
     // TODO: Test this function with Mandos after it is supported to issue tokens
@@ -44,16 +50,32 @@ pub trait OwnerModule {
     fn set_local_roles(&self) -> SCResult<AsyncCall> {
         require!(!self.token_identifier().is_empty(), "Token not issued");
 
-        Ok(self
-            .send()
-            .esdt_system_sc_proxy()
-            .set_special_roles(
-                &self.blockchain().get_sc_address(),
-                &self.token_identifier().get(),
-                (&[EsdtLocalRole::NftCreate][..]).iter().cloned(),
-            )
-            .async_call()
-        )
+        // Ok(self
+        //     .send()
+        //     .esdt_system_sc_proxy()
+        //     .set_special_roles(
+        //         &self.blockchain().get_sc_address(),
+        //         &self.token_identifier().get(),
+        //         (&[EsdtLocalRole::NftCreate][..]).iter().cloned(),
+        //     )
+        //     .async_call()
+        // )
+
+        let sc = &self.blockchain().get_sc_address();
+
+        // TODO: ^ Use EsdtLocalRole when it is created for ESDTNFTUpdateAttributes
+        let esdt_system_sc_address = self.send().esdt_system_sc_proxy().esdt_system_sc_address();
+        let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
+            esdt_system_sc_address,
+            ManagedBuffer::new_from_bytes(b"setSpecialRole"),
+        );
+
+        contract_call.push_endpoint_arg(&self.token_identifier().get());
+        contract_call.push_endpoint_arg(sc);
+        contract_call.push_argument_raw_bytes(EsdtLocalRole::NftCreate.as_role_name());
+        contract_call.push_argument_raw_bytes(ESDT_ROLE_NFT_UPDATE_ATTRIBUTES);
+
+        Ok(contract_call.async_call())
     }
 
     #[only_owner]
@@ -70,12 +92,10 @@ pub trait OwnerModule {
 
     #[only_owner]
     #[endpoint]
-    fn set_nft_royalties(&self, royalties: u16) -> SCResult<()> {
+    fn set_nft_royalties(&self, royalties: u16) {
         require!(royalties > 100 && royalties < 2500, "Royalties can not be less than 1% and greater than 25%");
 
         self.nft_royalties().set(&royalties);
-
-        Ok(())
     }
 
     #[callback]
@@ -114,6 +134,14 @@ pub trait OwnerModule {
         Ok(contract_call.async_call())
     }
 
+    #[only_owner]
+    #[endpoint]
+    fn set_custom_attributes(&self, nonce: u64, category: ManagedBuffer, rarity: u8) {
+        self.custom_attributes(nonce).set(
+            &CustomMemeAttributes { category, rarity }
+        );
+    }
+
     #[view]
     #[storage_mapper("tokenIdentifier")]
     fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
@@ -129,4 +157,8 @@ pub trait OwnerModule {
     #[view]
     #[storage_mapper("auctionSc")]
     fn auction_sc(&self) -> SingleValueMapper<ManagedAddress>;
+
+    #[view]
+    #[storage_mapper("customAttributes")]
+    fn custom_attributes(&self, nonce: u64) -> SingleValueMapper<CustomMemeAttributes<Self::Api>>;
 }

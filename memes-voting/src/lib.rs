@@ -58,6 +58,78 @@ pub trait MemesVoting: owner::OwnerModule {
 		Ok(self.create_meme_nft(&address, &name, url, category))
 	}
 
+	#[endpoint]
+	fn vote_memes(&self, #[var_args] nft_nonces: ManagedVarArgs<u64>) {
+		let caller: ManagedAddress = self.blockchain().get_caller();
+
+		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);
+		let current_period: u64 = self.current_period();
+		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
+		let nb_nfts: usize = nft_nonces.len();
+
+		require!(
+			reset_address_votes || (address_votes.get().votes >= nb_nfts as u8),
+			"Not enough votes left currently"
+		);
+
+		let mut new_meme_votes: HashMap<u64, u32> = HashMap::new();
+		for nonce in nft_nonces.into_iter() {
+			let votes: &mut u32 = new_meme_votes.entry(nonce).or_insert(0);
+			*votes += 1;
+		}
+
+		let last_nonce = self.blockchain().get_current_esdt_nft_nonce(
+			&self.blockchain().get_sc_address(),
+			&self.token_identifier().get()
+		);
+
+		for (nonce, new_votes) in new_meme_votes.iter_mut() {
+			require!(*nonce > 0 && *nonce <= last_nonce, "Meme does not exist");
+
+			// Update total votes before updating new_votes variable
+			self.meme_votes_total(*nonce)
+				.update(|value| *value += *new_votes);
+
+			let meme_votes = self.meme_votes(*nonce, current_period);
+
+			if !meme_votes.is_empty() {
+				*new_votes += meme_votes.get();
+			}
+
+			meme_votes.set(new_votes);
+		}
+
+		address_votes.set(&AddressVotes {
+			period: current_period,
+			votes: (if reset_address_votes { VOTES_PER_ADDRESS_PER_PERIOD } else { address_votes.get().votes }) - (nb_nfts as u8),
+		});
+
+		self.alter_period_top_memes(&mut new_meme_votes);
+	}
+
+	#[payable("*")]
+	#[endpoint]
+	fn upgrade_custom_attributes(
+		&self,
+		#[payment_token] nft_type: TokenIdentifier,
+		#[payment_nonce] nonce: u64,
+		#[payment_amount] nft_amount: BigUint,
+	) {
+		require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
+		require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
+		require!(!self.custom_attributes(nonce).is_empty(), "Nft can't be upgraded");
+
+		self.update_nft_attributes(
+			&self.blockchain().get_caller(),
+			nonce,
+			b"nft upgraded"
+		);
+
+		self.custom_attributes(nonce).clear();
+	}
+
+	// private
+
 	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> OptionalResult<AsyncCall> {
 		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
 		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
@@ -115,57 +187,6 @@ pub trait MemesVoting: owner::OwnerModule {
 		OptionalResult::None
 	}
 
-	#[endpoint]
-	fn vote_memes(&self, #[var_args] nft_nonces: ManagedVarArgs<u64>) -> SCResult<()> {
-		let caller: ManagedAddress = self.blockchain().get_caller();
-
-		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);
-		let current_period: u64 = self.current_period();
-		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
-		let nb_nfts: usize = nft_nonces.len();
-
-		require!(
-			reset_address_votes || (address_votes.get().votes >= nb_nfts as u8),
-			"Not enough votes left currently"
-		);
-
-		let mut new_meme_votes: HashMap<u64, u32> = HashMap::new();
-		for nonce in nft_nonces.into_iter() {
-			let votes: &mut u32 = new_meme_votes.entry(nonce).or_insert(0);
-			*votes += 1;
-		}
-
-		let last_nonce = self.blockchain().get_current_esdt_nft_nonce(
-			&self.blockchain().get_sc_address(),
-			&self.token_identifier().get()
-		);
-
-		for (nonce, new_votes) in new_meme_votes.iter_mut() {
-			require!(*nonce > 0 && *nonce <= last_nonce, "Meme does not exist");
-
-			// Update total votes before updating new_votes variable
-			self.meme_votes_total(*nonce)
-				.update(|value| *value += *new_votes);
-
-			let meme_votes = self.meme_votes(*nonce, current_period);
-
-			if !meme_votes.is_empty() {
-				*new_votes += meme_votes.get();
-			}
-
-			meme_votes.set(new_votes);
-		}
-
-		address_votes.set(&AddressVotes {
-			period: current_period,
-			votes: (if reset_address_votes { VOTES_PER_ADDRESS_PER_PERIOD } else { address_votes.get().votes }) - (nb_nfts as u8),
-		});
-
-		self.alter_period_top_memes(&mut new_meme_votes);
-
-		Ok(())
-	}
-
 	fn alter_period_top_memes(&self, new_meme_votes: &mut HashMap<u64, u32>) {
 		let current_period: u64 = self.current_period();
 		let top_memes: SingleValueMapper<Vec<MemeVotes>> = self.period_top_memes(current_period);
@@ -201,8 +222,44 @@ pub trait MemesVoting: owner::OwnerModule {
 		top_memes.set(&sorted);
 	}
 
+	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) {
+		let nft_token = &self.token_identifier().get();
+		let amount = BigUint::from(NFT_AMOUNT);
+
+		let own_address: ManagedAddress = self.blockchain().get_sc_address();
+		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
+		let mut new_attributes = token_data.decode_attributes_or_exit::<MemeAttributes<Self::Api>>();
+
+		let custom_attributes = self.custom_attributes(nft_nonce).get();
+
+		new_attributes.category = custom_attributes.category;
+		new_attributes.rarity = custom_attributes.rarity;
+
+		// TODO: Use built in function when it exists?
+		let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
+			own_address,
+			ManagedBuffer::new_from_bytes(b"ESDTNFTUpdateAttributes"),
+		);
+
+		contract_call.push_endpoint_arg(&self.token_identifier().get());
+		contract_call.push_endpoint_arg(&nft_nonce);
+		contract_call.push_endpoint_arg(&new_attributes);
+
+		contract_call.execute_on_dest_context();
+
+		self.send().direct(
+			send_to,
+			nft_token,
+			nft_nonce,
+			&amount,
+			text,
+		);
+	}
+
 	#[proxy]
 	fn auction_proxy(&self) -> auction_proxy::Proxy<Self::Api>;
+
+	// views/storage
 
 	#[view]
 	fn current_period_len(&self) -> usize {
