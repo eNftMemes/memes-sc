@@ -7,6 +7,7 @@
 elrond_wasm_node::wasm_endpoints! {
     memes_auction
     (
+        add_custom_auction
         bid
         bid_cut_percentage
         end_auction

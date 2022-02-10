@@ -4,7 +4,8 @@
 elrond_wasm::imports!();
 
 mod owner;
-pub mod meme;
+
+mod meme;
 use meme::*;
 
 use hashbrown::HashMap;

@@ -4,7 +4,9 @@
 elrond_wasm::imports!();
 
 mod owner;
-pub mod auction;
+use owner::AUCTION_TIME;
+
+mod auction;
 use auction::*;
 
 const PERCENTAGE_TOTAL: u64 = 10_000; // 100%
@@ -12,7 +14,6 @@ const NFT_AMOUNT: u32 = 1;
 const MAX_TOP_MEMES: usize = 10;
 
 const BID_TIME: u64 = 345600; // 4 days in seconds (time users can bid on NFTs)
-const AUCTION_TIME: u64 = 432000; // 5 days in seconds (time the owner of the NFT has for locking it)
 
 #[elrond_wasm::contract]
 pub trait MemesAuction: owner::OwnerModule {
@@ -50,21 +51,9 @@ pub trait MemesAuction: owner::OwnerModule {
 
 		// 1st meme is the one on 1st place etc
 		for nonce in nfts.iter() {
-			let mut min_bid: BigUint = BigUint::from(multiplier);
-			min_bid *= &min_bid_start;
+			self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
 
-			let auction = Auction {
-				min_bid,
-				current_bid: BigUint::zero(),
-				current_winner: ManagedAddress::zero(),
-				bid_cut_percentage,
-				original_owner: ManagedAddress::zero(),
-				ended: false,
-			};
-
-			self.period_meme_auction(period, *nonce).set(&auction);
-			self.period_auctioned_memes(period).push(nonce);
-
+			// TODO: Maybe store meme rarity temporarily and use the rarity from the NFT attribute when upgrading?
 			let meme_rarity = self.meme_rarity(*nonce);
 			if meme_rarity.is_empty() || multiplier > meme_rarity.get() {
 				let rarity: u8 = multiplier;
@@ -256,6 +245,7 @@ pub trait MemesAuction: owner::OwnerModule {
 		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
 		let mut new_attributes = token_data.decode_attributes_or_exit::<MemeAttributes<Self::Api>>();
 
+		// TODO: Maybe clear rarity when upgrade happens and compare with NFT rarity to see if it needs upgrading?
 		new_attributes.rarity = self.meme_rarity(nft_nonce).get();
 
 		// TODO: Use built in function when it exists?
@@ -306,14 +296,6 @@ pub trait MemesAuction: owner::OwnerModule {
 	#[view]
 	#[storage_mapper("tokenIdentifier")]
 	fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
-
-	#[view]
-	#[storage_mapper("periodMemeAuction")]
-	fn period_meme_auction(&self, period: u64, nonce: u64) -> SingleValueMapper<Auction<Self::Api>>;
-
-	#[view]
-	#[storage_mapper("periodAuctionedMemes")]
-	fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
 
 	// TODO: Maybe add the rarity directly in the NFT attributes by using ESDTNFTUpdateAttributes?
 	// https://docs.elrond.com/developers/nft-tokens/#change-nft-attributes
