@@ -1,4 +1,14 @@
-**Current contract address: erd1qqqqqqqqqqqqqpgqwpefaadku4343f8hg94kgzcjqg6swf3xlqpsynkhv8**
+### DEVNET
+**Contract Address: erd1qqqqqqqqqqqqqpgqcgd80txchyd7trxyf0gn9w4ztdwnmhcklqpsst8cx6**
+
+**Token Id: NFTMEMES-1119a5**
+
+
+### MAINNET
+**Contract Address: TBD**
+
+**Token Id: TBD**
+
 
 # Deploy
 
@@ -15,9 +25,9 @@ Contracts are upgradable by default. START_PERIOD_TIMESTAMP will be ignored for 
 ## Issue token
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
 
-eg: (NftMeme - NFTMEME and for other "Top NftMeme" - TNFTMEME?)
+eg: (NftMemes - NFTMEMES)
 
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0x4e66744d656d65" "0x4e46544d454d45"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0x4e66744d656d6573" "0x4e46544d454d4553"`
 
 ## Set local roles
 
@@ -35,7 +45,7 @@ Funny category:
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="modify_categories" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments 0x66756e6e79`
 
 ## Linking auction contract
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_auction_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_OTHER_CONTRACT"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_auction_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_OTHER_CONTRACT"`
 
 # Example calls
 

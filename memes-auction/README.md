@@ -1,4 +1,10 @@
-**Current contract address: erd1qqqqqqqqqqqqqpgq58cckeztlm0tx5gskvqzjzmyf80jfeqllqpsmm2uwe**
+### DEVNET
+**Contract Address: erd1qqqqqqqqqqqqqpgquxehgfrpkrm9cy0s3wf5q2w45ylhfs6nlqpsk7rrdm**
+
+
+### MAINNET
+**Contract Address: TBD**
+
 
 # Deploy
 
@@ -12,7 +18,7 @@ Then deploy:
 
 25000000000000000 - 0.025 EGLD
 
-Then set the address of the auction contract in the voting contract!
+**Then set the address of the auction contract in the voting contract!**
 
 # Upgrade
 
