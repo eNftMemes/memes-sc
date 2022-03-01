@@ -1,5 +1,5 @@
 {
-  "name": "auction start auction",
+  "name": "auction end auction custom rarity",
   "steps": [
     {
       "step": "externalSteps",
@@ -38,7 +38,6 @@
             "str:periodAuctionedMemes|u64:123,000|``.len": "2",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
-            "str:memeRarity|u64:1": "2",
             "str:memeRarity|u64:2": "1"
           },
           "esdt": {
@@ -62,7 +61,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
+                  "attributes": "u64:1|nested:str:funny|u8:10",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -114,7 +113,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
+                  "attributes": "u64:1|nested:str:funny|u8:10",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -320,7 +319,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
+                  "attributes": "u64:1|nested:str:funny|u8:10",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -394,7 +393,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:3",
+                  "attributes": "u64:1|nested:str:funny|u8:10",
                   "uri": [
                     "str:nft-create-uri"
                   ]

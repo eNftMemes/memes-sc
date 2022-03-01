@@ -53,7 +53,6 @@ pub trait MemesAuction: owner::OwnerModule {
 		for nonce in nfts.into_iter() {
 			self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
 
-			// TODO: Maybe store meme rarity temporarily and use the rarity from the NFT attribute when upgrading?
 			let meme_rarity = self.meme_rarity(nonce);
 			if meme_rarity.is_empty() || multiplier > meme_rarity.get() {
 				let rarity: u8 = multiplier;
@@ -245,15 +244,17 @@ pub trait MemesAuction: owner::OwnerModule {
 		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
 		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
 
-		// TODO: Test case when ending auction with custom NFT rarity that is not stored in the contract, since those might break
-		// TODO: Maybe clear rarity when upgrade happens and compare with NFT rarity to see if it needs upgrading?
-		new_attributes.rarity = self.meme_rarity(nft_nonce).get();
+		if !self.meme_rarity(nft_nonce).is_empty() && self.meme_rarity(nft_nonce).get() > new_attributes.rarity {
+			// TODO: Test case when ending auction with custom NFT rarity that is not stored in the contract, since those might break
+			// TODO: Maybe clear rarity when upgrade happens and compare with NFT rarity to see if it needs upgrading?
+			new_attributes.rarity = self.meme_rarity(nft_nonce).get();
 
-		self.send().nft_update_attributes(
-			&self.token_identifier().get(),
-			nft_nonce,
-			&new_attributes
-		);
+			self.send().nft_update_attributes(
+				&self.token_identifier().get(),
+				nft_nonce,
+				&new_attributes
+			);
+		}
 
 		self.send().direct(
 			send_to,
@@ -262,6 +263,8 @@ pub trait MemesAuction: owner::OwnerModule {
 			&amount,
 			text,
 		);
+
+		self.meme_rarity(nft_nonce).clear();
 	}
 
 	// views/storage
