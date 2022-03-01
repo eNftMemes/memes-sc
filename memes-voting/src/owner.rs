@@ -1,8 +1,6 @@
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
 
-const ESDT_ROLE_NFT_UPDATE_ATTRIBUTES: &[u8] = b"ESDTRoleNFTUpdateAttributes";
-
 #[derive(TopEncode, TopDecode, TypeAbi)]
 pub struct CustomMemeAttributes<M: ManagedTypeApi> {
     pub category: ManagedBuffer<M>,
@@ -20,74 +18,55 @@ pub trait OwnerModule {
         #[payment] issue_cost: BigUint,
         token_name: &ManagedBuffer,
         token_ticker: &ManagedBuffer,
-    ) -> SCResult<AsyncCall> {
+    ) {
         require!(self.token_identifier().is_empty(), "Token already issued");
 
-        Ok(
-            self.send()
-                .esdt_system_sc_proxy()
-                .issue_non_fungible(
-                    issue_cost,
-                    token_name,
-                    token_ticker,
-                    NonFungibleTokenProperties {
-                        can_freeze: true,
-                        can_wipe: true,
-                        can_pause: true,
-                        can_change_owner: false,
-                        can_upgrade: false,
-                        can_add_special_roles: true,
-                    },
-                )
-                .async_call()
-                .with_callback(self.callbacks().init_callback())
-        )
+        self.send()
+            .esdt_system_sc_proxy()
+            .issue_non_fungible(
+                issue_cost,
+                token_name,
+                token_ticker,
+                NonFungibleTokenProperties {
+                    can_freeze: true,
+                    can_wipe: true,
+                    can_pause: true,
+                    can_change_owner: false,
+                    can_upgrade: false,
+                    can_add_special_roles: true,
+                },
+            )
+            .async_call()
+            .with_callback(self.callbacks().init_callback())
+            .call_and_exit()
     }
 
     // TODO: Test this function with Mandos after it is supported to issue tokens
     #[endpoint]
     #[only_owner]
-    fn set_local_roles(&self) -> SCResult<AsyncCall> {
+    fn set_local_roles(&self) {
         require!(!self.token_identifier().is_empty(), "Token not issued");
 
-        // Ok(self
-        //     .send()
-        //     .esdt_system_sc_proxy()
-        //     .set_special_roles(
-        //         &self.blockchain().get_sc_address(),
-        //         &self.token_identifier().get(),
-        //         (&[EsdtLocalRole::NftCreate][..]).iter().cloned(),
-        //     )
-        //     .async_call()
-        // )
-
-        let sc = &self.blockchain().get_sc_address();
-
-        // TODO: ^ Use EsdtLocalRole when it is created for ESDTNFTUpdateAttributes
-        let esdt_system_sc_address = self.send().esdt_system_sc_proxy().esdt_system_sc_address();
-        let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
-            esdt_system_sc_address,
-            ManagedBuffer::new_from_bytes(b"setSpecialRole"),
-        );
-
-        contract_call.push_endpoint_arg(&self.token_identifier().get());
-        contract_call.push_endpoint_arg(sc);
-        contract_call.push_argument_raw_bytes(EsdtLocalRole::NftCreate.as_role_name());
-        contract_call.push_argument_raw_bytes(ESDT_ROLE_NFT_UPDATE_ATTRIBUTES);
-
-        Ok(contract_call.async_call())
+        self
+            .send()
+            .esdt_system_sc_proxy()
+            .set_special_roles(
+                &self.blockchain().get_sc_address(),
+                &self.token_identifier().get(),
+                (&[EsdtLocalRole::NftCreate, EsdtLocalRole::NftUpdateAttributes][..]).iter().cloned(),
+            )
+            .async_call()
+            .call_and_exit()
     }
 
     #[only_owner]
     #[endpoint]
-    fn modify_categories(&self, category: ManagedBuffer) -> SCResult<()> {
+    fn modify_categories(&self, category: ManagedBuffer) {
         if !self.categories().contains(&category) {
             self.categories().insert(category);
         } else {
             self.categories().remove(&category);
         }
-
-        Ok(())
     }
 
     #[only_owner]
@@ -117,21 +96,19 @@ pub trait OwnerModule {
 
     #[only_owner]
     #[endpoint]
-    fn set_auction_sc(&self, sc: &ManagedAddress) -> SCResult<AsyncCall> {
+    fn set_auction_sc(&self, sc: &ManagedAddress) {
         self.auction_sc().set(sc);
 
-        // TODO: ^ Use EsdtLocalRole when it is created for ESDTNFTUpdateAttributes
-        let esdt_system_sc_address = self.send().esdt_system_sc_proxy().esdt_system_sc_address();
-        let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
-            esdt_system_sc_address,
-            ManagedBuffer::new_from_bytes(b"setSpecialRole"),
-        );
-
-        contract_call.push_endpoint_arg(&self.token_identifier().get());
-        contract_call.push_endpoint_arg(sc);
-        contract_call.push_argument_raw_bytes(ESDT_ROLE_NFT_UPDATE_ATTRIBUTES);
-
-        Ok(contract_call.async_call())
+        self
+            .send()
+            .esdt_system_sc_proxy()
+            .set_special_roles(
+                sc,
+                &self.token_identifier().get(),
+                (&[EsdtLocalRole::NftUpdateAttributes][..]).iter().cloned(),
+            )
+            .async_call()
+            .call_and_exit()
     }
 
     #[only_owner]

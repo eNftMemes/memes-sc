@@ -30,7 +30,7 @@ pub trait MemesAuction: owner::OwnerModule {
 	}
 
 	#[endpoint]
-	fn start_auction(&self, period: u64, #[var_args] nfts: VarArgs<u64>) {
+	fn start_auction(&self, period: u64, #[var_args] nfts: MultiValueEncoded<u64>) {
 		let caller: ManagedAddress = self.blockchain().get_caller();
 		require!(
 			caller == self.voting_contract().get(),
@@ -50,11 +50,11 @@ pub trait MemesAuction: owner::OwnerModule {
 		let mut multiplier: u8 = nfts.len() as u8;
 
 		// 1st meme is the one on 1st place etc
-		for nonce in nfts.iter() {
+		for nonce in nfts.into_iter() {
 			self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
 
 			// TODO: Maybe store meme rarity temporarily and use the rarity from the NFT attribute when upgrading?
-			let meme_rarity = self.meme_rarity(*nonce);
+			let meme_rarity = self.meme_rarity(nonce);
 			if meme_rarity.is_empty() || multiplier > meme_rarity.get() {
 				let rarity: u8 = multiplier;
 				meme_rarity.set(&rarity);
@@ -243,22 +243,17 @@ pub trait MemesAuction: owner::OwnerModule {
 
 		let own_address: ManagedAddress = self.blockchain().get_sc_address();
 		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
-		let mut new_attributes = token_data.decode_attributes_or_exit::<MemeAttributes<Self::Api>>();
+		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
 
+		// TODO: Test case when ending auction with custom NFT rarity that is not stored in the contract, since those might break
 		// TODO: Maybe clear rarity when upgrade happens and compare with NFT rarity to see if it needs upgrading?
 		new_attributes.rarity = self.meme_rarity(nft_nonce).get();
 
-		// TODO: Use built in function when it exists?
-		let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
-			own_address,
-			ManagedBuffer::new_from_bytes(b"ESDTNFTUpdateAttributes"),
+		self.send().nft_update_attributes(
+			&self.token_identifier().get(),
+			nft_nonce,
+			&new_attributes
 		);
-
-		contract_call.push_endpoint_arg(&self.token_identifier().get());
-		contract_call.push_endpoint_arg(&nft_nonce);
-		contract_call.push_endpoint_arg(&new_attributes);
-
-		contract_call.execute_on_dest_context();
 
 		self.send().direct(
 			send_to,
@@ -272,8 +267,8 @@ pub trait MemesAuction: owner::OwnerModule {
 	// views/storage
 
 	#[view]
-	fn period_auctions_memes_all(&self, period: u64) -> ManagedMultiResultVec<FullAuction<Self::Api>> {
-		let mut result: ManagedMultiResultVec<FullAuction<Self::Api>> = ManagedMultiResultVec::new();
+	fn period_auctions_memes_all(&self, period: u64) -> MultiValueEncoded<FullAuction<Self::Api>> {
+		let mut result: MultiValueEncoded<FullAuction<Self::Api>> = MultiValueEncoded::new();
 		for index in 1..=self.period_auctioned_memes(period).len() {
 			let nonce = self.period_auctioned_memes(period).get(index);
 			let auction = self.period_meme_auction(period, nonce).get();
@@ -297,8 +292,6 @@ pub trait MemesAuction: owner::OwnerModule {
 	#[storage_mapper("tokenIdentifier")]
 	fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
 
-	// TODO: Maybe add the rarity directly in the NFT attributes by using ESDTNFTUpdateAttributes?
-	// https://docs.elrond.com/developers/nft-tokens/#change-nft-attributes
 	// The rarity of a meme depending on the place the meme was in an auction, to be used in the future
 	// If an auction has less than 10 memes, the max rarity is < 10
 	// 10 - 1st place, most rare

@@ -22,7 +22,7 @@ mod auction_proxy {
 	#[elrond_wasm::proxy]
 	pub trait Auction {
 		#[endpoint]
-		fn start_auction(&self, period: u64, #[var_args] nfts: VarArgs<u64>) -> SCResult<()>;
+		fn start_auction(&self, period: u64, #[var_args] nfts: MultiValueEncoded<u64>) -> SCResult<()>;
 	}
 }
 
@@ -39,7 +39,7 @@ pub trait MemesVoting: owner::OwnerModule {
 	}
 
 	#[endpoint]
-	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> SCResult<OptionalResult<AsyncCall>> {
+	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) {
 		let address: ManagedAddress = self.blockchain().get_caller();
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
 		let address_meme_time: SingleValueMapper<u64> = self.address_last_meme_time(&address);
@@ -56,11 +56,15 @@ pub trait MemesVoting: owner::OwnerModule {
 
 		self.address_last_meme_time(&address).set(&block_timestamp);
 
-		Ok(self.create_meme_nft(&address, &name, url, category))
+		let async_call: OptionalValue<AsyncCall> = self.create_meme_nft(&address, &name, url, category);
+
+		if let OptionalValue::Some(ac) = async_call {
+			ac.call_and_exit()
+		}
 	}
 
 	#[endpoint]
-	fn vote_memes(&self, #[var_args] nft_nonces: ManagedVarArgs<u64>) {
+	fn vote_memes(&self, #[var_args] nft_nonces: MultiValueEncoded<u64>) {
 		let caller: ManagedAddress = self.blockchain().get_caller();
 
 		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);
@@ -131,7 +135,7 @@ pub trait MemesVoting: owner::OwnerModule {
 
 	// private
 
-	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> OptionalResult<AsyncCall> {
+	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> OptionalValue<AsyncCall> {
 		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
 		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
 
@@ -161,7 +165,7 @@ pub trait MemesVoting: owner::OwnerModule {
 		return result;
 	}
 
-	fn alter_period(&self) -> OptionalResult<AsyncCall> {
+	fn alter_period(&self) -> OptionalValue<AsyncCall> {
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
 		let period: u64 = self.current_period();
 
@@ -171,13 +175,13 @@ pub trait MemesVoting: owner::OwnerModule {
 			self.periods().push(&new_period);
 
 			let top_memes = self.period_top_memes(period).get();
-			let mut top_memes_args: MultiArgVec<u64> = MultiArgVec::new();
+			let mut top_memes_args: MultiValueEncoded<u64> = MultiValueEncoded::new();
 
 			for meme in top_memes.iter() {
 				top_memes_args.push(meme.nft_nonce);
 			}
 
-			return OptionalResult::Some(
+			return OptionalValue::Some(
 				self.auction_proxy()
 					.contract(self.auction_sc().get())
 					.start_auction(new_period, top_memes_args)
@@ -185,7 +189,7 @@ pub trait MemesVoting: owner::OwnerModule {
 			);
 		}
 
-		OptionalResult::None
+		OptionalValue::None
 	}
 
 	fn alter_period_top_memes(&self, new_meme_votes: &mut HashMap<u64, u32>) {
@@ -229,24 +233,18 @@ pub trait MemesVoting: owner::OwnerModule {
 
 		let own_address: ManagedAddress = self.blockchain().get_sc_address();
 		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
-		let mut new_attributes = token_data.decode_attributes_or_exit::<MemeAttributes<Self::Api>>();
+		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
 
 		let custom_attributes = self.custom_attributes(nft_nonce).get();
 
 		new_attributes.category = custom_attributes.category;
 		new_attributes.rarity = custom_attributes.rarity;
 
-		// TODO: Use built in function when it exists?
-		let mut contract_call: ContractCall<Self::Api, ()> = ContractCall::new(
-			own_address,
-			ManagedBuffer::new_from_bytes(b"ESDTNFTUpdateAttributes"),
+		self.send().nft_update_attributes(
+			&self.token_identifier().get(),
+			nft_nonce,
+			&new_attributes
 		);
-
-		contract_call.push_endpoint_arg(&self.token_identifier().get());
-		contract_call.push_endpoint_arg(&nft_nonce);
-		contract_call.push_endpoint_arg(&new_attributes);
-
-		contract_call.execute_on_dest_context();
 
 		self.send().direct(
 			send_to,
@@ -273,7 +271,7 @@ pub trait MemesVoting: owner::OwnerModule {
 	}
 
 	#[view]
-	fn current_period_memes_latest(&self, page: usize) -> ManagedMultiResultVec<(u64, u32)> {
+	fn current_period_memes_latest(&self, page: usize) -> MultiValueEncoded<(u64, u32)> {
 		return self.period_memes_latest(self.current_period(), page);
 	}
 
@@ -288,17 +286,17 @@ pub trait MemesVoting: owner::OwnerModule {
 	}
 
 	#[view]
-	fn period_memes_latest(&self, period: u64, page: usize) -> ManagedMultiResultVec<(u64, u32)> {
+	fn period_memes_latest(&self, period: u64, page: usize) -> MultiValueEncoded<(u64, u32)> {
 		let len = self.period_memes(period).len();
 
 		if len <= page * PER_PAGE {
-			return ManagedMultiResultVec::new();
+			return MultiValueEncoded::new();
 		}
 
 		let last_index = len - page * PER_PAGE;
 		let first_index = if last_index > PER_PAGE { last_index - PER_PAGE + 1 } else { 1 };
 
-		let mut result: ManagedMultiResultVec<(u64, u32)> = ManagedMultiResultVec::new();
+		let mut result: MultiValueEncoded<(u64, u32)> = MultiValueEncoded::new();
 		for index in (first_index..=last_index).rev() {
 			let nonce: u64 = self.period_meme(period, index);
 			let votes: u32 = self.meme_votes(nonce, period).get();

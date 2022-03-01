@@ -17,10 +17,8 @@ pub trait OwnerModule {
 
     #[only_owner]
     #[endpoint]
-    fn set_min_bid_start(&self, min_bid_start: &BigUint) -> SCResult<()> {
+    fn set_min_bid_start(&self, min_bid_start: &BigUint) {
         self.min_bid_start().set(min_bid_start);
-
-        Ok(())
     }
 
     #[only_owner]
