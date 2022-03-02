@@ -75,5 +75,6 @@ pub trait OwnerModule {
 
     #[view]
     #[storage_mapper("periodAuctionedMemes")]
+    // TODO: Remove this if data is indexed on microservice side?
     fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
 }

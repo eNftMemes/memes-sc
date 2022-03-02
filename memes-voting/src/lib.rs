@@ -77,7 +77,7 @@ pub trait MemesVoting: owner::OwnerModule {
 			"Not enough votes left currently"
 		);
 
-		let mut new_meme_votes: HashMap<u64, u32> = HashMap::new();
+		let mut new_meme_votes: HashMap<u64, u32> = HashMap::with_capacity(VOTES_PER_ADDRESS_PER_PERIOD as usize);
 		for nonce in nft_nonces.into_iter() {
 			let votes: &mut u32 = new_meme_votes.entry(nonce).or_insert(0);
 			*votes += 1;
@@ -194,10 +194,11 @@ pub trait MemesVoting: owner::OwnerModule {
 
 	fn alter_period_top_memes(&self, new_meme_votes: &mut HashMap<u64, u32>) {
 		let current_period: u64 = self.current_period();
-		let top_memes: SingleValueMapper<Vec<MemeVotes>> = self.period_top_memes(current_period);
+
+		let top_memes: SingleValueMapper<ArrayVec<MemeVotes, 30>> = self.period_top_memes(current_period);
 
 		if !top_memes.is_empty() {
-			let meme_votes: Vec<MemeVotes> = top_memes.get();
+			let meme_votes: ArrayVec<MemeVotes, 30> = top_memes.get();
 			for meme_vote in meme_votes {
 				let nonce: u64 = meme_vote.nft_nonce;
 				if !new_meme_votes.contains_key(&nonce) {
@@ -206,7 +207,7 @@ pub trait MemesVoting: owner::OwnerModule {
 			}
 		}
 
-		let mut sorted: Vec<MemeVotes> = Vec::new();
+		let mut sorted: ArrayVec<MemeVotes, 30> = ArrayVec::<_, 30>::new();
 
 		for (nft_nonce, votes) in new_meme_votes.iter() {
 			sorted.push(MemeVotes {
@@ -332,7 +333,8 @@ pub trait MemesVoting: owner::OwnerModule {
 
 	#[view]
 	#[storage_mapper("periodTopMemes")]
-	fn period_top_memes(&self, period: u64) -> SingleValueMapper<Vec<MemeVotes>>;
+	// capacity 30, because 10 memes can be in the top, and another different 20 memes can come from votes
+	fn period_top_memes(&self, period: u64) -> SingleValueMapper<ArrayVec<MemeVotes, 30>>;
 
 	#[view]
 	#[storage_mapper("addressVotes")]

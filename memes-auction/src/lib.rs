@@ -245,8 +245,6 @@ pub trait MemesAuction: owner::OwnerModule {
 		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
 
 		if !self.meme_rarity(nft_nonce).is_empty() && self.meme_rarity(nft_nonce).get() > new_attributes.rarity {
-			// TODO: Test case when ending auction with custom NFT rarity that is not stored in the contract, since those might break
-			// TODO: Maybe clear rarity when upgrade happens and compare with NFT rarity to see if it needs upgrading?
 			new_attributes.rarity = self.meme_rarity(nft_nonce).get();
 
 			self.send().nft_update_attributes(
