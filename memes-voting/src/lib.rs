@@ -55,7 +55,32 @@ pub trait MemesVoting: owner::OwnerModule {
 
 		self.address_last_meme_time(&address).set(&block_timestamp);
 
-		let async_call: OptionalValue<AsyncCall> = self.create_meme_nft(&address, &name, url, category);
+		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
+		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
+
+		let nft_token: &TokenIdentifier = &self.token_identifier().get();
+		let hash: &ManagedBuffer = &ManagedBuffer::new();
+
+		let mut urls = ManagedVec::new();
+		urls.push(url);
+
+		let async_call: OptionalValue<AsyncCall> = self.alter_period();
+		let current_period: u64 = self.current_period();
+
+		// TODO: Test this function when it works properly on Devnet
+		let nonce: u64 = self.send().esdt_nft_create_as_caller(
+			nft_token,
+			&amount,
+			&name,
+			royalties,
+			hash,
+			&MemeAttributes { period: current_period, category, rarity: 0 },
+			&urls
+		);
+
+		self.send().direct(&address, nft_token, nonce, amount, &[]);
+
+		self.period_memes(current_period).push(&nonce);
 
 		if let OptionalValue::Some(ac) = async_call {
 			ac.call_and_exit()
@@ -163,36 +188,6 @@ pub trait MemesVoting: owner::OwnerModule {
 			nft_nonce: *temp_nonce,
 			votes: *temp_votes,
 		});
-	}
-
-	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> OptionalValue<AsyncCall> {
-		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
-		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
-
-		let nft_token: &TokenIdentifier = &self.token_identifier().get();
-		let hash: &ManagedBuffer = &ManagedBuffer::new();
-
-		let mut urls = ManagedVec::new();
-		urls.push(url);
-
-		let result = self.alter_period();
-		let current_period: u64 = self.current_period();
-
-		let nonce: u64 = self.send().esdt_nft_create_as_caller(
-			nft_token,
-			&amount,
-			name,
-			royalties,
-			hash,
-			&MemeAttributes { period: current_period, category, rarity: 0 },
-			&urls
-		);
-
-		self.send().direct(address, nft_token, nonce, amount, &[]);
-
-		self.period_memes(current_period).push(&nonce);
-
-		return result;
 	}
 
 	fn alter_period(&self) -> OptionalValue<AsyncCall> {
