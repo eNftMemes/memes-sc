@@ -22,6 +22,6 @@ Then deploy:
 
 # Upgrade
 
-`erdpy --verbose contract upgrade --project=memes-auction --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-auction.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS" --arguments "0xHEX_ADDRESS_OF_VOTING_CONTRACT" "0xHEX_ENCODING_OF_TOKEN_IDENTIFIER" "25000000000000000"`
+`erdpy --verbose contract upgrade --project=memes-auction --pem="devnet.pem" --gas-limit=50000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-auction.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS" --arguments "0xHEX_ADDRESS_OF_VOTING_CONTRACT" "0xHEX_ENCODING_OF_TOKEN_IDENTIFIER" "25000000000000000"`
 
 # Example calls

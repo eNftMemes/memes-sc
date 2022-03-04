@@ -13,7 +13,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:2", "u64:1"
+          "u64:1", "u64:2"
         ],
         "gasLimit": "10,000,000",
         "gasPrice": "0"

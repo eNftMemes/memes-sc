@@ -7,7 +7,7 @@ pub struct AddressVotes {
     pub votes: u8,
 }
 
-#[derive(TopEncode, TopDecode, NestedEncode, NestedDecode, TypeAbi)]
+#[derive(TopEncode, TopDecode, NestedEncode, NestedDecode, TypeAbi, ManagedVecItem)]
 pub struct MemeVotes {
     pub nft_nonce: u64,
     pub votes: u32,

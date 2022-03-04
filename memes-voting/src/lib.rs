@@ -1,4 +1,5 @@
 #![no_std]
+#![feature(generic_associated_types)] // needed to use ManagedVecItem derive for MemeVotes
 #![allow(unused_attributes)]
 
 elrond_wasm::imports!();
@@ -7,8 +8,6 @@ mod owner;
 
 mod meme;
 use meme::*;
-
-use hashbrown::HashMap;
 
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
 const NFT_AMOUNT: u32 = 1;
@@ -72,37 +71,48 @@ pub trait MemesVoting: owner::OwnerModule {
 		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
 		let nb_nfts: usize = nft_nonces.len();
 
+		require!(nb_nfts > 0, "At least an nft needs to be voted");
 		require!(
 			reset_address_votes || (address_votes.get().votes >= nb_nfts as u8),
 			"Not enough votes left currently"
 		);
 
-		let mut new_meme_votes: HashMap<u64, u32> = HashMap::with_capacity(VOTES_PER_ADDRESS_PER_PERIOD as usize);
-		for nonce in nft_nonces.into_iter() {
-			let votes: &mut u32 = new_meme_votes.entry(nonce).or_insert(0);
-			*votes += 1;
-		}
-
-		let last_nonce = self.blockchain().get_current_esdt_nft_nonce(
+		let last_nonce: u64 = self.blockchain().get_current_esdt_nft_nonce(
 			&self.blockchain().get_sc_address(),
 			&self.token_identifier().get()
 		);
 
-		for (nonce, new_votes) in new_meme_votes.iter_mut() {
-			require!(*nonce > 0 && *nonce <= last_nonce, "Meme does not exist");
+		let mut new_meme_votes: ManagedVec<MemeVotes> = ManagedVec::new();
+		let mut temp_nonce: u64 = 0;
+		let mut temp_votes: u32 = 0;
 
-			// Update total votes before updating new_votes variable
-			self.meme_votes_total(*nonce)
-				.update(|value| *value += *new_votes);
+		for nonce in nft_nonces.into_iter() {
+			require!(nonce > 0 && nonce >= temp_nonce, "Nonces need to be in ascending order");
 
-			let meme_votes = self.meme_votes(*nonce, current_period);
+			if temp_nonce == 0 {
+				temp_nonce = nonce;
+				temp_votes = 1;
 
-			if !meme_votes.is_empty() {
-				*new_votes += meme_votes.get();
+				continue;
 			}
 
-			meme_votes.set(new_votes);
+			if nonce == temp_nonce {
+				temp_votes += 1;
+
+				continue;
+			}
+
+			self.update_meme_votes(&current_period, &last_nonce, &mut new_meme_votes, &temp_nonce, &mut temp_votes);
+
+			temp_nonce = nonce;
+			temp_votes = 1;
 		}
+
+		// Update meme votes for last loop element
+		self.update_meme_votes(&current_period, &last_nonce, &mut new_meme_votes, &temp_nonce, &mut temp_votes);
+
+		// Require a max of 20 memes to be voted at a time because of static memory allocation
+		require!(new_meme_votes.len() <= 20, "Only 20 memes can be voted at a time");
 
 		address_votes.set(&AddressVotes {
 			period: current_period,
@@ -134,6 +144,26 @@ pub trait MemesVoting: owner::OwnerModule {
 	}
 
 	// private
+
+	fn update_meme_votes(&self, current_period: &u64, last_nonce: &u64, new_meme_votes: &mut ManagedVec<MemeVotes>, temp_nonce: &u64, temp_votes: &mut u32) {
+		require!(*temp_nonce <= *last_nonce, "Meme does not exist");
+
+		// Update total votes before updating new_votes variable
+		self.meme_votes_total(*temp_nonce).update(|value| *value += *temp_votes);
+
+		let meme_votes = self.meme_votes(*temp_nonce, *current_period);
+
+		if !meme_votes.is_empty() {
+			*temp_votes += meme_votes.get();
+		}
+
+		meme_votes.set(*temp_votes);
+
+		new_meme_votes.push(MemeVotes {
+			nft_nonce: *temp_nonce,
+			votes: *temp_votes,
+		});
+	}
 
 	fn create_meme_nft(&self, address: &ManagedAddress, name: &ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) -> OptionalValue<AsyncCall> {
 		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
@@ -192,40 +222,46 @@ pub trait MemesVoting: owner::OwnerModule {
 		OptionalValue::None
 	}
 
-	fn alter_period_top_memes(&self, new_meme_votes: &mut HashMap<u64, u32>) {
+	fn alter_period_top_memes(&self, new_meme_votes: &ManagedVec<MemeVotes>) {
 		let current_period: u64 = self.current_period();
 
-		let top_memes: SingleValueMapper<ArrayVec<MemeVotes, 30>> = self.period_top_memes(current_period);
+		let top_memes = self.period_top_memes(current_period);
+
+		// 10 from top memes, 20 from max number of votes a transaction can have (for now)
+		let mut sorted: ArrayVec<MemeVotes, 30> = ArrayVec::<_, 30>::new();
+
+		for meme_vote in new_meme_votes.iter() {
+			sorted.push(meme_vote);
+		}
 
 		if !top_memes.is_empty() {
-			let meme_votes: ArrayVec<MemeVotes, 30> = top_memes.get();
+			let meme_votes: ArrayVec<MemeVotes, 10> = top_memes.get();
+
 			for meme_vote in meme_votes {
 				let nonce: u64 = meme_vote.nft_nonce;
-				if !new_meme_votes.contains_key(&nonce) {
-					new_meme_votes.insert(meme_vote.nft_nonce, meme_vote.votes);
+
+				if sorted.binary_search_by(|probe| probe.nft_nonce.cmp(&nonce)).is_err() {
+					sorted.push(meme_vote);
 				}
 			}
 		}
 
-		let mut sorted: ArrayVec<MemeVotes, 30> = ArrayVec::<_, 30>::new();
-
-		for (nft_nonce, votes) in new_meme_votes.iter() {
-			sorted.push(MemeVotes {
-				nft_nonce: *nft_nonce,
-				votes: *votes,
-			})
-		}
-
 		sorted.sort_unstable_by(|a, b| b.votes.cmp(&a.votes).then(b.nft_nonce.cmp(&a.nft_nonce)));
 
-		// Remove memes if more than 10
-		if sorted.len() > 10 {
-			for index in (10..sorted.len()).rev() {
-				sorted.remove(index);
+		let mut new_top_memes: ArrayVec<MemeVotes, 10> = ArrayVec::<_, 10>::new();
+
+		let mut nb: u8 = 0;
+
+		for item in sorted {
+			new_top_memes.push(item);
+			nb += 1;
+
+			if nb == 10 {
+				break;
 			}
 		}
 
-		top_memes.set(&sorted);
+		top_memes.set(&new_top_memes);
 	}
 
 	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) {
@@ -333,8 +369,7 @@ pub trait MemesVoting: owner::OwnerModule {
 
 	#[view]
 	#[storage_mapper("periodTopMemes")]
-	// capacity 30, because 10 memes can be in the top, and another different 20 memes can come from votes
-	fn period_top_memes(&self, period: u64) -> SingleValueMapper<ArrayVec<MemeVotes, 30>>;
+	fn period_top_memes(&self, period: u64) -> SingleValueMapper<ArrayVec<MemeVotes, 10>>;
 
 	#[view]
 	#[storage_mapper("addressVotes")]
