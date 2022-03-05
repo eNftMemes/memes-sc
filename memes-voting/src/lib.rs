@@ -57,10 +57,8 @@ pub trait MemesVoting: owner::OwnerModule {
 
 		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
 		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
-
 		let nft_token: &TokenIdentifier = &self.token_identifier().get();
 		let hash: &ManagedBuffer = &ManagedBuffer::new();
-
 		let mut urls = ManagedVec::new();
 		urls.push(url);
 
@@ -114,6 +112,7 @@ pub trait MemesVoting: owner::OwnerModule {
 		for nonce in nft_nonces.into_iter() {
 			require!(nonce > 0 && nonce >= temp_nonce, "Nonces need to be in ascending order");
 
+			// If first element, save it to temp vars
 			if temp_nonce == 0 {
 				temp_nonce = nonce;
 				temp_votes = 1;
@@ -121,12 +120,14 @@ pub trait MemesVoting: owner::OwnerModule {
 				continue;
 			}
 
+			// If nonce is equal to previous temp none, increment votes
 			if nonce == temp_nonce {
 				temp_votes += 1;
 
 				continue;
 			}
 
+			// A different nonce was encountered, save votes for previous temp nonce
 			self.update_meme_votes(&current_period, &last_nonce, &mut new_meme_votes, &temp_nonce, &mut temp_votes);
 
 			temp_nonce = nonce;
@@ -144,7 +145,7 @@ pub trait MemesVoting: owner::OwnerModule {
 			votes: (if reset_address_votes { VOTES_PER_ADDRESS_PER_PERIOD } else { address_votes.get().votes }) - (nb_nfts as u8),
 		});
 
-		self.alter_period_top_memes(&mut new_meme_votes);
+		self.alter_period_top_memes(&mut new_meme_votes, &current_period);
 	}
 
 	#[payable("*")]
@@ -161,7 +162,7 @@ pub trait MemesVoting: owner::OwnerModule {
 
 		self.update_nft_attributes(
 			&self.blockchain().get_caller(),
-			nonce,
+			&nonce,
 			b"nft upgraded"
 		);
 
@@ -217,17 +218,15 @@ pub trait MemesVoting: owner::OwnerModule {
 		OptionalValue::None
 	}
 
-	fn alter_period_top_memes(&self, new_meme_votes: &ManagedVec<MemeVotes>) {
-		let current_period: u64 = self.current_period();
-
-		let top_memes = self.period_top_memes(current_period);
-
-		// 10 from top memes, 20 from max number of votes a transaction can have (for now)
+	fn alter_period_top_memes(&self, new_meme_votes: &ManagedVec<MemeVotes>, current_period: &u64) {
+		// 10 from top memes, 20 from max number of votes a transaction can have
 		let mut sorted: ArrayVec<MemeVotes, 30> = ArrayVec::<_, 30>::new();
 
 		for meme_vote in new_meme_votes.iter() {
 			sorted.push(meme_vote);
 		}
+
+		let top_memes = self.period_top_memes(*current_period);
 
 		if !top_memes.is_empty() {
 			let meme_votes: ArrayVec<MemeVotes, 10> = top_memes.get();
@@ -259,29 +258,29 @@ pub trait MemesVoting: owner::OwnerModule {
 		top_memes.set(&new_top_memes);
 	}
 
-	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) {
+	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
 		let nft_token = &self.token_identifier().get();
 		let amount = BigUint::from(NFT_AMOUNT);
 
 		let own_address: ManagedAddress = self.blockchain().get_sc_address();
-		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
+		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
 		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
 
-		let custom_attributes = self.custom_attributes(nft_nonce).get();
+		let custom_attributes = self.custom_attributes(*nft_nonce).get();
 
 		new_attributes.category = custom_attributes.category;
 		new_attributes.rarity = custom_attributes.rarity;
 
 		self.send().nft_update_attributes(
 			&self.token_identifier().get(),
-			nft_nonce,
+			*nft_nonce,
 			&new_attributes
 		);
 
 		self.send().direct(
 			send_to,
 			nft_token,
-			nft_nonce,
+			*nft_nonce,
 			&amount,
 			text,
 		);

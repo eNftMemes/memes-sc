@@ -154,7 +154,7 @@ pub trait MemesAuction: owner::OwnerModule {
 
 		self.period_meme_auction(period, nonce).set(&auction);
 
-		self.distribute_tokens_after_auction_end(nonce, &auction);
+		self.distribute_tokens_after_auction_end(&nonce, &auction);
 	}
 
 	#[payable("*")]
@@ -171,7 +171,7 @@ pub trait MemesAuction: owner::OwnerModule {
 
 		self.update_nft_attributes(
 			&self.blockchain().get_caller(),
-			nonce,
+			&nonce,
 			b"nft upgraded"
 		);
 	}
@@ -189,7 +189,7 @@ pub trait MemesAuction: owner::OwnerModule {
 		auction.get()
 	}
 
-	fn distribute_tokens_after_auction_end(&self, nft_nonce: u64, auction: &Auction<Self::Api>) {
+	fn distribute_tokens_after_auction_end(&self, nft_nonce: &u64, auction: &Auction<Self::Api>) {
 		if auction.original_owner.is_zero() {
 			if auction.current_winner.is_zero() {
 				return;
@@ -236,20 +236,20 @@ pub trait MemesAuction: owner::OwnerModule {
 		self.update_nft_attributes(&auction.current_winner, nft_nonce, b"bought token at auction");
 	}
 
-	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: u64, text: &[u8]) {
+	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
 		let nft_token = &self.token_identifier().get();
 		let amount = BigUint::from(NFT_AMOUNT);
 
 		let own_address: ManagedAddress = self.blockchain().get_sc_address();
-		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, nft_nonce);
+		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
 		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
 
-		if !self.meme_rarity(nft_nonce).is_empty() && self.meme_rarity(nft_nonce).get() > new_attributes.rarity {
-			new_attributes.rarity = self.meme_rarity(nft_nonce).get();
+		if !self.meme_rarity(*nft_nonce).is_empty() && self.meme_rarity(*nft_nonce).get() > new_attributes.rarity {
+			new_attributes.rarity = self.meme_rarity(*nft_nonce).get();
 
 			self.send().nft_update_attributes(
 				&self.token_identifier().get(),
-				nft_nonce,
+				*nft_nonce,
 				&new_attributes
 			);
 		}
@@ -257,12 +257,12 @@ pub trait MemesAuction: owner::OwnerModule {
 		self.send().direct(
 			send_to,
 			nft_token,
-			nft_nonce,
+			*nft_nonce,
 			&amount,
 			text,
 		);
 
-		self.meme_rarity(nft_nonce).clear();
+		self.meme_rarity(*nft_nonce).clear();
 	}
 
 	// views/storage
