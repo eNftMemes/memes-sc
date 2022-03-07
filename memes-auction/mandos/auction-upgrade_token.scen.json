@@ -96,7 +96,7 @@
           "nonce": "1",
           "value": "1"
         },
-        "gasLimit": "20,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -211,7 +211,7 @@
           "nonce": "1",
           "value": "1"
         },
-        "gasLimit": "20,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -234,7 +234,7 @@
           "nonce": "2",
           "value": "1"
         },
-        "gasLimit": "20,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {

@@ -220,33 +220,39 @@ pub trait MemesVoting: owner::OwnerModule {
 
 	fn alter_period_top_memes(&self, new_meme_votes: &ManagedVec<MemeVotes>, current_period: &u64) {
 		// 10 from top memes, 20 from max number of votes a transaction can have
-		let mut sorted: ArrayVec<MemeVotes, 30> = ArrayVec::<_, 30>::new();
-
-		for meme_vote in new_meme_votes.iter() {
-			sorted.push(meme_vote);
-		}
+		let mut result: ArrayVec<MemeVotes, 30> = ArrayVec::<_, 30>::new();
 
 		let top_memes = self.period_top_memes(*current_period);
 
 		if !top_memes.is_empty() {
+			let mut sorted: ArrayVec<MemeVotes, 20> = ArrayVec::<_, 20>::new();
+
+			for meme_vote in new_meme_votes.into_iter() {
+				sorted.push(meme_vote);
+			}
+
 			let meme_votes: ArrayVec<MemeVotes, 10> = top_memes.get();
 
 			for meme_vote in meme_votes {
 				let nonce: u64 = meme_vote.nft_nonce;
 
 				if sorted.binary_search_by(|probe| probe.nft_nonce.cmp(&nonce)).is_err() {
-					sorted.push(meme_vote);
+					result.push(meme_vote);
 				}
 			}
 		}
 
-		sorted.sort_unstable_by(|a, b| b.votes.cmp(&a.votes).then(b.nft_nonce.cmp(&a.nft_nonce)));
+		for meme_vote in new_meme_votes.iter() {
+			result.push(meme_vote);
+		}
+
+		result.sort_unstable_by(|a, b| b.votes.cmp(&a.votes).then(b.nft_nonce.cmp(&a.nft_nonce)));
 
 		let mut new_top_memes: ArrayVec<MemeVotes, 10> = ArrayVec::<_, 10>::new();
 
 		let mut nb: u8 = 0;
 
-		for item in sorted {
+		for item in result {
 			new_top_memes.push(item);
 			nb += 1;
 
