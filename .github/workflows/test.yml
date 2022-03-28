@@ -25,7 +25,7 @@ jobs:
         run: |
           pip3 install erdpy
           mkdir $HOME/elrondsdk
-          erdpy deps install vmtools --tag ${{ inputs.vmtools-version }}
+          erdpy deps install vmtools --tag latest
           erdpy deps install nodejs
           erdpy deps install wasm-opt
           cargo install twiggy
@@ -53,7 +53,7 @@ jobs:
         run: |
           pip3 install erdpy
           mkdir $HOME/elrondsdk
-          erdpy deps install vmtools --tag ${{ inputs.vmtools-version }}
+          erdpy deps install vmtools --tag latest
           erdpy deps install nodejs
           erdpy deps install wasm-opt
           cargo install twiggy
