@@ -13,6 +13,7 @@ elrond_wasm_node::wasm_endpoints! {
         auction_sc
         categories
         create_meme
+        create_meme_signed
         current_period
         current_period_len
         current_period_meme
@@ -35,6 +36,7 @@ elrond_wasm_node::wasm_endpoints! {
         set_custom_attributes
         set_local_roles
         set_nft_royalties
+        set_signer
         token_identifier
         unpause
         upgrade_custom_attributes

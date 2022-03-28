@@ -1,6 +1,14 @@
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
 
+use elrond_wasm::api::ED25519_SIGNATURE_BYTE_LEN;
+
+// caller + url + some extra
+// 32 + (4 + 74) + 16
+const MAX_SIGNATURE_DATA_LEN: usize = 126;
+
+pub type Signature<M> = ManagedByteArray<M, ED25519_SIGNATURE_BYTE_LEN>;
+
 #[derive(TopEncode, TopDecode, TypeAbi)]
 pub struct CustomMemeAttributes<M: ManagedTypeApi> {
     pub category: ManagedBuffer<M>,
@@ -119,6 +127,31 @@ pub trait OwnerModule {
         );
     }
 
+    #[only_owner]
+    #[endpoint]
+    fn set_signer(&self, new_signer: ManagedAddress) {
+        self.signer().set(&new_signer);
+    }
+
+    fn verify_signature(
+        &self,
+        caller: &ManagedAddress,
+        url: &ManagedBuffer,
+        signature: &Signature<Self::Api>,
+    ) {
+        let mut data = ManagedBuffer::new();
+        data.append(caller.as_managed_buffer());
+        data.append(url);
+
+        let signer: ManagedAddress = self.signer().get();
+        let valid_signature = self.crypto().verify_ed25519_managed::<MAX_SIGNATURE_DATA_LEN>(
+            signer.as_managed_byte_array(),
+            &data,
+            signature,
+        );
+        require!(valid_signature, "Invalid signature");
+    }
+
     #[view]
     #[storage_mapper("tokenIdentifier")]
     fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
@@ -138,4 +171,7 @@ pub trait OwnerModule {
     #[view]
     #[storage_mapper("customAttributes")]
     fn custom_attributes(&self, nonce: u64) -> SingleValueMapper<CustomMemeAttributes<Self::Api>>;
+
+    #[storage_mapper("signer")]
+    fn signer(&self) -> SingleValueMapper<ManagedAddress>;
 }
