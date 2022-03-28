@@ -122,6 +122,19 @@
         "out": ["123,000", "727,800"],
         "status": "0"
       }
+    },
+    {
+      "step": "scQuery",
+      "txId": "is_paused",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "isPaused",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["0"],
+        "status": "0"
+      }
     }
   ]
 }

@@ -1,0 +1,240 @@
+{
+  "name": "voting add meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "voting-init.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "pause",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "pause",
+        "arguments": [],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-1",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name",
+          "str:nft-create-uri",
+          "str:funny"
+        ],
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Contract paused, can't create new memes",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "is_paused",
+      "tx": {
+        "to": "sc:voting_contract",
+        "function": "isPaused",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["1"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "address:other_address" : {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:nftRoyalties": "500",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:auctionSc": "address:auction_contract",
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+
+            "str:pause_module:paused": "1"
+          },
+          "code": "file:../output/memes-voting.wasm",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "unpause",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "unpause",
+        "arguments": [],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-1",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name",
+          "str:nft-create-uri",
+          "str:funny"
+        ],
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": ["0x01"],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "4",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "creator": "address:my_address",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u64:123,000|nested:str:funny|u8:0",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        },
+        "address:other_address" : {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:nftRoyalties": "500",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:addressLastMemeTime|address:my_address": "123,000",
+
+            "str:auctionSc": "address:auction_contract",
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes|u64:123,000|``.len": "1",
+            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
+
+            "str:pause_module:paused": "0"
+          },
+          "code": "file:../output/memes-voting.wasm",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "1",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

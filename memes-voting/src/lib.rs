@@ -26,7 +26,9 @@ mod auction_proxy {
 }
 
 #[elrond_wasm::contract]
-pub trait MemesVoting: owner::OwnerModule {
+pub trait MemesVoting: owner::OwnerModule
+	+ elrond_wasm_modules::pause::PauseModule
+{
 	#[init]
 	fn init(&self, period: &u64) {
 		if self.periods().len() == 0 {
@@ -39,6 +41,8 @@ pub trait MemesVoting: owner::OwnerModule {
 
 	#[endpoint]
 	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) {
+		require!(self.not_paused(), "Contract paused, can't create new memes");
+
 		let address: ManagedAddress = self.blockchain().get_caller();
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
 		let address_meme_time: SingleValueMapper<u64> = self.address_last_meme_time(&address);
@@ -87,6 +91,8 @@ pub trait MemesVoting: owner::OwnerModule {
 
 	#[endpoint]
 	fn vote_memes(&self, #[var_args] nft_nonces: MultiValueEncoded<u64>) {
+		require!(self.not_paused(), "Contract paused, can't vote memes");
+
 		let caller: ManagedAddress = self.blockchain().get_caller();
 
 		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);

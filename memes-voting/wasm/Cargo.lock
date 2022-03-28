@@ -88,6 +88,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "elrond-wasm-modules"
+version = "0.29.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "83c4ffe4ceb68a81e548fa6901b6d6bbf11ae85ebdb26de5d58018e36436ab93"
+dependencies = [
+ "elrond-wasm",
+]
+
+[[package]]
 name = "elrond-wasm-node"
 version = "0.29.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -155,6 +164,7 @@ name = "memes-voting"
 version = "0.0.1"
 dependencies = [
  "elrond-wasm",
+ "elrond-wasm-modules",
 ]
 
 [[package]]

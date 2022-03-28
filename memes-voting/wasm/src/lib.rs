@@ -18,12 +18,14 @@ elrond_wasm_node::wasm_endpoints! {
         current_period_meme
         current_period_memes_latest
         custom_attributes
+        isPaused
         issue_token
         meme_votes
         meme_votes_all
         meme_votes_total
         modify_categories
         nft_royalties
+        pause
         period_len
         period_meme
         period_memes_latest
@@ -34,6 +36,7 @@ elrond_wasm_node::wasm_endpoints! {
         set_local_roles
         set_nft_royalties
         token_identifier
+        unpause
         upgrade_custom_attributes
         vote_memes
     )
