@@ -1,7 +1,7 @@
 [package]
 name = "memes-auction"
 version = "0.0.1"
-authors = ["Rares Serban <raresserban96@outlook.com>"]
+authors = ["Rares"]
 edition = "2018"
 publish = false
 
