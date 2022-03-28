@@ -1,18 +1,74 @@
 name: Test
 
 on:
-    push:
-        branches:
-            - master
-            - develop
+  push:
+    branches:
+      - master
+      - develop
 
 jobs:
-    contracts:
-        name: Contracts
-        uses: ElrondNetwork/elrond-actions/.github/workflows/contracts.yml@v1
+  voting_tests:
+    name: Voting tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
         with:
-            rust-toolchain: nightly-2022-01-17
-            vmtools-version: v1.4.43
-            extra-build-args: --ignore-eei-checks
-        secrets:
-            token: ${{ secrets.GITHUB_TOKEN }}
+          default: true
+          toolchain: "nightly-2022-01-17"
+
+      - name: Setup the PATH variable
+        run: echo "PATH=$HOME/.local/bin:$HOME/elrondsdk/vmtools:$PATH" >> $GITHUB_ENV
+
+      - name: Install prerequisites
+        run: |
+          pip3 install erdpy
+          mkdir $HOME/elrondsdk
+          erdpy deps install vmtools --tag ${{ inputs.vmtools-version }}
+          erdpy deps install nodejs
+          erdpy deps install wasm-opt
+          cargo install twiggy
+      - name: Build the wasm contracts
+        run: cd memes-voting && erdpy contract build
+
+      - name: Run the wasm tests
+        run: cd memes-voting && erdpy contract test
+
+  auction_tests:
+    name: Auction tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: "nightly-2022-01-17"
+
+      - name: Setup the PATH variable
+        run: echo "PATH=$HOME/.local/bin:$HOME/elrondsdk/vmtools:$PATH" >> $GITHUB_ENV
+
+      - name: Install prerequisites
+        run: |
+          pip3 install erdpy
+          mkdir $HOME/elrondsdk
+          erdpy deps install vmtools --tag ${{ inputs.vmtools-version }}
+          erdpy deps install nodejs
+          erdpy deps install wasm-opt
+          cargo install twiggy
+      - name: Build the wasm contracts
+        run: cd memes-auction && erdpy contract build
+
+      - name: Run the wasm tests
+        run: cd memes-auction && erdpy contract test
+
+#    contracts:
+#        name: Contracts
+#        uses: ElrondNetwork/elrond-actions/.github/workflows/contracts.yml@v1
+#        with:
+#            rust-toolchain: nightly-2022-01-17
+#            vmtools-version: v1.4.43
+#            extra-build-args: --ignore-eei-checks
+#        secrets:
+#            token: ${{ secrets.GITHUB_TOKEN }}
