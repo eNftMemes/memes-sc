@@ -140,7 +140,7 @@ pub trait OwnerModule {
         signature: &Signature<Self::Api>,
     ) {
         let mut data = ManagedBuffer::new();
-        data.append(caller.as_managed_buffer());
+        // data.append(caller.as_managed_buffer());
         data.append(url);
 
         let signer: ManagedAddress = self.signer().get();
