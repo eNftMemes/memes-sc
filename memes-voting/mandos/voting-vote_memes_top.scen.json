@@ -3,11 +3,16 @@
   "steps": [
     {
       "step": "externalSteps",
-      "path": "voting-vote_memes.scen.json"
+      "path": "voting-init.json"
     },
     {
       "step": "setState",
       "accounts": {
+        "address:my_address": {
+          "nonce": "4",
+          "balance": "1,000,000",
+          "esdt": {}
+        },
         "address:last_address": {
           "nonce": "0",
           "balance": "1,000,000",
@@ -95,72 +100,12 @@
         "address:my_address": {
           "nonce": "5",
           "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "1",
-                  "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny|u8:0",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
-                {
-                  "nonce": "3",
-                  "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri3"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
+          "esdt": {}
         },
         "address:other_address": {
-          "nonce": "3",
+          "nonce": "0",
           "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "2",
-                  "balance": "1",
-                  "creator": "address:other_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri2"
-                  ]
-                },
-                {
-                  "nonce": "4",
-                  "balance": "1",
-                  "creator": "address:other_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri4"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
+          "esdt": {}
         },
         "address:last_address": {
           "nonce": "0",
@@ -263,72 +208,12 @@
         "address:my_address": {
           "nonce": "5",
           "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "1",
-                  "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny|u8:0",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
-                {
-                  "nonce": "3",
-                  "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri3"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
+          "esdt": {}
         },
         "address:other_address": {
-          "nonce": "4",
+          "nonce": "1",
           "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "2",
-                  "balance": "1",
-                  "creator": "address:other_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri2"
-                  ]
-                },
-                {
-                  "nonce": "4",
-                  "balance": "1",
-                  "creator": "address:other_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri4"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
+          "esdt": {}
         },
         "address:last_address": {
           "nonce": "0",
@@ -438,72 +323,12 @@
         "address:my_address": {
           "nonce": "5",
           "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "1",
-                  "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny|u8:0",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
-                {
-                  "nonce": "3",
-                  "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri3"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
+          "esdt": {}
         },
         "address:other_address": {
-          "nonce": "5",
+          "nonce": "2",
           "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "2",
-                  "balance": "1",
-                  "creator": "address:other_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri2"
-                  ]
-                },
-                {
-                  "nonce": "4",
-                  "balance": "1",
-                  "creator": "address:other_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri4"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
+          "esdt": {}
         },
         "address:last_address": {
           "nonce": "0",
@@ -617,72 +442,12 @@
         "address:my_address": {
           "nonce": "5",
           "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "1",
-                  "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny|u8:0",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
-                {
-                  "nonce": "3",
-                  "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri3"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
+          "esdt": {}
         },
         "address:other_address": {
-          "nonce": "5",
+          "nonce": "2",
           "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "2",
-                  "balance": "1",
-                  "creator": "address:other_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri2"
-                  ]
-                },
-                {
-                  "nonce": "4",
-                  "balance": "1",
-                  "creator": "address:other_address",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|u8:0",
-                  "uri": [
-                    "str:nft-create-uri4"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
+          "esdt": {}
         },
         "address:last_address": {
           "nonce": "1",

@@ -18,7 +18,7 @@ Then set the address of the voting contract in the creator contract
 
 # Upgrade
 
-`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=20000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS" --arguments START_PERIOD_TIMESTAMP`
+`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS" --arguments START_PERIOD_TIMESTAMP`
 
 Contracts are upgradable by default. START_PERIOD_TIMESTAMP will be ignored for upgrades 
 
@@ -43,6 +43,9 @@ eg: (NftMemes - NFTMEMES)
 Funny category:
 
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="modify_categories" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments 0x66756e6e79`
+
+## Set signer address
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_signer" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_ADDRESS"`
 
 ## Linking auction contract
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_auction_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_OTHER_CONTRACT"`

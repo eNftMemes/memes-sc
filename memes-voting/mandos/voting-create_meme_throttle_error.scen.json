@@ -40,7 +40,9 @@
             "str:auctionSc": "address:auction_contract",
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
-            "str:periodMemes.len": "0"
+            "str:periodMemes.len": "0",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm"
         }
@@ -59,7 +61,8 @@
         "arguments": [
           "str:nft-name",
           "str:nft-create-uri",
-          "str:funny"
+          "str:funny",
+          "0xfee4217e52c66abc2478746e84de569771fad7ab2b016f28ba455ebca058580214dc950123df0ddef32c741ec3e89aeb65ad80095338464e4de11e74f38faf0e"
         ],
         "gasLimit": "20,000,000",
         "gasPrice": "0"
@@ -127,7 +130,9 @@
             "str:auctionSc": "address:auction_contract",
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
-            "str:periodMemes.len": "0"
+            "str:periodMemes.len": "0",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -160,7 +165,8 @@
         "arguments": [
           "str:nft-name",
           "str:nft-create-uri",
-          "str:funny"
+          "str:funny",
+          "0xfee4217e52c66abc2478746e84de569771fad7ab2b016f28ba455ebca058580214dc950123df0ddef32c741ec3e89aeb65ad80095338464e4de11e74f38faf0e"
         ],
         "gasLimit": "20,000,000",
         "gasPrice": "0"
@@ -241,7 +247,9 @@
             "str:periods.item|u32:1": "123,000",
 
             "str:periodMemes|u64:123,000|``.len": "1",
-            "str:periodMemes|u64:123,000|``.item|u32:1": "1"
+            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "esdt": {
             "str:MEMENFT-745e9b": {

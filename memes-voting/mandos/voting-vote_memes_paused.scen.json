@@ -59,7 +59,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "4",
+          "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -165,7 +165,9 @@
             "str:periodMemes|u64:727,800|``.item|u32:1": "3",
             "str:periodMemes|u64:727,800|``.item|u32:2": "4",
 
-            "str:pause_module:paused": "1"
+            "str:pause_module:paused": "1",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
@@ -222,7 +224,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "6",
+          "nonce": "7",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -337,7 +339,9 @@
             "str:addressVotes|address:my_address": "u64:727,800|u8:18",
             "str:periodTopMemes|u64:727,800": "u64:2|u32:1|u64:1|u32:1",
 
-            "str:pause_module:paused": "0"
+            "str:pause_module:paused": "0",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {

@@ -51,7 +51,9 @@
 
             "str:addressVotes|address:my_address": "u64:727,800|u8:17",
             "str:addressVotes|address:other_address": "u64:727,800|u8:19",
-            "str:periodTopMemes|u64:727,800": "u64:1|u32:3|u64:2|u32:1"
+            "str:periodTopMemes|u64:727,800": "u64:1|u32:3|u64:2|u32:1",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
@@ -91,7 +93,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "4",
+          "nonce": "5",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -209,7 +211,9 @@
 
             "str:addressVotes|address:my_address": "u64:727,800|u8:17",
             "str:addressVotes|address:other_address": "u64:727,800|u8:10",
-            "str:periodTopMemes|u64:727,800": "u64:11|u32:7|||u64:1|u32:3|||u64:12|u32:2|||u64:2|u32:1"
+            "str:periodTopMemes|u64:727,800": "u64:11|u32:7|||u64:1|u32:3|||u64:12|u32:2|||u64:2|u32:1",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
@@ -236,7 +240,8 @@
         "arguments": [
           "str:nft-name13",
           "str:nft-create-uri13",
-          "str:random"
+          "str:random",
+          "0x8fa9870b7ee4c98f3016804e8c660483523cd0fe191bee611ca52585fdb8f618513cdd1d9b312a349c49abacf2d2e8eab8218863663942ea413b65671e39710f"
         ],
         "gasLimit": "20,000,000",
         "gasPrice": "0"
@@ -252,7 +257,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "5",
+          "nonce": "6",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -385,7 +390,9 @@
 
             "str:addressVotes|address:my_address": "u64:727,800|u8:17",
             "str:addressVotes|address:other_address": "u64:727,800|u8:10",
-            "str:periodTopMemes|u64:727,800": "u64:11|u32:7|||u64:1|u32:3|||u64:12|u32:2|||u64:2|u32:1"
+            "str:periodTopMemes|u64:727,800": "u64:11|u32:7|||u64:1|u32:3|||u64:12|u32:2|||u64:2|u32:1",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
@@ -425,7 +432,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "5",
+          "nonce": "6",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -562,7 +569,9 @@
             "str:addressVotes|address:my_address": "u64:727,800|u8:17",
             "str:addressVotes|address:other_address": "u64:1,332,600|u8:9",
             "str:periodTopMemes|u64:727,800": "u64:11|u32:7|||u64:1|u32:3|||u64:12|u32:2|||u64:2|u32:1",
-            "str:periodTopMemes|u64:1,332,600": "u64:11|u32:8|||u64:12|u32:3"
+            "str:periodTopMemes|u64:1,332,600": "u64:11|u32:8|||u64:12|u32:3",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {

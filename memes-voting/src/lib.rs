@@ -41,8 +41,12 @@ pub trait MemesVoting: owner::OwnerModule
 	}
 
 	#[endpoint]
-	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer) {
+	fn create_meme(&self, name: ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer, signature: Signature<Self::Api>) {
 		require!(self.not_paused(), "Contract paused, can't create new memes");
+
+		let caller: ManagedAddress = self.blockchain().get_caller();
+
+		self.verify_signature(&caller, &url, &signature);
 
 		let address: ManagedAddress = self.blockchain().get_caller();
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
@@ -88,15 +92,6 @@ pub trait MemesVoting: owner::OwnerModule
 		if let OptionalValue::Some(ac) = async_call {
 			ac.call_and_exit()
 		}
-	}
-
-	#[endpoint]
-	fn create_meme_signed(&self, name: ManagedBuffer, url: ManagedBuffer, category: ManagedBuffer, signature: Signature<Self::Api>) {
-		let caller: ManagedAddress = self.blockchain().get_caller();
-
-		self.verify_signature(&caller, &url, &signature);
-
-		self.create_meme(name, url, category);
 	}
 
 	#[endpoint]

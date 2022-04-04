@@ -21,7 +21,8 @@
         "arguments": [
           "str:nft-name3",
           "str:nft-create-uri3",
-          "str:random"
+          "str:random",
+          "0xc5ba376ac8370e59fd5849332cd88c9235cada93a91e82d4c3643d28fffbdaeff00b023be524c119ce1b27514853d0670b07432653805319cdaeb6b3cc02e70f"
         ],
         "gasLimit": "20,000,000",
         "gasPrice": "0"
@@ -37,7 +38,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "2",
+          "nonce": "3",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -129,7 +130,9 @@
             "str:periodMemes|u64:123,000|``.item|u32:2": "2",
 
             "str:periodMemes|u64:727,800|``.len": "1",
-            "str:periodMemes|u64:727,800|``.item|u32:1": "3"
+            "str:periodMemes|u64:727,800|``.item|u32:1": "3",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
@@ -156,7 +159,8 @@
         "arguments": [
           "str:nft-name4",
           "str:nft-create-uri4",
-          "str:random"
+          "str:random",
+          "0x367d638d93bb819fc3e3a42849e0458737bfc0bb32b512e65634898a62d070fa6d68dde41ce45c896b2ffdd2b7e588c76e58986bada7178c82a88635b32ab101"
         ],
         "gasLimit": "20,000,000",
         "gasPrice": "0"
@@ -172,7 +176,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "2",
+          "nonce": "3",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -276,7 +280,9 @@
 
             "str:periodMemes|u64:727,800|``.len": "2",
             "str:periodMemes|u64:727,800|``.item|u32:1": "3",
-            "str:periodMemes|u64:727,800|``.item|u32:2": "4"
+            "str:periodMemes|u64:727,800|``.item|u32:2": "4",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {

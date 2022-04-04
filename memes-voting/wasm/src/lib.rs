@@ -13,7 +13,6 @@ elrond_wasm_node::wasm_endpoints! {
         auction_sc
         categories
         create_meme
-        create_meme_signed
         current_period
         current_period_len
         current_period_meme
