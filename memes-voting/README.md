@@ -1,7 +1,7 @@
 ### DEVNET
-**Contract Address: erd1qqqqqqqqqqqqqpgqcgd80txchyd7trxyf0gn9w4ztdwnmhcklqpsst8cx6**
+**Contract Address: erd1qqqqqqqqqqqqqpgq2ss8pftydnrv04kylm8e9yx8fzfkfjk4lqpsrvs2yn**
 
-**Token Id: NFTMEMES-1119a5**
+**Token Id: NFTMEMES-6f4547**
 
 
 ### MAINNET
@@ -12,22 +12,22 @@
 
 # Deploy
 
-`erdpy --verbose contract deploy --project=memes-voting --pem="devnet.pem" --gas-limit=200000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" --arguments START_PERIOD_TIMESTAMP`
+`erdpy --verbose contract deploy --project=memes-voting --pem="devnet.pem" --gas-limit=20000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" --arguments START_PERIOD_TIMESTAMP`
 
 Then set the address of the voting contract in the creator contract
 
 # Upgrade
 
-`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS" --arguments START_PERIOD_TIMESTAMP`
+`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=20000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS" --arguments START_PERIOD_TIMESTAMP`
 
 Contracts are upgradable by default. START_PERIOD_TIMESTAMP will be ignored for upgrades 
 
 ## Issue token
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=10000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
 
 eg: (NftMemes - NFTMEMES)
 
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0x4e66744d656d6573" "0x4e46544d454d4553"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=10000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0x4e66744d656d6573" "0x4e46544d454d4553"`
 
 ## Set local roles
 
@@ -57,5 +57,3 @@ s://devnet-gateway.elrond.com"`
 Create Meme:
 
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="create_meme" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments 0x746573742033 0x68747470733a2f2f697066732e6d6f72616c69732e696f3a323035332f697066732f516d645a634b7836374d4571677a64376631774e345755484253454661446f6978777046544b347175567175514d`
-
-# TODO: Update contract on devnet after `esdt_nft_create_as_caller` function works properly.
