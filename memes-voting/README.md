@@ -49,11 +49,15 @@ Funny category:
 
 # Example calls
 
-Query categories:
-
+### Query categories
 `erdpy contract query $CONTRACT_ADDRESS --function="categories" --proxy="http
 s://devnet-gateway.elrond.com"`
 
-Create Meme:
-
+### Create Meme
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="create_meme" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments 0x746573742033 0x68747470733a2f2f697066732e6d6f72616c69732e696f3a323035332f697066732f516d645a634b7836374d4571677a64376631774e345755484253454661446f6978777046544b347175567175514d`
+
+### Pause contract
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=5000000 --function="pause" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D"`
+
+### Unpause contract
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=5000000 --function="unpause" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D"`
