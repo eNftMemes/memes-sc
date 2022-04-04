@@ -1,5 +1,5 @@
 ### DEVNET
-**Contract Address: erd1qqqqqqqqqqqqqpgquxehgfrpkrm9cy0s3wf5q2w45ylhfs6nlqpsk7rrdm**
+**Contract Address: erd1qqqqqqqqqqqqqpgq9f60ttjzedw78g9k975ual4z73cufd80lqpsev9nrm**
 
 
 ### MAINNET
@@ -14,7 +14,7 @@ First decode voting contract address to hex using erdpy:
 
 Then deploy:
 
-`erdpy --verbose contract deploy --project=memes-auction --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-auction.json" --recall-nonce --send --chain="D" --arguments "0xHEX_ADDRESS_OF_VOTING_CONTRACT" "0xHEX_ENCODING_OF_TOKEN_IDENTIFIER" "25000000000000000"`
+`erdpy --verbose contract deploy --project=memes-auction --pem="devnet.pem" --gas-limit=50000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-auction.json" --recall-nonce --send --chain="D" --arguments "0xHEX_ADDRESS_OF_VOTING_CONTRACT" "0xHEX_ENCODING_OF_TOKEN_IDENTIFIER" "25000000000000000"`
 
 25000000000000000 - 0.025 EGLD
 
