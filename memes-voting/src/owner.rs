@@ -133,7 +133,7 @@ pub trait OwnerModule {
         self.signer().set(&new_signer);
     }
 
-    fn verify_signature(
+    fn verify_signature_create(
         &self,
         caller: &ManagedAddress,
         url: &ManagedBuffer,
@@ -150,6 +150,45 @@ pub trait OwnerModule {
             signature,
         );
         require!(valid_signature, "Invalid signature");
+    }
+
+    fn verify_signature_vote(
+        &self,
+        caller: &ManagedAddress,
+        first_vote: &u64,
+        nb_votes: &u64,
+        signature: &Signature<Self::Api>,
+    ) {
+        let mut data = ManagedBuffer::new();
+        data.append(caller.as_managed_buffer());
+        data.append(&self.decimal_to_ascii(*first_vote));
+        data.append(&self.decimal_to_ascii(*nb_votes));
+
+        let signer: ManagedAddress = self.signer().get();
+        let valid_signature = self.crypto().verify_ed25519_managed::<MAX_SIGNATURE_DATA_LEN>(
+            signer.as_managed_byte_array(),
+            &data,
+            signature,
+        );
+        require!(valid_signature, "Invalid signature");
+    }
+
+    fn decimal_to_ascii(&self, mut number: u64) -> ManagedBuffer {
+        const MAX_NUMBER_CHARACTERS: usize = 20;
+        const ZERO_ASCII: u8 = b'0';
+
+        let mut vec = ArrayVec::<u8, MAX_NUMBER_CHARACTERS>::new();
+        loop {
+            vec.push(ZERO_ASCII + (number % 10) as u8);
+            number /= 10;
+
+            if number == 0 {
+                break;
+            }
+        }
+
+        vec.reverse();
+        vec.as_slice().into()
     }
 
     #[view]

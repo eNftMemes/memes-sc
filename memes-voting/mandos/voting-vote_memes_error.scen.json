@@ -12,7 +12,7 @@
         "from": "address:my_address",
         "to": "sc:voting_contract",
         "function": "vote_memes",
-        "arguments": [],
+        "arguments": ["0x6f20fb5be4cd702303e2f853a7a057d8eb44a116bf10296421bd2f34edce2c9f7609c7da6f4d62f5723588d5d32fffa9161b2f57ed1236b47167dfcf40f4520a"],
         "gasLimit": "10,000,000",
         "gasPrice": "0"
       },
@@ -31,7 +31,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:0"
+          "0x6f20fb5be4cd702303e2f853a7a057d8eb44a116bf10296421bd2f34edce2c9f7609c7da6f4d62f5723588d5d32fffa9161b2f57ed1236b47167dfcf40f4520a", "u64:0"
         ],
         "gasLimit": "10,000,000",
         "gasPrice": "0"
@@ -51,7 +51,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:10"
+          "0x047a183fde0128304f42f055f662342b2adbd35ff12d1aa305f650a3449c6a586399c9e083c55ea89ae1dd6a5e776c8bfcb9adf2cdedfbd6f32d534a6cedb001", "u64:10"
         ],
         "gasLimit": "10,000,000",
         "gasPrice": "0"
@@ -71,7 +71,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:2", "u64:1"
+          "0x9762234c4408e600e30321bb3263f0970bb0a2c4a88f77702f665d5e3ba7e193e93514fce94926c1d374d8f1740c6d5bda73b4c152f694cf3ca4bf41d879c00b", "u64:1", "u64:2", "u64:1"
         ],
         "gasLimit": "10,000,000",
         "gasPrice": "0"
@@ -91,7 +91,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:1", "u64:1", "u64:1", "u64:1", "u64:1", "u64:1", "u64:1", "u64:2", "u64:2", "u64:2", "u64:2", "u64:2", "u64:2", "u64:2", "u64:2"
+          "0xa656b9e86e0cac88e4b8f4a9d63e06297ac1582c3d5bbb0c70902d05064e6015798f6c8e1f35d4f55779af9f0edfd2035799db142d0b94b0707d9bdfd1f9c707", "u64:1", "u64:1", "u64:1", "u64:1", "u64:1", "u64:1", "u64:1", "u64:1", "u64:2", "u64:2", "u64:2", "u64:2", "u64:2", "u64:2", "u64:2", "u64:2"
         ],
         "gasLimit": "10,000,000",
         "gasPrice": "0"
@@ -247,7 +247,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:2"
+          "0x9762234c4408e600e30321bb3263f0970bb0a2c4a88f77702f665d5e3ba7e193e93514fce94926c1d374d8f1740c6d5bda73b4c152f694cf3ca4bf41d879c00b", "u64:1", "u64:2"
         ],
         "gasLimit": "10,000,000",
         "gasPrice": "0"
@@ -290,13 +290,34 @@
     },
     {
       "step": "scCall",
+      "txId": "vote-memes-signature-error",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "vote_memes",
+        "arguments": [
+          "0x3957ac6709804ae0a0bae99ec1ac05cc62d23f4fb3637b12a46e63c1423e9d2bb29cbecaf181a74363cf49a2919fd97ce9c69033e11611891bb0779d6b63d20f", "u64:1", "u64:2"
+        ],
+        "gasLimit": "10,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:invalid signature",
+        "out": [],
+        "status": "10",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
       "txId": "vote-memes-5",
       "tx": {
         "from": "address:my_address",
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:2"
+          "0x3957ac6709804ae0a0bae99ec1ac05cc62d23f4fb3637b12a46e63c1423e9d2bb29cbecaf181a74363cf49a2919fd97ce9c69033e11611891bb0779d6b63d200", "u64:1", "u64:2"
         ],
         "gasLimit": "10,000,000",
         "gasPrice": "0"
@@ -311,7 +332,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "13",
+          "nonce": "14",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -471,7 +492,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:1", "u64:2"
+          "0x3d6c6896184c6c6e0805fd83361b56871a6a8489a254fe4272d22b0567b53dbf40626f367e2be52ce43bfc774e47968d9bf5afabd51c80f3a884a6106c108502", "u64:1", "u64:1", "u64:2"
         ],
         "gasLimit": "10,000,000",
         "gasPrice": "0"
@@ -486,7 +507,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "13",
+          "nonce": "14",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -716,9 +737,9 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:2", "u64:3", "u64:4", "u64:5", "u64:6", "u64:7", "u64:8", "u64:9", "u64:10", "u64:11", "u64:12", "u64:13", "u64:14", "u64:15", "u64:16", "u64:17", "u64:18", "u64:19", "u64:20", "u64:21"
+          "0x6f20fb5be4cd702303e2f853a7a057d8eb44a116bf10296421bd2f34edce2c9f7609c7da6f4d62f5723588d5d32fffa9161b2f57ed1236b47167dfcf40f4520a", "u64:1", "u64:2", "u64:3", "u64:4", "u64:5", "u64:6", "u64:7", "u64:8", "u64:9", "u64:10", "u64:11", "u64:12", "u64:13", "u64:14", "u64:15", "u64:16", "u64:17", "u64:18", "u64:19", "u64:20", "u64:21"
         ],
-        "gasLimit": "12,000,000",
+        "gasLimit": "15,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -732,7 +753,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "14",
+          "nonce": "15",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {

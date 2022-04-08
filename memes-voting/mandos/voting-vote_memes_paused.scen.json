@@ -30,7 +30,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:2"
+          "0x3957ac6709804ae0a0bae99ec1ac05cc62d23f4fb3637b12a46e63c1423e9d2bb29cbecaf181a74363cf49a2919fd97ce9c69033e11611891bb0779d6b63d200", "u64:1", "u64:2"
         ],
         "gasLimit": "12,000,000",
         "gasPrice": "0"
@@ -209,7 +209,7 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:2"
+          "0x3957ac6709804ae0a0bae99ec1ac05cc62d23f4fb3637b12a46e63c1423e9d2bb29cbecaf181a74363cf49a2919fd97ce9c69033e11611891bb0779d6b63d200", "u64:1", "u64:2"
         ],
         "gasLimit": "12,000,000",
         "gasPrice": "0"

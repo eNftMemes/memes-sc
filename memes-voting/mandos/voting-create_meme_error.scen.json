@@ -53,7 +53,31 @@
     },
     {
       "step": "scCall",
-      "txId": "create-meme-error",
+      "txId": "create-meme-signature-error",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "create_meme",
+        "arguments": [
+          "str:nft-name",
+          "str:nft-create-uri",
+          "str:funny",
+          "0xfee4217e52c66abc2478746e84de569771fad7ab2b016f28ba455ebca058580214dc950123df0ddef32c741ec3e89aeb65ad80095338464e4de11e74f38faf0f"
+        ],
+        "gasLimit": "20,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:invalid signature",
+        "out": [],
+        "status": "10",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "create-meme-throttle-error",
       "tx": {
         "from": "address:my_address",
         "to": "sc:voting_contract",
@@ -79,7 +103,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "1",
+          "nonce": "2",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -182,7 +206,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "2",
+          "nonce": "3",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {

@@ -46,7 +46,7 @@ pub trait MemesVoting: owner::OwnerModule
 
 		let caller: ManagedAddress = self.blockchain().get_caller();
 
-		self.verify_signature(&caller, &url, &signature);
+		self.verify_signature_create(&caller, &url, &signature);
 
 		let address: ManagedAddress = self.blockchain().get_caller();
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
@@ -95,12 +95,12 @@ pub trait MemesVoting: owner::OwnerModule
 	}
 
 	#[endpoint]
-	fn vote_memes(&self, #[var_args] nft_nonces: MultiValueEncoded<u64>) {
+	fn vote_memes(&self, signature: Signature<Self::Api>, #[var_args] nft_nonces: MultiValueEncoded<u64>) {
 		require!(self.not_paused(), "Contract paused, can't vote memes");
 
 		let caller: ManagedAddress = self.blockchain().get_caller();
 
-		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(caller);
+		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(&caller);
 		let current_period: u64 = self.current_period();
 		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
 		let nb_nfts: usize = nft_nonces.len();
@@ -123,8 +123,10 @@ pub trait MemesVoting: owner::OwnerModule
 		for nonce in nft_nonces.into_iter() {
 			require!(nonce > 0 && nonce >= temp_nonce, "Nonces need to be in ascending order");
 
-			// If first element, save it to temp vars
+			// If first element, save it to temp vars and verify signature
 			if temp_nonce == 0 {
+				self.verify_signature_vote(&caller, &nonce, &(nb_nfts as u64), &signature);
+
 				temp_nonce = nonce;
 				temp_votes = 1;
 
@@ -384,7 +386,7 @@ pub trait MemesVoting: owner::OwnerModule
 
 	#[view]
 	#[storage_mapper("addressVotes")]
-	fn address_votes(&self, address: ManagedAddress) -> SingleValueMapper<AddressVotes>;
+	fn address_votes(&self, address: &ManagedAddress) -> SingleValueMapper<AddressVotes>;
 
 	// TODO: Remove this if data is indexed on microservice side?
 	#[storage_mapper("periodMemes")]

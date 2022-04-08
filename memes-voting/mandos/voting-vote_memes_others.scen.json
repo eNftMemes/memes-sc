@@ -28,7 +28,9 @@
             "str:memeVotes|u64:7|u64:1,332,600": "1",
 
             "str:addressVotes|address:my_address": "u64:1,332,600|u8:20",
-            "str:periodTopMemes|u64:1,332,600": "u64:5|u32:11|||u64:6|u32:8|||u64:7|u32:1"
+            "str:periodTopMemes|u64:1,332,600": "u64:5|u32:11|||u64:6|u32:8|||u64:7|u32:1",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
@@ -53,9 +55,9 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:7", "u64:8", "u64:8", "u64:8", "u64:8"
+          "0x4315fc7109e9a066764aa2a44d6c9af4f436895c9e12d27a5c786896265a242c1cc07be1d5a4de0396e6dd5b78333e39a7d288b1b73bd5e841d29ab89d011f0a", "u64:7", "u64:8", "u64:8", "u64:8", "u64:8"
         ],
-        "gasLimit": "6,000,000",
+        "gasLimit": "8,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -118,7 +120,9 @@
             "str:memeVotes|u64:8|u64:1,332,600": "4",
 
             "str:addressVotes|address:my_address": "u64:1,332,600|u8:15",
-            "str:periodTopMemes|u64:1,332,600": "u64:5|u32:11|||u64:6|u32:8|||u64:8|u32:4|||u64:7|u32:2"
+            "str:periodTopMemes|u64:1,332,600": "u64:5|u32:11|||u64:6|u32:8|||u64:8|u32:4|||u64:7|u32:2",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
@@ -191,7 +195,9 @@
             "str:memeVotes|u64:20|u64:1,332,600": "1",
 
             "str:addressVotes|address:my_address": "u64:1,332,600|u8:20",
-            "str:periodTopMemes|u64:1,332,600": "u64:1|u32:3|||u64:2|u32:2|||u64:3|u32:1|||u64:4|u32:1|||u64:5|u32:1|||u64:6|u32:1|||u64:7|u32:1|||u64:8|u32:1|||u64:9|u32:1|||u64:10|u32:1"
+            "str:periodTopMemes|u64:1,332,600": "u64:1|u32:3|||u64:2|u32:2|||u64:3|u32:1|||u64:4|u32:1|||u64:5|u32:1|||u64:6|u32:1|||u64:7|u32:1|||u64:8|u32:1|||u64:9|u32:1|||u64:10|u32:1",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
@@ -216,9 +222,9 @@
         "to": "sc:voting_contract",
         "function": "vote_memes",
         "arguments": [
-          "u64:1", "u64:2", "u64:3", "u64:4", "u64:5", "u64:6", "u64:7", "u64:8", "u64:9", "u64:10", "u64:11", "u64:12", "u64:13", "u64:14", "u64:15", "u64:16", "u64:17", "u64:18", "u64:19", "u64:20"
+          "0xf768c44c923915410d2ece667b2dd147f687f7dc801c2cfa7f0d947cd37e3c8c3b261baa47bb431fb31737f960c26708fcbd834c19002a1d40a02d9c81500d0e", "u64:1", "u64:2", "u64:3", "u64:4", "u64:5", "u64:6", "u64:7", "u64:8", "u64:9", "u64:10", "u64:11", "u64:12", "u64:13", "u64:14", "u64:15", "u64:16", "u64:17", "u64:18", "u64:19", "u64:20"
         ],
-        "gasLimit": "12,000,000",
+        "gasLimit": "15,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -312,7 +318,9 @@
             "str:memeVotes|u64:20|u64:1,332,600": "2",
 
             "str:addressVotes|address:my_address": "u64:1,332,600|u8:0",
-            "str:periodTopMemes|u64:1,332,600": "u64:1|u32:4|||u64:2|u32:3|||u64:20|u32:2|||u64:19|u32:2|||u64:18|u32:2|||u64:17|u32:2|||u64:16|u32:2|||u64:15|u32:2|||u64:14|u32:2|||u64:13|u32:2"
+            "str:periodTopMemes|u64:1,332,600": "u64:1|u32:4|||u64:2|u32:3|||u64:20|u32:2|||u64:19|u32:2|||u64:18|u32:2|||u64:17|u32:2|||u64:16|u32:2|||u64:15|u32:2|||u64:14|u32:2|||u64:13|u32:2",
+
+            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
           },
           "code": "file:../output/memes-voting.wasm",
           "esdt": {
