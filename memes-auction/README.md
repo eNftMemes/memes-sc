@@ -1,6 +1,8 @@
 ### DEVNET
 **Contract Address: erd1qqqqqqqqqqqqqpgq9f60ttjzedw78g9k975ual4z73cufd80lqpsev9nrm**
 
+### TESTNET
+**Contract Address: erd1qqqqqqqqqqqqqpgqxs0hnym50kule2jlthmzcvdmdfgyzyrya2pqdk5cx4**
 
 ### MAINNET
 **Contract Address: TBD**
