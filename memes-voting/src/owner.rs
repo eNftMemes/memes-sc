@@ -76,7 +76,7 @@ pub trait OwnerModule {
         match result {
             ManagedAsyncCallResult::Ok(token_id) => {
                 self.token_identifier().set(&token_id);
-            },
+            }
             ManagedAsyncCallResult::Err(_) => {
                 let caller = self.blockchain().get_owner_address();
                 let (returned_tokens, token_id) = self.call_value().payment_token_pair();
@@ -84,7 +84,7 @@ pub trait OwnerModule {
                     self.send()
                         .direct(&caller, &token_id, 0, &returned_tokens, &[]);
                 }
-            },
+            }
         }
     }
 
@@ -109,6 +109,18 @@ pub trait OwnerModule {
     #[endpoint]
     fn set_signer(&self, new_signer: ManagedAddress) {
         self.signer().set(&new_signer);
+    }
+
+    #[endpoint]
+    #[only_owner]
+    fn claim_royalties(&self) {
+        let caller = self.blockchain().get_caller();
+
+        self.send().direct_egld(
+            &caller,
+            &self.blockchain().get_sc_balance(&TokenIdentifier::egld(), 0),
+            b"claiming success"
+        );
     }
 
     fn verify_signature_create(
