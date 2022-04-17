@@ -7,10 +7,12 @@
 elrond_wasm_node::wasm_endpoints! {
     memes_auction
     (
+        callBack
         add_custom_auction
         bid
         bid_cut_percentage
         end_auction
+        issue_token
         lock_token
         meme_rarity
         min_bid_start
@@ -18,12 +20,12 @@ elrond_wasm_node::wasm_endpoints! {
         period_auctions_memes_all
         period_meme_auction
         set_bid_cut_percentage
+        set_local_roles
         set_min_bid_start
         start_auction
         token_identifier
+        token_identifier_top
         upgrade_token
         voting_contract
     )
 }
-
-elrond_wasm_node::wasm_empty_callback! {}

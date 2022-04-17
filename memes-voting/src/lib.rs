@@ -16,7 +16,7 @@ const PER_PAGE: usize = 10;
 const PERIOD_TIME: u64 = 604800; // 1 week in seconds
 const VOTES_PER_ADDRESS_PER_PERIOD: u8 = 20;
 
-const ROYALTIES: u16 = 1000; // 10%;
+const ROYALTIES: u16 = 1000; // 10%
 
 mod auction_proxy {
 	elrond_wasm::imports!();

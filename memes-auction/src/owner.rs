@@ -14,6 +14,73 @@ pub const AUCTION_TIME: u64 = 432000; // 5 days in seconds (time the owner of th
 
 #[elrond_wasm::module]
 pub trait OwnerModule {
+    // TODO: Test this function with Mandos after it is supported to issue tokens
+    #[endpoint]
+    #[only_owner]
+    #[payable("EGLD")]
+    fn issue_token(
+        &self,
+        #[payment] issue_cost: BigUint,
+        token_name: &ManagedBuffer,
+        token_ticker: &ManagedBuffer,
+    ) {
+        require!(self.token_identifier_top().is_empty(), "Token already issued");
+
+        self.send()
+            .esdt_system_sc_proxy()
+            .issue_non_fungible(
+                issue_cost,
+                token_name,
+                token_ticker,
+                NonFungibleTokenProperties {
+                    can_freeze: true,
+                    can_wipe: true,
+                    can_pause: true,
+                    can_change_owner: false,
+                    can_upgrade: false,
+                    can_add_special_roles: true,
+                },
+            )
+            .async_call()
+            .with_callback(self.callbacks().init_callback())
+            .call_and_exit()
+    }
+
+    // TODO: Test this function with Mandos after it is supported to issue tokens
+    #[endpoint]
+    #[only_owner]
+    fn set_local_roles(&self) {
+        require!(!self.token_identifier_top().is_empty(), "Token not issued");
+
+        self
+            .send()
+            .esdt_system_sc_proxy()
+            .set_special_roles(
+                &self.blockchain().get_sc_address(),
+                &self.token_identifier_top().get(),
+                (&[EsdtLocalRole::NftCreate, EsdtLocalRole::NftUpdateAttributes][..]).iter().cloned(),
+            )
+            .async_call()
+            .call_and_exit()
+    }
+
+    #[callback]
+    fn init_callback(&self, #[call_result] result: ManagedAsyncCallResult<TokenIdentifier>) {
+        match result {
+            ManagedAsyncCallResult::Ok(token_id) => {
+                self.token_identifier_top().set(&token_id);
+            }
+            ManagedAsyncCallResult::Err(_) => {
+                let caller = self.blockchain().get_owner_address();
+                let (returned_tokens, token_id) = self.call_value().payment_token_pair();
+                if token_id.is_egld() && returned_tokens > 0 {
+                    self.send()
+                        .direct(&caller, &token_id, 0, &returned_tokens, &[]);
+                }
+            }
+        }
+    }
+
     #[only_owner]
     #[endpoint]
     fn set_bid_cut_percentage(&self, bid_cut: u16) {
@@ -28,6 +95,7 @@ pub trait OwnerModule {
         self.min_bid_start().set(min_bid_start);
     }
 
+    // TODO: Improve this
     #[only_owner]
     #[endpoint]
     fn add_custom_auction(&self, period: u64, nonce: u64) {
@@ -93,6 +161,10 @@ pub trait OwnerModule {
     #[storage_mapper("periodAuctionedMemes")]
     // TODO: Remove this if data is indexed on microservice side?
     fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
+
+    #[view]
+    #[storage_mapper("tokenIdentifierTop")]
+    fn token_identifier_top(&self) -> SingleValueMapper<TokenIdentifier>;
 
     // TODO
     // #[view]
