@@ -49,7 +49,7 @@
                   "creator": "sc:voting_contract",
                   "royalties": "1000",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny",
+                  "attributes": "u64:123,000|nested:str:funny|address:my_address",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -60,7 +60,7 @@
                   "creator": "sc:voting_contract",
                   "royalties": "1000",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|address:my_address",
                   "uri": [
                     "str:nft-create-uri3"
                   ]
@@ -84,7 +84,7 @@
                   "creator": "sc:voting_contract",
                   "royalties": "1000",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:random",
+                  "attributes": "u64:123,000|nested:str:random|address:other_address",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
@@ -186,7 +186,7 @@
                   "creator": "sc:voting_contract",
                   "royalties": "1000",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny",
+                  "attributes": "u64:123,000|nested:str:funny|address:my_address",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -197,7 +197,7 @@
                   "creator": "sc:voting_contract",
                   "royalties": "1000",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|address:my_address",
                   "uri": [
                     "str:nft-create-uri3"
                   ]
@@ -221,7 +221,7 @@
                   "creator": "sc:voting_contract",
                   "royalties": "1000",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:random",
+                  "attributes": "u64:123,000|nested:str:random|address:other_address",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
@@ -232,7 +232,7 @@
                   "creator": "sc:voting_contract",
                   "royalties": "1000",
                   "hash": "",
-                  "attributes": "u64:727,800|nested:str:random",
+                  "attributes": "u64:727,800|nested:str:random|address:other_address",
                   "uri": [
                     "str:nft-create-uri4"
                   ]

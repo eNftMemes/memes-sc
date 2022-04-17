@@ -96,30 +96,36 @@ pub trait OwnerModule {
     }
 
     // TODO: Improve this
-    #[only_owner]
-    #[endpoint]
-    fn add_custom_auction(&self, period: u64, nonce: u64) {
-        let block_timestamp = self.blockchain().get_block_timestamp();
-
-        require!(
-            block_timestamp > period && block_timestamp - period < AUCTION_TIME,
-            "Auction deadline has passed"
-        );
-        require!(!self.period_auctioned_memes(period).is_empty(), "Period auction does not exist");
-        require!(self.period_meme_auction(period, nonce).is_empty(), "Auction for this period and nonce already exists");
-
-        let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
-        let min_bid_start: BigUint = self.min_bid_start().get();
-        let multiplier: u8 = 10;
-
-        self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
-    }
+    // #[only_owner]
+    // #[endpoint]
+    // fn add_custom_auction(&self, period: u64, nonce: u64) {
+    //     let block_timestamp = self.blockchain().get_block_timestamp();
+    //
+    //     require!(
+    //         block_timestamp > period && block_timestamp - period < AUCTION_TIME,
+    //         "Auction deadline has passed"
+    //     );
+    //     require!(!self.period_auctioned_memes(period).is_empty(), "Period auction does not exist");
+    //     require!(self.period_meme_auction(period, nonce).is_empty(), "Auction for this period and nonce already exists");
+    //
+    //     let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
+    //     let min_bid_start: BigUint = self.min_bid_start().get();
+    //     let multiplier: u8 = 10;
+    //
+    //     self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
+    // }
 
     // private
 
     fn add_auction(&self, period: &u64, bid_cut_percentage: &u16, min_bid_start: &BigUint, multiplier: &u8, nonce: &u64) {
         let mut min_bid: BigUint = BigUint::from(*multiplier);
         min_bid *= min_bid_start;
+
+        let mut top_nonce: u64 = 0;
+
+        if !self.meme_to_top_meme(*nonce).is_empty() {
+            top_nonce = self.meme_to_top_meme(*nonce).get();
+        }
 
         let auction = Auction {
             min_bid,
@@ -128,6 +134,7 @@ pub trait OwnerModule {
             bid_cut_percentage: *bid_cut_percentage,
             original_owner: ManagedAddress::zero(),
             ended: false,
+            top_nonce,
         };
 
         self.period_meme_auction(*period, *nonce).set(&auction);
@@ -165,6 +172,10 @@ pub trait OwnerModule {
     #[view]
     #[storage_mapper("tokenIdentifierTop")]
     fn token_identifier_top(&self) -> SingleValueMapper<TokenIdentifier>;
+
+    #[view]
+    #[storage_mapper("memeToTopMeme")]
+    fn meme_to_top_meme(&self, nonce: u64) -> SingleValueMapper<u64>;
 
     // TODO
     // #[view]

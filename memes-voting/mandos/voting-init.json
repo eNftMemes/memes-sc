@@ -1,5 +1,5 @@
 {
-  "name": "creator init",
+  "name": "voting init",
   "steps": [
     {
       "step": "setState",

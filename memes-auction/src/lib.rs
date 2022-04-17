@@ -4,12 +4,15 @@
 elrond_wasm::imports!();
 
 mod owner;
+
 use owner::AUCTION_TIME;
 
 mod auction;
+
 use auction::*;
 
-const PERCENTAGE_TOTAL: u64 = 10_000; // 100%
+const PERCENTAGE_TOTAL: u64 = 10_000;
+// 100%
 const NFT_AMOUNT: u32 = 1;
 const MAX_TOP_MEMES: usize = 10;
 
@@ -19,411 +22,460 @@ const ROYALTIES: u16 = 1000; // 10%
 
 #[elrond_wasm::contract]
 pub trait MemesAuction: owner::OwnerModule {
-	#[init]
-	fn init(&self, voting_contract: &ManagedAddress, token_identifier: &TokenIdentifier, min_bid_start: &BigUint) {
-		self.voting_contract().set(voting_contract);
-		self.token_identifier().set(token_identifier);
-		self.min_bid_start().set(min_bid_start);
+    #[init]
+    fn init(&self, voting_contract: &ManagedAddress, token_identifier: &TokenIdentifier, min_bid_start: &BigUint) {
+        self.voting_contract().set(voting_contract);
+        self.token_identifier().set(token_identifier);
+        self.min_bid_start().set(min_bid_start);
 
-		if self.bid_cut_percentage().is_empty() {
-			let bid_cut: u16 = 1000;
-			self.bid_cut_percentage().set(&bid_cut);
-		}
-	}
+        if self.bid_cut_percentage().is_empty() {
+            let bid_cut: u16 = 1000;
+            self.bid_cut_percentage().set(&bid_cut);
+        }
+    }
 
-	// TODO: Add logic in case nft is already upgraded
-	#[endpoint]
-	fn start_auction(&self, period: u64, #[var_args] nfts: MultiValueEncoded<u64>) {
-		let caller: ManagedAddress = self.blockchain().get_caller();
-		require!(
+    #[endpoint]
+    fn start_auction(&self, period: u64, #[var_args] nfts: MultiValueEncoded<u64>) {
+        let caller: ManagedAddress = self.blockchain().get_caller();
+        require!(
 			caller == self.voting_contract().get(),
 			"Only voting contract can call this"
 		);
-		require!(
+        require!(
 			nfts.len() <= MAX_TOP_MEMES,
 			"There can't be more than 10 nfts"
 		);
-		require!(
+        require!(
 			self.period_auctioned_memes(period).is_empty(),
 			"There are already auctioned nfts for this period"
 		);
 
-		let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
-		let min_bid_start: BigUint = self.min_bid_start().get();
-		let mut multiplier: u8 = nfts.len() as u8;
+        let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
+        let min_bid_start: BigUint = self.min_bid_start().get();
+        let mut multiplier: u8 = nfts.len() as u8;
 
-		// 1st meme is the one on 1st place etc
-		for nonce in nfts.into_iter() {
-			self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
+        // 1st meme is the one on 1st place etc
+        for nonce in nfts.into_iter() {
+            self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
 
-			let meme_rarity = self.meme_rarity(nonce);
-			if meme_rarity.is_empty() || multiplier > meme_rarity.get() {
-				let rarity: u8 = multiplier;
-				meme_rarity.set(&rarity);
-			}
+            let meme_rarity = self.meme_rarity(nonce);
+            if meme_rarity.is_empty() || multiplier > meme_rarity.get() {
+                let rarity: u8 = multiplier;
+                meme_rarity.set(&rarity);
+            }
 
-			multiplier -= 1;
-		}
-	}
+            multiplier -= 1;
+        }
+    }
 
-	// TODO: Also accept already upgraded NFTs
-	#[payable("*")]
-	#[endpoint]
-	fn lock_token(
-		&self,
-		period: u64,
-		#[payment_token] nft_type: TokenIdentifier,
-		#[payment_nonce] nonce: u64,
-		#[payment_amount] nft_amount: BigUint,
-	) {
-		require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
-		require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
+    #[payable("*")]
+    #[endpoint]
+    fn lock_token(
+        &self,
+        period: u64,
+        #[payment_token] nft_type: TokenIdentifier,
+        #[payment_nonce] nonce: u64,
+        #[payment_amount] nft_amount: BigUint,
+    ) {
+        require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
 
-		let block_timestamp = self.blockchain().get_block_timestamp();
+        let block_timestamp = self.blockchain().get_block_timestamp();
 
-		require!(
+        require!(
             block_timestamp > period && block_timestamp - period < AUCTION_TIME,
             "Auction deadline has passed"
         );
 
-		let mut auction = self.try_get_auction(period, nonce);
-		let caller = self.blockchain().get_caller();
+        let token_identifier_top = self.token_identifier_top().get();
 
-		auction.original_owner = caller;
+        require!(nft_type == self.token_identifier().get() || nft_type == token_identifier_top, "Nft is not of the correct type");
 
-		self.period_meme_auction(period, nonce).set(&auction);
-	}
+        let mut original_nonce: u64 = nonce;
+        let mut auction: Auction<Self::Api>;
 
-	#[payable("EGLD")]
-	#[endpoint]
-	fn bid(
-		&self,
-		#[payment_amount] payment_amount: BigUint,
-		period: u64,
-		nonce: u64
-	) {
-		let mut auction = self.try_get_auction(period, nonce);
-		let caller = self.blockchain().get_caller();
-		let block_timestamp = self.blockchain().get_block_timestamp();
+        if nft_type == token_identifier_top {
+            let own_address: ManagedAddress = self.blockchain().get_sc_address();
+            let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, &nft_type, nonce);
+            let attributes = token_data.decode_attributes::<TopMemeAttributes<Self::Api>>();
 
-		require!(
+            original_nonce = attributes.original_nonce;
+
+            auction = self.try_get_auction(period, original_nonce);
+
+            require!(auction.top_nonce == nonce, "Auction should have top nonce set");
+        } else {
+            auction = self.try_get_auction(period, original_nonce);
+        }
+
+        let caller = self.blockchain().get_caller();
+
+        auction.original_owner = caller;
+
+        self.period_meme_auction(period, original_nonce).set(&auction);
+    }
+
+    #[payable("EGLD")]
+    #[endpoint]
+    fn bid(
+        &self,
+        #[payment_amount] payment_amount: BigUint,
+        period: u64,
+        nonce: u64,
+    ) {
+        let mut auction = self.try_get_auction(period, nonce);
+        let caller = self.blockchain().get_caller();
+        let block_timestamp = self.blockchain().get_block_timestamp();
+
+        require!(
 			block_timestamp > period && block_timestamp - period < BID_TIME,
             "Auction bidding ended already"
         );
-		require!(
+        require!(
             auction.original_owner != caller,
             "Can't bid on your own token"
         );
-		require!(auction.current_winner != caller, "Can't outbid yourself");
-		require!(
+        require!(auction.current_winner != caller, "Can't outbid yourself");
+        require!(
             payment_amount >= auction.min_bid,
             "Bid must be higher than or equal to the min bid"
         );
-		require!(
+        require!(
             payment_amount > auction.current_bid,
             "Bid must be higher than the current winning bid"
         );
 
-		// refund losing bid
-		if !auction.current_winner.is_zero() {
-			self.send().direct_egld(
-				&auction.current_winner,
-				&auction.current_bid,
-				b"bid refund",
-			);
-		}
+        // refund losing bid
+        if !auction.current_winner.is_zero() {
+            self.send().direct_egld(
+                &auction.current_winner,
+                &auction.current_bid,
+                b"bid refund",
+            );
+        }
 
-		// update auction bid and winner
-		auction.current_bid = payment_amount;
-		auction.current_winner = caller;
+        // update auction bid and winner
+        auction.current_bid = payment_amount;
+        auction.current_winner = caller;
 
-		self.period_meme_auction(period, nonce).set(&auction);
-	}
+        self.period_meme_auction(period, nonce).set(&auction);
+    }
 
-	#[endpoint]
-	fn end_auction(&self, period: u64, nonce: u64) {
-		let mut auction = self.try_get_auction(period, nonce);
-		let block_timestamp = self.blockchain().get_block_timestamp();
+    // TODO: Test token upgrade
+    #[endpoint]
+    fn end_auction(&self, period: u64, nonce: u64) {
+        let mut auction = self.try_get_auction(period, nonce);
+        let block_timestamp = self.blockchain().get_block_timestamp();
 
-		require!(
+        require!(
             block_timestamp > period && block_timestamp - period >= AUCTION_TIME,
             "Auction deadline has not passed"
         );
-		require!(
+        require!(
 			!auction.ended,
 			"Auction was already ended"
 		);
 
-		auction.ended = true;
+        auction.ended = true;
 
-		self.period_meme_auction(period, nonce).set(&auction);
+        self.period_meme_auction(period, nonce).set(&auction);
 
-		self.distribute_tokens_after_auction_end(&nonce, &auction);
-	}
+        self.distribute_tokens_after_auction_end(&nonce, &auction);
+    }
 
-	// TODO: Also accept already upgraded NFTs
-	#[payable("*")]
-	#[endpoint]
-	fn upgrade_token(
-		&self,
-		#[payment_token] nft_type: TokenIdentifier,
-		#[payment_nonce] nonce: u64,
-		#[payment_amount] nft_amount: BigUint,
-	) {
-		require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
-		require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
-		require!(!self.meme_rarity(nonce).is_empty(), "Nft can't be upgraded");
+    // TODO: Also accept already upgraded NFTs
+    #[payable("*")]
+    #[endpoint]
+    fn upgrade_token(
+        &self,
+        #[payment_token] nft_type: TokenIdentifier,
+        #[payment_nonce] nonce: u64,
+        #[payment_amount] nft_amount: BigUint,
+    ) {
+        require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
+        require!(nft_type == self.token_identifier().get() || nft_type == self.token_identifier_top().get(), "Nft is not of the correct type");
 
-		self.convert_to_top_nft(
-			&self.blockchain().get_caller(),
-			&nonce,
-			b"nft upgraded"
-		);
-	}
+        if nft_type == self.token_identifier_top().get() {
+            let own_address: ManagedAddress = self.blockchain().get_sc_address();
+            let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, &nft_type, nonce);
+            let attributes = token_data.decode_attributes::<TopMemeAttributes<Self::Api>>();
 
-	// TODO: Get this working again
-	// #[payable("*")]
-	// #[endpoint]
-	// fn upgrade_custom_attributes(
-	// 	&self,
-	// 	#[payment_token] nft_type: TokenIdentifier,
-	// 	#[payment_nonce] nonce: u64,
-	// 	#[payment_amount] nft_amount: BigUint,
-	// ) {
-	// 	require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
-	// 	require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
-	// 	require!(!self.custom_attributes(nonce).is_empty(), "Nft can't be upgraded");
-	//
-	// 	self.update_nft_attributes(
-	// 		&self.blockchain().get_caller(),
-	// 		&nonce,
-	// 		b"nft upgraded"
-	// 	);
-	//
-	// 	self.custom_attributes(nonce).clear();
-	// }
+            let original_nonce: u64 = attributes.original_nonce;
 
-	// fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
-	// 	let nft_token = &self.token_identifier().get();
-	// 	let amount = BigUint::from(NFT_AMOUNT);
-	//
-	// 	let own_address: ManagedAddress = self.blockchain().get_sc_address();
-	// 	let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
-	// 	let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
-	//
-	// 	let custom_attributes = self.custom_attributes(*nft_nonce).get();
-	//
-	// 	new_attributes.category = custom_attributes.category;
-	// 	new_attributes.rarity = custom_attributes.rarity;
-	//
-	// 	self.send().nft_update_attributes(
-	// 		&self.token_identifier().get(),
-	// 		*nft_nonce,
-	// 		&new_attributes
-	// 	);
-	//
-	// 	self.send().direct(
-	// 		send_to,
-	// 		nft_token,
-	// 		*nft_nonce,
-	// 		&amount,
-	// 		text,
-	// 	);
-	// }
+            require!(!self.meme_rarity(original_nonce).is_empty(), "Nft can't be upgraded");
 
-	// private
+            self.update_nft_attributes(
+                &self.blockchain().get_caller(),
+                &original_nonce,
+                &nonce,
+                b"nft upgraded",
+            );
 
-	fn try_get_auction(&self, period: u64, nonce: u64) -> Auction<Self::Api> {
-		let auction = self.period_meme_auction(period, nonce);
+            return;
+        }
 
-		require!(
+        self.convert_to_top_nft(
+            &self.blockchain().get_caller(),
+            &nonce,
+            b"nft upgraded",
+        );
+    }
+
+    // TODO: Get this working again
+    // #[payable("*")]
+    // #[endpoint]
+    // fn upgrade_custom_attributes(
+    // 	&self,
+    // 	#[payment_token] nft_type: TokenIdentifier,
+    // 	#[payment_nonce] nonce: u64,
+    // 	#[payment_amount] nft_amount: BigUint,
+    // ) {
+    // 	require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
+    // 	require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
+    // 	require!(!self.custom_attributes(nonce).is_empty(), "Nft can't be upgraded");
+    //
+    // 	self.update_nft_attributes(
+    // 		&self.blockchain().get_caller(),
+    // 		&nonce,
+    // 		b"nft upgraded"
+    // 	);
+    //
+    // 	self.custom_attributes(nonce).clear();
+    // }
+
+    // fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
+    // 	let nft_token = &self.token_identifier().get();
+    // 	let amount = BigUint::from(NFT_AMOUNT);
+    //
+    // 	let own_address: ManagedAddress = self.blockchain().get_sc_address();
+    // 	let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
+    // 	let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
+    //
+    // 	let custom_attributes = self.custom_attributes(*nft_nonce).get();
+    //
+    // 	new_attributes.category = custom_attributes.category;
+    // 	new_attributes.rarity = custom_attributes.rarity;
+    //
+    // 	self.send().nft_update_attributes(
+    // 		&self.token_identifier().get(),
+    // 		*nft_nonce,
+    // 		&new_attributes
+    // 	);
+    //
+    // 	self.send().direct(
+    // 		send_to,
+    // 		nft_token,
+    // 		*nft_nonce,
+    // 		&amount,
+    // 		text,
+    // 	);
+    // }
+
+    // private
+
+    fn try_get_auction(&self, period: u64, nonce: u64) -> Auction<Self::Api> {
+        let auction = self.period_meme_auction(period, nonce);
+
+        require!(
             !auction.is_empty(),
             "Auction does not exist"
         );
 
-		auction.get()
-	}
+        auction.get()
+    }
 
-	fn distribute_tokens_after_auction_end(&self, nft_nonce: &u64, auction: &Auction<Self::Api>) {
-		if auction.original_owner.is_zero() {
-			if auction.current_winner.is_zero() {
-				return;
-			}
+    fn distribute_tokens_after_auction_end(&self, nft_nonce: &u64, auction: &Auction<Self::Api>) {
+        if auction.original_owner.is_zero() {
+            if auction.current_winner.is_zero() {
+                return;
+            }
 
-			// return money to current winner
-			self.send().direct_egld(
-				&auction.current_winner,
-				&auction.current_bid,
-				b"bid refund",
-			);
+            // return money to current winner
+            self.send().direct_egld(
+                &auction.current_winner,
+                &auction.current_bid,
+                b"bid refund",
+            );
 
-			return;
-		}
+            return;
+        }
 
-		if auction.current_winner.is_zero() {
-			// return nft to original owner
-			self.convert_to_top_nft(&auction.original_owner, nft_nonce, b"returned token");
+        if auction.current_winner.is_zero() {
+            // return nft to original owner
 
-			return;
-		}
+            if auction.top_nonce != 0 {
+                self.update_nft_attributes(&auction.original_owner, &auction.top_nonce, nft_nonce, b"returned token");
 
-		let bid_cut_percentage = BigUint::from(auction.bid_cut_percentage);
-		let bid_cut = &auction.current_bid * &bid_cut_percentage / PERCENTAGE_TOTAL;
-		let mut owner_cut = auction.current_bid.clone();
-		owner_cut -= &bid_cut;
+                return;
+            }
 
-		// send part as cut for contract owner
-		let owner = self.blockchain().get_owner_address();
-		self.send().direct_egld(
-			&owner,
-			&bid_cut,
-			b"bid cut for sold token",
-		);
+            self.convert_to_top_nft(&auction.original_owner, nft_nonce, b"returned token");
 
-		// send rest of the bid to original owner
-		self.send().direct_egld(
-			&auction.original_owner,
-			&owner_cut,
-			b"sold token",
-		);
+            return;
+        }
 
-		// send NFT to auction winner
-		self.convert_to_top_nft(&auction.current_winner, nft_nonce, b"bought token at auction");
-	}
+        let bid_cut_percentage = BigUint::from(auction.bid_cut_percentage);
+        let bid_cut = &auction.current_bid * &bid_cut_percentage / PERCENTAGE_TOTAL;
+        let mut owner_cut = auction.current_bid.clone();
+        owner_cut -= &bid_cut;
 
-	// fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
-	// 	let nft_token = &self.token_identifier().get();
-	// 	let amount = BigUint::from(NFT_AMOUNT);
-	//
-	// 	let own_address: ManagedAddress = self.blockchain().get_sc_address();
-	// 	let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
-	// 	let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
-	//
-	// 	if !self.meme_rarity(*nft_nonce).is_empty() && self.meme_rarity(*nft_nonce).get() > new_attributes.rarity {
-	// 		new_attributes.rarity = self.meme_rarity(*nft_nonce).get();
-	//
-	// 		self.send().nft_update_attributes(
-	// 			&self.token_identifier().get(),
-	// 			*nft_nonce,
-	// 			&new_attributes
-	// 		);
-	// 	}
-	//
-	// 	self.send().direct(
-	// 		send_to,
-	// 		nft_token,
-	// 		*nft_nonce,
-	// 		&amount,
-	// 		text,
-	// 	);
-	//
-	// 	self.meme_rarity(*nft_nonce).clear();
-	//
-	//
-	// 	// Create NFT for another address
-	// 	// let mut arg_buffer = ManagedArgBuffer::new_empty();
-	// 	// arg_buffer.push_arg(nft_token);
-	// 	// arg_buffer.push_arg(&amount);
-	// 	// arg_buffer.push_arg(&name);
-	// 	// arg_buffer.push_arg(royalties);
-	// 	// arg_buffer.push_arg(hash);
-	// 	// arg_buffer.push_arg(&MemeAttributes { period: current_period, category, rarity: 0 });
-	// 	// arg_buffer.push_arg(&url);
-	// 	//
-	// 	// let output = Self::Api::send_api_impl().execute_on_dest_context_by_caller_raw(
-	// 	// 	self.blockchain().get_gas_left(),
-	// 	// 	&self.auction_sc().get(),
-	// 	// 	// &caller,
-	// 	// 	&BigUint::zero(),
-	// 	// 	&ManagedBuffer::new_from_bytes(ESDT_NFT_CREATE_FUNC_NAME),
-	// 	// 	&arg_buffer,
-	// 	// );
-	// 	//
-	// 	// let mut nonce: u64 = 0;
-	// 	// if let Some(first_result_bytes) = output.try_get(0) {
-	// 	// 	nonce = first_result_bytes.parse_as_u64().unwrap_or_default();
-	// 	// }
-	// }
+        // send part as cut for contract owner
+        let owner = self.blockchain().get_owner_address();
+        self.send().direct_egld(
+            &owner,
+            &bid_cut,
+            b"bid cut for sold token",
+        );
 
-	fn convert_to_top_nft(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
-		let nft_token = &self.token_identifier().get();
-		let nft_token_top = &self.token_identifier_top().get();
-		let amount = BigUint::from(NFT_AMOUNT);
+        // send rest of the bid to original owner
+        self.send().direct_egld(
+            &auction.original_owner,
+            &owner_cut,
+            b"sold token",
+        );
 
-		let own_address: ManagedAddress = self.blockchain().get_sc_address();
-		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
-		// TODO: Update struct to MemeAttributes
-		let attributes = token_data.decode_attributes::<TopMemeAttributes<Self::Api>>();
+        if auction.top_nonce != 0 {
+            self.update_nft_attributes(&auction.current_winner, &auction.top_nonce, nft_nonce, b"bought token at auction");
 
-		let mut new_attributes = TopMemeAttributes {
-			period: attributes.period,
-			category: attributes.category,
-			rarity: 0,
-		};
+            return;
+        }
 
-		// TODO: Add logic if the NFT is already a Top NFT
-		if !self.meme_rarity(*nft_nonce).is_empty() && self.meme_rarity(*nft_nonce).get() > new_attributes.rarity {
-			new_attributes.rarity = self.meme_rarity(*nft_nonce).get();
-		}
+        // send NFT to auction winner
+        self.convert_to_top_nft(&auction.current_winner, nft_nonce, b"bought token at auction");
+    }
 
-		let top_royalties: &BigUint = &BigUint::from(ROYALTIES);
+    fn convert_to_top_nft(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
+        require!(!self.meme_rarity(*nft_nonce).is_empty(), "Meme rarity is empty");
 
-		let nft_nonce_top: u64 = self.send().esdt_nft_create(
-			nft_token_top,
-			&amount,
-			&token_data.name,
-			top_royalties,
-			&token_data.hash,
-			&new_attributes,
-			&token_data.uris
-		);
+        let nft_token = &self.token_identifier().get();
+        let nft_token_top = &self.token_identifier_top().get();
+        let amount = BigUint::from(NFT_AMOUNT);
 
-		self.send().esdt_local_burn(nft_token, *nft_nonce, &amount);
+        let own_address: ManagedAddress = self.blockchain().get_sc_address();
+        let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
+        let attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
 
-		self.send().direct(
-			send_to,
-			nft_token_top,
-			nft_nonce_top,
-			&amount,
-			text,
-		);
+        let top_royalties: &BigUint = &BigUint::from(ROYALTIES);
 
-		self.meme_rarity(*nft_nonce).clear();
-	}
+        let new_attributes = TopMemeAttributes {
+            rarity: self.meme_rarity(*nft_nonce).get(),
+            original_nonce: *nft_nonce,
+            period: attributes.period,
+            category: attributes.category,
+            creator: attributes.creator,
+        };
 
-	// views/storage
+        let nft_nonce_top: u64 = self.send().esdt_nft_create(
+            nft_token_top,
+            &amount,
+            &token_data.name,
+            top_royalties,
+            &token_data.hash,
+            &new_attributes,
+            &token_data.uris,
+        );
 
-	#[view]
-	fn period_auctions_memes_all(&self, period: u64) -> MultiValueEncoded<FullAuction<Self::Api>> {
-		let mut result: MultiValueEncoded<FullAuction<Self::Api>> = MultiValueEncoded::new();
-		for index in 1..=self.period_auctioned_memes(period).len() {
-			let nonce = self.period_auctioned_memes(period).get(index);
-			let auction = self.period_meme_auction(period, nonce).get();
+        self.meme_to_top_meme(*nft_nonce).set(nft_nonce_top);
 
-			let full_auction = FullAuction {
-				nonce,
-				auction,
-			};
+        // TODO: See if this works, so the Voting contract is the owner of all NFTs
+        // Create NFT for another address
+        // let mut arg_buffer = ManagedArgBuffer::new_empty();
+        // arg_buffer.push_arg(nft_token);
+        // arg_buffer.push_arg(&amount);
+        // arg_buffer.push_arg(&name);
+        // arg_buffer.push_arg(royalties);
+        // arg_buffer.push_arg(hash);
+        // arg_buffer.push_arg(&MemeAttributes { period: current_period, category, rarity: 0 });
+        // arg_buffer.push_arg(&url);
+        //
+        // let output = Self::Api::send_api_impl().execute_on_dest_context_by_caller_raw(
+        // 	self.blockchain().get_gas_left(),
+        // 	&self.auction_sc().get(),
+        // 	// &caller,
+        // 	&BigUint::zero(),
+        // 	&ManagedBuffer::new_from_bytes(ESDT_NFT_CREATE_FUNC_NAME),
+        // 	&arg_buffer,
+        // );
+        //
+        // let mut nonce: u64 = 0;
+        // if let Some(first_result_bytes) = output.try_get(0) {
+        // 	nonce = first_result_bytes.parse_as_u64().unwrap_or_default();
+        // }
 
-			result.push(full_auction);
-		}
+        self.send().esdt_local_burn(nft_token, *nft_nonce, &amount);
 
-		return result;
-	}
+        self.send().direct(
+            send_to,
+            nft_token_top,
+            nft_nonce_top,
+            &amount,
+            text,
+        );
 
-	#[view]
-	#[storage_mapper("votingContract")]
-	fn voting_contract(&self) -> SingleValueMapper<ManagedAddress>;
+        self.meme_rarity(*nft_nonce).clear();
+    }
 
-	#[view]
-	#[storage_mapper("tokenIdentifier")]
-	fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
+    fn update_nft_attributes(&self, send_to: &ManagedAddress, original_nonce: &u64, nft_nonce: &u64, text: &[u8]) {
+        let nft_token = &self.token_identifier_top().get();
+        let amount = BigUint::from(NFT_AMOUNT);
 
-	// The rarity of a meme depending on the place the meme was in an auction, to be used in the future
-	// If an auction has less than 10 memes, the max rarity is < 10
-	// 10 - 1st place, most rare
-	// 1 - 10th place, most common
-	#[view]
-	#[storage_mapper("memeRarity")]
-	fn meme_rarity(&self, nonce: u64) -> SingleValueMapper<u8>;
+        let own_address: ManagedAddress = self.blockchain().get_sc_address();
+        let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
+        let mut new_attributes = token_data.decode_attributes::<TopMemeAttributes<Self::Api>>();
+
+        if !self.meme_rarity(*original_nonce).is_empty() && self.meme_rarity(*original_nonce).get() > new_attributes.rarity {
+            new_attributes.rarity = self.meme_rarity(*original_nonce).get();
+
+            self.send().nft_update_attributes(
+                &self.token_identifier().get(),
+                *nft_nonce,
+                &new_attributes,
+            );
+        }
+
+        self.send().direct(
+            send_to,
+            nft_token,
+            *nft_nonce,
+            &amount,
+            text,
+        );
+
+        self.meme_rarity(*nft_nonce).clear();
+    }
+
+    // views/storage
+
+    #[view]
+    fn period_auctions_memes_all(&self, period: u64) -> MultiValueEncoded<FullAuction<Self::Api>> {
+        let mut result: MultiValueEncoded<FullAuction<Self::Api>> = MultiValueEncoded::new();
+        for index in 1..=self.period_auctioned_memes(period).len() {
+            let nonce = self.period_auctioned_memes(period).get(index);
+            let auction = self.period_meme_auction(period, nonce).get();
+
+            let full_auction = FullAuction {
+                nonce,
+                auction,
+            };
+
+            result.push(full_auction);
+        }
+
+        return result;
+    }
+
+    #[view]
+    #[storage_mapper("votingContract")]
+    fn voting_contract(&self) -> SingleValueMapper<ManagedAddress>;
+
+    #[view]
+    #[storage_mapper("tokenIdentifier")]
+    fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
+
+    // The rarity of a meme depending on the place the meme was in an auction, to be used in the future
+    // If an auction has less than 10 memes, the max rarity is < 10
+    // 10 - 1st place, most rare
+    // 1 - 10th place, most common
+    #[view]
+    #[storage_mapper("memeRarity")]
+    fn meme_rarity(&self, nonce: u64) -> SingleValueMapper<u8>;
 }

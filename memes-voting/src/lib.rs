@@ -79,7 +79,7 @@ pub trait MemesVoting: owner::OwnerModule
 			&name,
 			royalties,
 			hash,
-			&MemeAttributes { period: current_period, category },
+			&MemeAttributes { period: current_period, category, creator: caller },
 			&urls
 		);
 

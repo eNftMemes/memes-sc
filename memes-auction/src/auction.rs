@@ -10,6 +10,8 @@ pub struct Auction<M: ManagedTypeApi> {
 
     pub original_owner: ManagedAddress<M>,
     pub ended: bool,
+
+    pub top_nonce: u64,
 }
 
 #[derive(TopEncode, TopDecode, NestedEncode, TypeAbi)]
@@ -22,11 +24,14 @@ pub struct FullAuction<M: ManagedTypeApi> {
 pub struct MemeAttributes<M: ManagedTypeApi> {
     pub period: u64,
     pub category: ManagedBuffer<M>,
+    pub creator: ManagedAddress<M>,
 }
 
 #[derive(TopEncode, TopDecode, TypeAbi)]
 pub struct TopMemeAttributes<M: ManagedTypeApi> {
+    pub rarity: u8,
+    pub original_nonce: u64,
     pub period: u64,
     pub category: ManagedBuffer<M>,
-    pub rarity: u8,
+    pub creator: ManagedAddress<M>,
 }

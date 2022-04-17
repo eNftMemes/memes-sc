@@ -1,0 +1,38 @@
+{
+  "name": "auction init",
+  "steps": [
+    {
+      "step": "setState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+            "str:bidCutPercentage": "1000",
+            "str:minBidStart": "5"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-auction.wasm"
+        }
+      }
+    }
+  ]
+}

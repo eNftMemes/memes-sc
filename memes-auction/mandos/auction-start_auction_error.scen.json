@@ -84,6 +84,8 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
             "str:bidCutPercentage": "1000",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -92,7 +94,8 @@
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "03-bid_cut_percentage": "u16:1000",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
+              "05-ended": "u8:0",
+              "06-top_nonce": "u64:0"
             },
             "str:periodMemeAuction|u64:123,000|u64:2": {
               "00-min_bid": "biguint:5",
@@ -100,7 +103,8 @@
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "03-bid_cut_percentage": "u16:1000",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
+              "05-ended": "u8:0",
+              "06-top_nonce": "u64:0"
             },
             "str:periodAuctionedMemes|u64:123,000|``.len": "2",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
@@ -174,6 +178,8 @@
           "storage": {
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
             "str:bidCutPercentage": "1000",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -182,7 +188,8 @@
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "03-bid_cut_percentage": "u16:1000",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
+              "05-ended": "u8:0",
+              "06-top_nonce": "u64:0"
             },
             "str:periodMemeAuction|u64:123,000|u64:2": {
               "00-min_bid": "biguint:5",
@@ -190,7 +197,8 @@
               "02-current_winner": "0x0000000000000000000000000000000000000000000000000000000000000000",
               "03-bid_cut_percentage": "u16:1000",
               "04-original_owner": "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "05-ended": "u8:0"
+              "05-ended": "u8:0",
+              "06-top_nonce": "u64:0"
             },
             "str:periodAuctionedMemes|u64:123,000|``.len": "2",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",

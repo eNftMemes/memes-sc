@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install rust
-        uses: actions-rs/toolchain@v1
-        with:
-          default: true
-          toolchain: "nightly-2022-01-17"
+#      - name: Install rust
+#        uses: actions-rs/toolchain@v1
+#        with:
+#          default: true
+#          toolchain: "nightly-2022-01-17"
 
       - name: Setup the PATH variable
         run: echo "PATH=$HOME/.local/bin:$HOME/elrondsdk/vmtools:$PATH" >> $GITHUB_ENV
@@ -40,11 +40,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install rust
-        uses: actions-rs/toolchain@v1
-        with:
-          default: true
-          toolchain: "nightly-2022-01-17"
+#      - name: Install rust
+#        uses: actions-rs/toolchain@v1
+#        with:
+#          default: true
+#          toolchain: "nightly-2022-01-17"
 
       - name: Setup the PATH variable
         run: echo "PATH=$HOME/.local/bin:$HOME/elrondsdk/vmtools:$PATH" >> $GITHUB_ENV
