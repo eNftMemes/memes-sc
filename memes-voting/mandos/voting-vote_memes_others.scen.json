@@ -13,7 +13,6 @@
           "balance": "0",
           "storage": {
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:nftRoyalties": "500",
 
             "str:auctionSc": "address:auction_contract",
             "str:periods.len": "1",
@@ -103,7 +102,6 @@
           "balance": "0",
           "storage": {
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:nftRoyalties": "500",
 
             "str:auctionSc": "address:auction_contract",
             "str:periods.len": "1",

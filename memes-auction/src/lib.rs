@@ -176,6 +176,56 @@ pub trait MemesAuction: owner::OwnerModule {
 		);
 	}
 
+	// TODO: Get this working again
+	// #[payable("*")]
+	// #[endpoint]
+	// fn upgrade_custom_attributes(
+	// 	&self,
+	// 	#[payment_token] nft_type: TokenIdentifier,
+	// 	#[payment_nonce] nonce: u64,
+	// 	#[payment_amount] nft_amount: BigUint,
+	// ) {
+	// 	require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
+	// 	require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
+	// 	require!(!self.custom_attributes(nonce).is_empty(), "Nft can't be upgraded");
+	//
+	// 	self.update_nft_attributes(
+	// 		&self.blockchain().get_caller(),
+	// 		&nonce,
+	// 		b"nft upgraded"
+	// 	);
+	//
+	// 	self.custom_attributes(nonce).clear();
+	// }
+
+	// fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
+	// 	let nft_token = &self.token_identifier().get();
+	// 	let amount = BigUint::from(NFT_AMOUNT);
+	//
+	// 	let own_address: ManagedAddress = self.blockchain().get_sc_address();
+	// 	let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
+	// 	let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
+	//
+	// 	let custom_attributes = self.custom_attributes(*nft_nonce).get();
+	//
+	// 	new_attributes.category = custom_attributes.category;
+	// 	new_attributes.rarity = custom_attributes.rarity;
+	//
+	// 	self.send().nft_update_attributes(
+	// 		&self.token_identifier().get(),
+	// 		*nft_nonce,
+	// 		&new_attributes
+	// 	);
+	//
+	// 	self.send().direct(
+	// 		send_to,
+	// 		nft_token,
+	// 		*nft_nonce,
+	// 		&amount,
+	// 		text,
+	// 	);
+	// }
+
 	// private
 
 	fn try_get_auction(&self, period: u64, nonce: u64) -> Auction<Self::Api> {
@@ -263,6 +313,31 @@ pub trait MemesAuction: owner::OwnerModule {
 		);
 
 		self.meme_rarity(*nft_nonce).clear();
+
+
+		// Create NFT for another address
+		// let mut arg_buffer = ManagedArgBuffer::new_empty();
+		// arg_buffer.push_arg(nft_token);
+		// arg_buffer.push_arg(&amount);
+		// arg_buffer.push_arg(&name);
+		// arg_buffer.push_arg(royalties);
+		// arg_buffer.push_arg(hash);
+		// arg_buffer.push_arg(&MemeAttributes { period: current_period, category, rarity: 0 });
+		// arg_buffer.push_arg(&url);
+		//
+		// let output = Self::Api::send_api_impl().execute_on_dest_context_by_caller_raw(
+		// 	self.blockchain().get_gas_left(),
+		// 	&self.auction_sc().get(),
+		// 	// &caller,
+		// 	&BigUint::zero(),
+		// 	&ManagedBuffer::new_from_bytes(ESDT_NFT_CREATE_FUNC_NAME),
+		// 	&arg_buffer,
+		// );
+		//
+		// let mut nonce: u64 = 0;
+		// if let Some(first_result_bytes) = output.try_get(0) {
+		// 	nonce = first_result_bytes.parse_as_u64().unwrap_or_default();
+		// }
 	}
 
 	// views/storage

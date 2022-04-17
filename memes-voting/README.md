@@ -12,13 +12,13 @@
 
 # Deploy
 
-`erdpy --verbose contract deploy --project=memes-voting --pem="devnet.pem" --gas-limit=20000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" --arguments START_PERIOD_TIMESTAMP`
+`erdpy --verbose contract deploy --project=memes-voting --pem="devnet.pem" --gas-limit=20000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --chain="D" --metadata-payable-by-sc --send --arguments START_PERIOD_TIMESTAMP`
 
 Then set the address of the voting contract in the creator contract
 
 # Upgrade
 
-`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --send --chain="D" "BECH32_ADDRESS" --arguments START_PERIOD_TIMESTAMP`
+`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --chain="D" --metadata-payable-by-sc --send "BECH32_ADDRESS" --arguments START_PERIOD_TIMESTAMP`
 
 Contracts are upgradable by default. START_PERIOD_TIMESTAMP will be ignored for upgrades 
 

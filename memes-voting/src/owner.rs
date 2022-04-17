@@ -9,12 +9,6 @@ const MAX_SIGNATURE_DATA_LEN: usize = 126;
 
 pub type Signature<M> = ManagedByteArray<M, ED25519_SIGNATURE_BYTE_LEN>;
 
-#[derive(TopEncode, TopDecode, TypeAbi)]
-pub struct CustomMemeAttributes<M: ManagedTypeApi> {
-    pub category: ManagedBuffer<M>,
-    pub rarity: u8,
-}
-
 #[elrond_wasm::module]
 pub trait OwnerModule {
     // TODO: Test this function with Mandos after it is supported to issue tokens
@@ -61,7 +55,7 @@ pub trait OwnerModule {
             .set_special_roles(
                 &self.blockchain().get_sc_address(),
                 &self.token_identifier().get(),
-                (&[EsdtLocalRole::NftCreate, EsdtLocalRole::NftUpdateAttributes][..]).iter().cloned(),
+                (&[EsdtLocalRole::NftCreate][..]).iter().cloned(),
             )
             .async_call()
             .call_and_exit()
@@ -75,14 +69,6 @@ pub trait OwnerModule {
         } else {
             self.categories().remove(&category);
         }
-    }
-
-    #[only_owner]
-    #[endpoint]
-    fn set_nft_royalties(&self, royalties: u16) {
-        require!(royalties > 100 && royalties < 2500, "Royalties can not be less than 1% and greater than 25%");
-
-        self.nft_royalties().set(&royalties);
     }
 
     #[callback]
@@ -113,18 +99,10 @@ pub trait OwnerModule {
             .set_special_roles(
                 sc,
                 &self.token_identifier().get(),
-                (&[EsdtLocalRole::NftUpdateAttributes][..]).iter().cloned(),
+                (&[EsdtLocalRole::NftBurn][..]).iter().cloned(),
             )
             .async_call()
             .call_and_exit()
-    }
-
-    #[only_owner]
-    #[endpoint]
-    fn set_custom_attributes(&self, nonce: u64, category: ManagedBuffer, rarity: u8) {
-        self.custom_attributes(nonce).set(
-            &CustomMemeAttributes { category, rarity }
-        );
     }
 
     #[only_owner]
@@ -196,20 +174,12 @@ pub trait OwnerModule {
     fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
 
     #[view]
-    #[storage_mapper("nftRoyalties")]
-    fn nft_royalties(&self) -> SingleValueMapper<u16>;
-
-    #[view]
     #[storage_mapper("categories")]
     fn categories(&self) -> SetMapper<ManagedBuffer>;
 
     #[view]
     #[storage_mapper("auctionSc")]
     fn auction_sc(&self) -> SingleValueMapper<ManagedAddress>;
-
-    #[view]
-    #[storage_mapper("customAttributes")]
-    fn custom_attributes(&self, nonce: u64) -> SingleValueMapper<CustomMemeAttributes<Self::Api>>;
 
     #[storage_mapper("signer")]
     fn signer(&self) -> SingleValueMapper<ManagedAddress>;

@@ -17,5 +17,4 @@ pub struct MemeVotes {
 pub struct MemeAttributes<M: ManagedTypeApi> {
     pub period: u64,
     pub category: ManagedBuffer<M>,
-    pub rarity: u8,
 }

@@ -24,7 +24,6 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
             "str:categories|``.value|u32:1": "str:funny",
@@ -138,7 +137,6 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
             "str:categories|``.value|u32:1": "str:funny",
@@ -214,10 +212,10 @@
                 {
                   "nonce": "1",
                   "balance": "1",
-                  "creator": "address:my_address",
-                  "royalties": "500",
+                  "creator": "sc:voting_contract",
+                  "royalties": "1000",
                   "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny|u8:0",
+                  "attributes": "u64:123,000|nested:str:funny",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -253,7 +251,6 @@
           "storage": {
             "str:votingSc": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
             "str:categories|``.value|u32:1": "str:funny",

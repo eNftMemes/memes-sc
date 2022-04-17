@@ -1,20 +1,22 @@
 #![no_std]
 #![feature(generic_associated_types)] // needed to use ManagedVecItem derive for MemeVotes
-#![allow(unused_attributes)]
+
+use meme::*;
+use owner::*;
 
 elrond_wasm::imports!();
 
 mod owner;
-use owner::*;
 
 mod meme;
-use meme::*;
 
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
 const NFT_AMOUNT: u32 = 1;
 const PER_PAGE: usize = 10;
 const PERIOD_TIME: u64 = 604800; // 1 week in seconds
 const VOTES_PER_ADDRESS_PER_PERIOD: u8 = 20;
+
+const ROYALTIES: u16 = 1000; // 10%;
 
 mod auction_proxy {
 	elrond_wasm::imports!();
@@ -33,9 +35,6 @@ pub trait MemesVoting: owner::OwnerModule
 	#[init]
 	fn init(&self, period: &u64) {
 		if self.periods().len() == 0 {
-			let royalties: u16 = 500;
-			self.nft_royalties().set(&royalties);
-
 			self.periods().push(period);
 		}
 	}
@@ -65,7 +64,7 @@ pub trait MemesVoting: owner::OwnerModule
 		self.address_last_meme_time(&address).set(&block_timestamp);
 
 		let amount: &BigUint = &BigUint::from(NFT_AMOUNT);
-		let royalties: &BigUint = &BigUint::from(self.nft_royalties().get());
+		let royalties: &BigUint = &BigUint::from(ROYALTIES);
 		let nft_token: &TokenIdentifier = &self.token_identifier().get();
 		let hash: &ManagedBuffer = &ManagedBuffer::new();
 		let mut urls = ManagedVec::new();
@@ -74,14 +73,13 @@ pub trait MemesVoting: owner::OwnerModule
 		let async_call: OptionalValue<AsyncCall> = self.alter_period();
 		let current_period: u64 = self.current_period();
 
-		// TODO: Test this function when it works properly on Devnet
-		let nonce: u64 = self.send().esdt_nft_create_as_caller(
+		let nonce: u64 = self.send().esdt_nft_create(
 			nft_token,
 			&amount,
 			&name,
 			royalties,
 			hash,
-			&MemeAttributes { period: current_period, category, rarity: 0 },
+			&MemeAttributes { period: current_period, category },
 			&urls
 		);
 
@@ -159,27 +157,6 @@ pub trait MemesVoting: owner::OwnerModule
 		});
 
 		self.alter_period_top_memes(&mut new_meme_votes, &current_period);
-	}
-
-	#[payable("*")]
-	#[endpoint]
-	fn upgrade_custom_attributes(
-		&self,
-		#[payment_token] nft_type: TokenIdentifier,
-		#[payment_nonce] nonce: u64,
-		#[payment_amount] nft_amount: BigUint,
-	) {
-		require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
-		require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
-		require!(!self.custom_attributes(nonce).is_empty(), "Nft can't be upgraded");
-
-		self.update_nft_attributes(
-			&self.blockchain().get_caller(),
-			&nonce,
-			b"nft upgraded"
-		);
-
-		self.custom_attributes(nonce).clear();
 	}
 
 	// private
@@ -275,34 +252,6 @@ pub trait MemesVoting: owner::OwnerModule
 		}
 
 		top_memes.set(&new_top_memes);
-	}
-
-	fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
-		let nft_token = &self.token_identifier().get();
-		let amount = BigUint::from(NFT_AMOUNT);
-
-		let own_address: ManagedAddress = self.blockchain().get_sc_address();
-		let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
-		let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
-
-		let custom_attributes = self.custom_attributes(*nft_nonce).get();
-
-		new_attributes.category = custom_attributes.category;
-		new_attributes.rarity = custom_attributes.rarity;
-
-		self.send().nft_update_attributes(
-			&self.token_identifier().get(),
-			*nft_nonce,
-			&new_attributes
-		);
-
-		self.send().direct(
-			send_to,
-			nft_token,
-			*nft_nonce,
-			&amount,
-			text,
-		);
 	}
 
 	#[proxy]

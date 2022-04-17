@@ -17,14 +17,12 @@ elrond_wasm_node::wasm_endpoints! {
         current_period_len
         current_period_meme
         current_period_memes_latest
-        custom_attributes
         isPaused
         issue_token
         meme_votes
         meme_votes_all
         meme_votes_total
         modify_categories
-        nft_royalties
         pause
         period_len
         period_meme
@@ -32,13 +30,10 @@ elrond_wasm_node::wasm_endpoints! {
         period_top_memes
         periods
         set_auction_sc
-        set_custom_attributes
         set_local_roles
-        set_nft_royalties
         set_signer
         token_identifier
         unpause
-        upgrade_custom_attributes
         vote_memes
     )
 }

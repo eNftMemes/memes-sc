@@ -13,7 +13,6 @@
           "balance": "0",
           "storage": {
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
             "str:categories|``.value|u32:1": "str:funny",
@@ -133,7 +132,6 @@
           "balance": "0",
           "storage": {
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
             "str:categories|``.value|u32:1": "str:funny",
@@ -255,7 +253,6 @@
           "balance": "0",
           "storage": {
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
-            "str:nftRoyalties": "500",
 
             "str:categories|``.node_links|u32:1": "u32:0|u32:2",
             "str:categories|``.value|u32:1": "str:funny",

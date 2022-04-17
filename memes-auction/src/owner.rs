@@ -5,6 +5,13 @@ use crate::auction::*;
 
 pub const AUCTION_TIME: u64 = 432000; // 5 days in seconds (time the owner of the NFT has for locking it)
 
+// TODO: Update this
+// #[derive(TopEncode, TopDecode, TypeAbi)]
+// pub struct CustomMemeAttributes<M: ManagedTypeApi> {
+//     pub category: ManagedBuffer<M>,
+//     pub rarity: u8,
+// }
+
 #[elrond_wasm::module]
 pub trait OwnerModule {
     #[only_owner]
@@ -59,6 +66,15 @@ pub trait OwnerModule {
         self.period_auctioned_memes(*period).push(nonce);
     }
 
+    // TODO
+    // #[only_owner]
+    // #[endpoint]
+    // fn set_custom_attributes(&self, nonce: u64, category: ManagedBuffer, rarity: u8) {
+    //     self.custom_attributes(nonce).set(
+    //         &CustomMemeAttributes { category, rarity }
+    //     );
+    // }
+
     // views/storage
 
     #[view]
@@ -77,4 +93,9 @@ pub trait OwnerModule {
     #[storage_mapper("periodAuctionedMemes")]
     // TODO: Remove this if data is indexed on microservice side?
     fn period_auctioned_memes(&self, period: u64) -> VecMapper<u64>;
+
+    // TODO
+    // #[view]
+    // #[storage_mapper("customAttributes")]
+    // fn custom_attributes(&self, nonce: u64) -> SingleValueMapper<CustomMemeAttributes<Self::Api>>;
 }
