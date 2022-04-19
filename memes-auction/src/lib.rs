@@ -160,7 +160,6 @@ pub trait MemesAuction: owner::OwnerModule {
         self.period_meme_auction(period, nonce).set(&auction);
     }
 
-    // TODO: Test token upgrade
     #[endpoint]
     fn end_auction(&self, period: u64, nonce: u64) {
         let mut auction = self.try_get_auction(period, nonce);
@@ -303,7 +302,7 @@ pub trait MemesAuction: owner::OwnerModule {
             // return nft to original owner
 
             if auction.top_nonce != 0 {
-                self.update_nft_attributes(&auction.original_owner, &auction.top_nonce, nft_nonce, b"returned token");
+                self.update_nft_attributes(&auction.original_owner, nft_nonce, &auction.top_nonce, b"returned token");
 
                 return;
             }
@@ -334,7 +333,7 @@ pub trait MemesAuction: owner::OwnerModule {
         );
 
         if auction.top_nonce != 0 {
-            self.update_nft_attributes(&auction.current_winner, &auction.top_nonce, nft_nonce, b"bought token at auction");
+            self.update_nft_attributes(&auction.current_winner, nft_nonce, &auction.top_nonce, b"bought token at auction");
 
             return;
         }
@@ -426,7 +425,7 @@ pub trait MemesAuction: owner::OwnerModule {
             new_attributes.rarity = self.meme_rarity(*original_nonce).get();
 
             self.send().nft_update_attributes(
-                &self.token_identifier().get(),
+                nft_token,
                 *nft_nonce,
                 &new_attributes,
             );
@@ -440,7 +439,7 @@ pub trait MemesAuction: owner::OwnerModule {
             text,
         );
 
-        self.meme_rarity(*nft_nonce).clear();
+        self.meme_rarity(*original_nonce).clear();
     }
 
     // views/storage

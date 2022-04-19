@@ -69,7 +69,7 @@
                   "balance": "2",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:0",
+                  "attributes": "u64:1|nested:str:funny|address:my_address",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -121,7 +121,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:0",
+                  "attributes": "u64:1|nested:str:funny|address:my_address",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -163,7 +163,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:0",
+                  "attributes": "u64:1|nested:str:funny|address:other_address",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
@@ -232,7 +232,7 @@
                   "balance": "2",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:0",
+                  "attributes": "u64:1|nested:str:funny|address:my_address",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -284,7 +284,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:0",
+                  "attributes": "u64:1|nested:str:funny|address:my_address",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -294,7 +294,7 @@
                   "balance": "1",
                   "royalties": "500",
                   "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:0",
+                  "attributes": "u64:1|nested:str:funny|address:other_address",
                   "uri": [
                     "str:nft-create-uri2"
                   ]
