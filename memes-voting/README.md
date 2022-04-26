@@ -1,7 +1,7 @@
 ### DEVNET
-**Contract Address: erd1qqqqqqqqqqqqqpgq2ss8pftydnrv04kylm8e9yx8fzfkfjk4lqpsrvs2yn**
+**Contract Address: erd1qqqqqqqqqqqqqpgqw6fdmgw7hk4tw6ljjrxymh8ah9lryq4flqpsgu6d86**
 
-**Token Id: NFTMEMES-6f4547**
+**Token Id: NFTMEMES-706046**
 
 ### TESTNET
 **Contract Address: erd1qqqqqqqqqqqqqpgqj3uzpmg5l7tr5we8r5xnatpchag095w5a2pqna4amj**
@@ -48,8 +48,10 @@ Funny category:
 
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="modify_categories" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments 0x66756e6e79`
 
-## Set signer address
+## Set signer address 
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_signer" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_ADDRESS"`
+
+On Devnet the signer is wallet address `erd1zq5zmnqjdlymzxg6av0623vw8ke6fmp8qkk4lqn0gt2nxca2mh2sayqt3g`
 
 ## Linking auction contract
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_auction_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_AUCTION_CONTRACT"`
