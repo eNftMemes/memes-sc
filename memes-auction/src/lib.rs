@@ -181,7 +181,6 @@ pub trait MemesAuction: owner::OwnerModule {
         self.distribute_tokens_after_auction_end(&nonce, &auction);
     }
 
-    // TODO: Also accept already upgraded NFTs
     #[payable("*")]
     #[endpoint]
     fn upgrade_token(
@@ -219,7 +218,7 @@ pub trait MemesAuction: owner::OwnerModule {
         );
     }
 
-    // TODO: Get this working again
+    // TODO: Get this working again OR use same upgrade function
     // #[payable("*")]
     // #[endpoint]
     // fn upgrade_custom_attributes(

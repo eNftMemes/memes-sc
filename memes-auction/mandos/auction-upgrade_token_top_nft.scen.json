@@ -43,7 +43,7 @@
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
 
-            "str:memeRarity|u64:1": "3",
+            "str:memeRarity|u64:1": "4",
             "str:memeRarity|u64:2": "1",
 
             "str:memeToTopMeme|u64:1": "5"
@@ -58,7 +58,7 @@
             "str:TMEMENFT-745e9b": {
               "nonce": "0",
               "balance": "0",
-              "lastNonce": "4",
+              "lastNonce": "5",
               "roles": [
                 "ESDTRoleNFTCreate",
                 "ESDTRoleNFTUpdateAttributes"
@@ -71,62 +71,27 @@
           "nonce": "0",
           "balance": "1,000,000",
           "esdt": {
-            "str:MEMENFT-123456": {
-              "instances": [
-                {
-                  "nonce": "1",
-                  "balance": "1",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                }
-              ]
-            },
             "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "2",
-                  "balance": "2",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
-                {
-                  "nonce": "3",
-                  "balance": "1",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                }
-              ]
+              "instances": []
             },
             "str:TMEMENFT-745e9b": {
               "instances": [
-                {
-                  "nonce": "4",
-                  "balance": "1",
-                  "royalties": "1000",
-                  "hash": "",
-                  "attributes": "u8:3|u64:3|u64:1|nested:str:funny|address:my_address",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
                 {
                   "nonce": "5",
                   "balance": "1",
                   "royalties": "1000",
                   "hash": "",
                   "attributes": "u8:3|u64:1|u64:1|nested:str:funny|address:my_address",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                },
+                {
+                  "nonce": "6",
+                  "balance": "1",
+                  "royalties": "1000",
+                  "hash": "",
+                  "attributes": "u8:2|u64:2|u64:1|nested:str:funny|address:my_address",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -139,104 +104,60 @@
     },
     {
       "step": "scCall",
-      "txId": "upgrade-token-error-type",
+      "txId": "upgrade-token",
       "tx": {
         "from": "address:my_address",
         "to": "sc:auction_contract",
         "function": "upgrade_token",
         "arguments": [],
-        "esdt": {
-          "tokenIdentifier": "str:MEMENFT-123456",
-          "nonce": "1",
-          "value": "1"
-        },
-        "gasLimit": "5,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "4",
-        "message": "str:Nft is not of the correct type",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "upgrade-token-error-amount",
-      "tx": {
-        "from": "address:my_address",
-        "to": "sc:auction_contract",
-        "function": "upgrade_token",
-        "arguments": [],
-        "esdt": {
-          "tokenIdentifier": "str:MEMENFT-745e9b",
-          "nonce": "2",
-          "value": "2"
-        },
-        "gasLimit": "5,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "4",
-        "message": "str:Nft amount should be 1",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "upgrade-token-error-rarity",
-      "tx": {
-        "from": "address:my_address",
-        "to": "sc:auction_contract",
-        "function": "upgrade_token",
-        "esdt": {
-          "tokenIdentifier": "str:MEMENFT-745e9b",
-          "nonce": "3",
-          "value": "1"
-        },
-        "gasLimit": "5,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "4",
-        "message": "str:Meme rarity is empty",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "upgrade-token-error-rarity-top",
-      "tx": {
-        "from": "address:my_address",
-        "to": "sc:auction_contract",
-        "function": "upgrade_token",
-        "esdt": {
-          "tokenIdentifier": "str:TMEMENFT-745e9b",
-          "nonce": "4",
-          "value": "1"
-        },
-        "gasLimit": "5,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "status": "4",
-        "message": "str:Nft can't be upgraded",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "upgrade-token-rarity-same",
-      "tx": {
-        "from": "address:my_address",
-        "to": "sc:auction_contract",
-        "function": "upgrade_token",
         "esdt": {
           "tokenIdentifier": "str:TMEMENFT-745e9b",
           "nonce": "5",
+          "value": "1"
+        },
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "upgrade-token-twice",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "upgrade_token",
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:TMEMENFT-745e9b",
+          "nonce": "5",
+          "value": "1"
+        },
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Nft can't be upgraded",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "upgrade-token-rarity-less",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "upgrade_token",
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:TMEMENFT-745e9b",
+          "nonce": "6",
           "value": "1"
         },
         "gasLimit": "5,000,000",
@@ -257,65 +178,30 @@
           "owner": "address:my_address"
         },
         "address:my_address": {
-          "nonce": "5",
+          "nonce": "3",
           "balance": "1,000,000",
           "esdt": {
-            "str:MEMENFT-123456": {
-              "instances": [
-                {
-                  "nonce": "1",
-                  "balance": "1",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                }
-              ]
-            },
             "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "2",
-                  "balance": "2",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
-                {
-                  "nonce": "3",
-                  "balance": "1",
-                  "royalties": "500",
-                  "hash": "",
-                  "attributes": "u64:1|nested:str:funny|u8:2",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                }
-              ]
+              "instances": []
             },
             "str:TMEMENFT-745e9b": {
               "instances": [
-                {
-                  "nonce": "4",
-                  "balance": "1",
-                  "royalties": "1000",
-                  "hash": "",
-                  "attributes": "u8:3|u64:3|u64:1|nested:str:funny|address:my_address",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
                 {
                   "nonce": "5",
                   "balance": "1",
                   "royalties": "1000",
                   "hash": "",
-                  "attributes": "u8:3|u64:1|u64:1|nested:str:funny|address:my_address",
+                  "attributes": "u8:4|u64:1|u64:1|nested:str:funny|address:my_address",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                },
+                {
+                  "nonce": "6",
+                  "balance": "1",
+                  "royalties": "1000",
+                  "hash": "",
+                  "attributes": "u8:2|u64:2|u64:1|nested:str:funny|address:my_address",
                   "uri": [
                     "str:nft-create-uri"
                   ]
@@ -331,6 +217,7 @@
             "str:votingContract": "address:voting_contract",
             "str:tokenIdentifier": "str:MEMENFT-745e9b",
             "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
             "str:bidCutPercentage": "1000",
             "str:minBidStart": "5",
             "str:periodMemeAuction|u64:123,000|u64:1": {
@@ -355,8 +242,6 @@
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:1": "1",
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
 
-            "str:memeRarity|u64:2": "1",
-
             "str:memeToTopMeme|u64:1": "5"
           },
           "esdt": {
@@ -369,7 +254,7 @@
             "str:TMEMENFT-745e9b": {
               "nonce": "0",
               "balance": "0",
-              "lastNonce": "4",
+              "lastNonce": "5",
               "roles": [
                 "ESDTRoleNFTCreate",
                 "ESDTRoleNFTUpdateAttributes"
