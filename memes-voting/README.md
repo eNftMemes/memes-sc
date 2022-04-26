@@ -3,6 +3,10 @@
 
 **Token Id: NFTMEMES-6f4547**
 
+### TESTNET
+**Contract Address: erd1qqqqqqqqqqqqqpgqj3uzpmg5l7tr5we8r5xnatpchag095w5a2pqna4amj**
+
+**Token Id: NFTMEMES-32473b**
 
 ### MAINNET
 **Contract Address: TBD**
@@ -48,7 +52,7 @@ Funny category:
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_signer" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_ADDRESS"`
 
 ## Linking auction contract
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_auction_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_OTHER_CONTRACT"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_auction_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_AUCTION_CONTRACT"`
 
 # Example calls
 
