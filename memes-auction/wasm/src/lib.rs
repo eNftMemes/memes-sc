@@ -10,6 +10,7 @@ elrond_wasm_node::wasm_endpoints! {
         callBack
         bid
         bid_cut_percentage
+        claim_royalties
         end_auction
         issue_token
         lock_token

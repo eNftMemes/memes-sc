@@ -95,6 +95,22 @@ pub trait OwnerModule {
         self.min_bid_start().set(min_bid_start);
     }
 
+    #[endpoint]
+    #[only_owner]
+    fn claim_royalties(&self) {
+        let caller = self.blockchain().get_caller();
+
+        let mut to_send = self.blockchain().get_sc_balance(&TokenIdentifier::egld(), 0);
+
+        to_send = &to_send - &self.auction_funds().get();
+
+        self.send().direct_egld(
+            &caller,
+            &to_send,
+            b"claiming success"
+        );
+    }
+
     // TODO: Improve this
     // #[only_owner]
     // #[endpoint]
@@ -176,6 +192,9 @@ pub trait OwnerModule {
     #[view]
     #[storage_mapper("memeToTopMeme")]
     fn meme_to_top_meme(&self, nonce: u64) -> SingleValueMapper<u64>;
+
+    #[storage_mapper("auctionFunds")]
+    fn auction_funds(&self) -> SingleValueMapper<BigUint>;
 
     // TODO
     // #[view]

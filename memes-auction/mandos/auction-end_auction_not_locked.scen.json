@@ -85,7 +85,9 @@
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
 
             "str:memeRarity|u64:1": "2",
-            "str:memeRarity|u64:2": "1"
+            "str:memeRarity|u64:2": "1",
+
+            "str:auctionFunds": "11"
           },
           "code": "file:../output/memes-auction.wasm"
         },
@@ -178,7 +180,9 @@
             "str:periodAuctionedMemes|u64:123,000|``.item|u32:2": "2",
 
             "str:memeRarity|u64:1": "2",
-            "str:memeRarity|u64:2": "1"
+            "str:memeRarity|u64:2": "1",
+
+            "str:auctionFunds": "0"
           },
           "code": "file:../output/memes-auction.wasm"
         },

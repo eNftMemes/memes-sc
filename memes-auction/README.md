@@ -37,4 +37,7 @@ eg: (TopNftMemes - TNFTMEMES)
 
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_local_roles" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D"`
 
+## Query token id
+erdpy contract query $CONTRACT_ADDRESS --function="token_identifier_top" --proxy="https://devnet-gateway.elrond.com"
+
 # Example calls

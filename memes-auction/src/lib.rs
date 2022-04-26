@@ -144,8 +144,12 @@ pub trait MemesAuction: owner::OwnerModule {
             "Bid must be higher than the current winning bid"
         );
 
+        let mut funds = self.auction_funds().get();
+
         // refund losing bid
         if !auction.current_winner.is_zero() {
+            funds = &funds - &auction.current_bid;
+
             self.send().direct_egld(
                 &auction.current_winner,
                 &auction.current_bid,
@@ -153,11 +157,15 @@ pub trait MemesAuction: owner::OwnerModule {
             );
         }
 
+        funds = &funds + &payment_amount;
+
         // update auction bid and winner
         auction.current_bid = payment_amount;
         auction.current_winner = caller;
 
         self.period_meme_auction(period, nonce).set(&auction);
+
+        self.auction_funds().set(&funds);
     }
 
     #[endpoint]
@@ -282,10 +290,16 @@ pub trait MemesAuction: owner::OwnerModule {
     }
 
     fn distribute_tokens_after_auction_end(&self, nft_nonce: &u64, auction: &Auction<Self::Api>) {
+        let mut funds = self.auction_funds().get();
+
         if auction.original_owner.is_zero() {
             if auction.current_winner.is_zero() {
                 return;
             }
+
+            funds = &funds - &auction.current_bid;
+
+            self.auction_funds().set(funds);
 
             // return money to current winner
             self.send().direct_egld(
@@ -310,6 +324,10 @@ pub trait MemesAuction: owner::OwnerModule {
 
             return;
         }
+
+        funds = &funds - &auction.current_bid;
+
+        self.auction_funds().set(&funds);
 
         let bid_cut_percentage = BigUint::from(auction.bid_cut_percentage);
         let bid_cut = &auction.current_bid * &bid_cut_percentage / PERCENTAGE_TOTAL;
@@ -373,31 +391,6 @@ pub trait MemesAuction: owner::OwnerModule {
         );
 
         self.meme_to_top_meme(*nft_nonce).set(nft_nonce_top);
-
-        // TODO: See if this works, so the Voting contract is the owner of all NFTs
-        // Create NFT for another address
-        // let mut arg_buffer = ManagedArgBuffer::new_empty();
-        // arg_buffer.push_arg(nft_token);
-        // arg_buffer.push_arg(&amount);
-        // arg_buffer.push_arg(&name);
-        // arg_buffer.push_arg(royalties);
-        // arg_buffer.push_arg(hash);
-        // arg_buffer.push_arg(&MemeAttributes { period: current_period, category, rarity: 0 });
-        // arg_buffer.push_arg(&url);
-        //
-        // let output = Self::Api::send_api_impl().execute_on_dest_context_by_caller_raw(
-        // 	self.blockchain().get_gas_left(),
-        // 	&self.auction_sc().get(),
-        // 	// &caller,
-        // 	&BigUint::zero(),
-        // 	&ManagedBuffer::new_from_bytes(ESDT_NFT_CREATE_FUNC_NAME),
-        // 	&arg_buffer,
-        // );
-        //
-        // let mut nonce: u64 = 0;
-        // if let Some(first_result_bytes) = output.try_get(0) {
-        // 	nonce = first_result_bytes.parse_as_u64().unwrap_or_default();
-        // }
 
         self.send().esdt_local_burn(nft_token, *nft_nonce, &amount);
 
