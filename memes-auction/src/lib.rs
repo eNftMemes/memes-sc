@@ -35,7 +35,7 @@ pub trait MemesAuction: owner::OwnerModule {
     }
 
     #[endpoint]
-    fn start_auction(&self, period: u64, #[var_args] nfts: MultiValueEncoded<u64>) {
+    fn start_auction(&self, period: u64, nfts: MultiValueEncoded<u64>) {
         let caller: ManagedAddress = self.blockchain().get_caller();
         require!(
 			caller == self.voting_contract().get(),

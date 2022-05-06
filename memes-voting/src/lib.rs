@@ -24,7 +24,7 @@ mod auction_proxy {
 	#[elrond_wasm::proxy]
 	pub trait Auction {
 		#[endpoint]
-		fn start_auction(&self, period: u64, #[var_args] nfts: MultiValueEncoded<u64>) -> SCResult<()>;
+		fn start_auction(&self, period: u64, nfts: MultiValueEncoded<u64>) -> SCResult<()>;
 	}
 }
 
@@ -93,7 +93,7 @@ pub trait MemesVoting: owner::OwnerModule
 	}
 
 	#[endpoint]
-	fn vote_memes(&self, signature: Signature<Self::Api>, #[var_args] nft_nonces: MultiValueEncoded<u64>) {
+	fn vote_memes(&self, signature: Signature<Self::Api>, nft_nonces: MultiValueEncoded<u64>) {
 		require!(self.not_paused(), "Contract paused, can't vote memes");
 
 		let caller: ManagedAddress = self.blockchain().get_caller();

@@ -194,7 +194,6 @@
         "gasPrice": "0"
       },
       "expect": {
-        "out": ["0x01"],
         "status": "0",
         "gas": "*",
         "refund": "*"
