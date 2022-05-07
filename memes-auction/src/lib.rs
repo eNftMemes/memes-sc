@@ -226,56 +226,6 @@ pub trait MemesAuction: owner::OwnerModule {
         );
     }
 
-    // TODO: Get this working again OR use same upgrade function
-    // #[payable("*")]
-    // #[endpoint]
-    // fn upgrade_custom_attributes(
-    // 	&self,
-    // 	#[payment_token] nft_type: TokenIdentifier,
-    // 	#[payment_nonce] nonce: u64,
-    // 	#[payment_amount] nft_amount: BigUint,
-    // ) {
-    // 	require!(nft_type == self.token_identifier().get(), "Nft is not of the correct type");
-    // 	require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
-    // 	require!(!self.custom_attributes(nonce).is_empty(), "Nft can't be upgraded");
-    //
-    // 	self.update_nft_attributes(
-    // 		&self.blockchain().get_caller(),
-    // 		&nonce,
-    // 		b"nft upgraded"
-    // 	);
-    //
-    // 	self.custom_attributes(nonce).clear();
-    // }
-
-    // fn update_nft_attributes(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
-    // 	let nft_token = &self.token_identifier().get();
-    // 	let amount = BigUint::from(NFT_AMOUNT);
-    //
-    // 	let own_address: ManagedAddress = self.blockchain().get_sc_address();
-    // 	let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
-    // 	let mut new_attributes = token_data.decode_attributes::<MemeAttributes<Self::Api>>();
-    //
-    // 	let custom_attributes = self.custom_attributes(*nft_nonce).get();
-    //
-    // 	new_attributes.category = custom_attributes.category;
-    // 	new_attributes.rarity = custom_attributes.rarity;
-    //
-    // 	self.send().nft_update_attributes(
-    // 		&self.token_identifier().get(),
-    // 		*nft_nonce,
-    // 		&new_attributes
-    // 	);
-    //
-    // 	self.send().direct(
-    // 		send_to,
-    // 		nft_token,
-    // 		*nft_nonce,
-    // 		&amount,
-    // 		text,
-    // 	);
-    // }
-
     // private
 
     fn try_get_auction(&self, period: u64, nonce: u64) -> Auction<Self::Api> {
@@ -360,7 +310,9 @@ pub trait MemesAuction: owner::OwnerModule {
     }
 
     fn convert_to_top_nft(&self, send_to: &ManagedAddress, nft_nonce: &u64, text: &[u8]) {
-        require!(!self.meme_rarity(*nft_nonce).is_empty(), "Meme rarity is empty");
+        let meme_rarity = self.meme_rarity(*nft_nonce);
+
+        require!(!meme_rarity.is_empty(), "Meme rarity is empty");
 
         let nft_token = &self.token_identifier().get();
         let nft_token_top = &self.token_identifier_top().get();
@@ -372,11 +324,22 @@ pub trait MemesAuction: owner::OwnerModule {
 
         let top_royalties: &BigUint = &BigUint::from(ROYALTIES);
 
+        let rarity = meme_rarity.get();
+        meme_rarity.clear();
+
+        // Set custom category if set
+        let mut category = attributes.category;
+        let custom_meme_category = self.custom_meme_category(*nft_nonce);
+        if !custom_meme_category.is_empty() {
+            category = custom_meme_category.get();
+            custom_meme_category.clear();
+        }
+
         let new_attributes = TopMemeAttributes {
-            rarity: self.meme_rarity(*nft_nonce).get(),
+            rarity,
             original_nonce: *nft_nonce,
             period: attributes.period,
-            category: attributes.category,
+            category,
             creator: attributes.creator,
         };
 
@@ -401,8 +364,6 @@ pub trait MemesAuction: owner::OwnerModule {
             &amount,
             text,
         );
-
-        self.meme_rarity(*nft_nonce).clear();
     }
 
     fn update_nft_attributes(&self, send_to: &ManagedAddress, original_nonce: &u64, nft_nonce: &u64, text: &[u8]) {
@@ -413,15 +374,34 @@ pub trait MemesAuction: owner::OwnerModule {
         let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(&own_address, nft_token, *nft_nonce);
         let mut new_attributes = token_data.decode_attributes::<TopMemeAttributes<Self::Api>>();
 
-        if !self.meme_rarity(*original_nonce).is_empty() && self.meme_rarity(*original_nonce).get() > new_attributes.rarity {
-            new_attributes.rarity = self.meme_rarity(*original_nonce).get();
+        let mut attributes_updated = false;
 
+        let meme_rarity = self.meme_rarity(*original_nonce);
+
+        if !meme_rarity.is_empty() && meme_rarity.get() > new_attributes.rarity {
+            new_attributes.rarity = meme_rarity.get();
+
+            attributes_updated = true;
+        }
+
+        // Set custom category if set
+        let custom_meme_category = self.custom_meme_category(*original_nonce);
+        if !custom_meme_category.is_empty() {
+            new_attributes.category = custom_meme_category.get();
+            custom_meme_category.clear();
+
+            attributes_updated = true;
+        }
+
+        if attributes_updated {
             self.send().nft_update_attributes(
                 nft_token,
                 *nft_nonce,
                 &new_attributes,
             );
         }
+
+        meme_rarity.clear();
 
         self.send().direct(
             send_to,
@@ -430,8 +410,6 @@ pub trait MemesAuction: owner::OwnerModule {
             &amount,
             text,
         );
-
-        self.meme_rarity(*original_nonce).clear();
     }
 
     // views/storage
@@ -461,12 +439,4 @@ pub trait MemesAuction: owner::OwnerModule {
     #[view]
     #[storage_mapper("tokenIdentifier")]
     fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
-
-    // The rarity of a meme depending on the place the meme was in an auction, to be used in the future
-    // If an auction has less than 10 memes, the max rarity is < 10
-    // 10 - 1st place, most rare
-    // 1 - 10th place, most common
-    #[view]
-    #[storage_mapper("memeRarity")]
-    fn meme_rarity(&self, nonce: u64) -> SingleValueMapper<u8>;
 }

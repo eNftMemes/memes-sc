@@ -5,13 +5,6 @@ use crate::auction::*;
 
 pub const AUCTION_TIME: u64 = 432000; // 5 days in seconds (time the owner of the NFT has for locking it)
 
-// TODO: Update this
-// #[derive(TopEncode, TopDecode, TypeAbi)]
-// pub struct CustomMemeAttributes<M: ManagedTypeApi> {
-//     pub category: ManagedBuffer<M>,
-//     pub rarity: u8,
-// }
-
 #[elrond_wasm::module]
 pub trait OwnerModule {
     // TODO: Test this function with Mandos after it is supported to issue tokens
@@ -157,14 +150,22 @@ pub trait OwnerModule {
         self.period_auctioned_memes(*period).push(nonce);
     }
 
-    // TODO
-    // #[only_owner]
-    // #[endpoint]
-    // fn set_custom_attributes(&self, nonce: u64, category: ManagedBuffer, rarity: u8) {
-    //     self.custom_attributes(nonce).set(
-    //         &CustomMemeAttributes { category, rarity }
-    //     );
-    // }
+    #[only_owner]
+    #[endpoint]
+    fn set_custom_attributes(&self, nonce: u64, category: &ManagedBuffer, rarity: &u8) {
+        require!(*rarity > 10, "Rarity needs to be higher than 10");
+
+        let meme_rarity = self.meme_rarity(nonce);
+        let custom_meme_category = self.custom_meme_category(nonce);
+
+        require!(
+            meme_rarity.is_empty() && custom_meme_category.is_empty(),
+            "Meme rarity and custom category needs to be empty"
+        );
+
+        meme_rarity.set(rarity);
+        custom_meme_category.set(category);
+    }
 
     // views/storage
 
@@ -196,8 +197,15 @@ pub trait OwnerModule {
     #[storage_mapper("auctionFunds")]
     fn auction_funds(&self) -> SingleValueMapper<BigUint>;
 
-    // TODO
-    // #[view]
-    // #[storage_mapper("customAttributes")]
-    // fn custom_attributes(&self, nonce: u64) -> SingleValueMapper<CustomMemeAttributes<Self::Api>>;
+    // The rarity of a meme depending on the place the meme was in an auction, to be used in the future
+    // If an auction has less than 10 memes, the max rarity is < 10
+    // 10 - 1st place, most rare
+    // 1 - 10th place, most common
+    #[view]
+    #[storage_mapper("memeRarity")]
+    fn meme_rarity(&self, nonce: u64) -> SingleValueMapper<u8>;
+
+    #[view]
+    #[storage_mapper("customMemeCategory")]
+    fn custom_meme_category(&self, nonce: u64) -> SingleValueMapper<ManagedBuffer>;
 }

@@ -1,0 +1,160 @@
+{
+  "name": "voting add meme",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "auction-deploy.scen.json"
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:bidCutPercentage": "1000",
+            "str:minBidStart": "5",
+
+            "str:memeRarity|u64:2": "1",
+            "str:customMemeCategory|u64:3": "str:CustomProject"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-auction.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-custom-attributes-error-owner",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:auction_contract",
+        "function": "set_custom_attributes",
+        "arguments": [
+          "u64:1",
+          "str:CustomProject",
+          "u8:255"
+        ],
+        "gasLimit": "4,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Endpoint can only be called by owner",
+        "out": [],
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-custom-attributes-error-rarity-less",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "set_custom_attributes",
+        "arguments": [
+          "u64:1",
+          "str:CustomProject",
+          "u8:10"
+        ],
+        "gasLimit": "4,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Rarity needs to be higher than 10",
+        "out": [],
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-custom-attributes-error-rarity-exists",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "set_custom_attributes",
+        "arguments": [
+          "u64:2",
+          "str:CustomProject",
+          "u8:255"
+        ],
+        "gasLimit": "4,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Meme rarity and custom category needs to be empty",
+        "out": [],
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-custom-attributes-error-category-exists",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "set_custom_attributes",
+        "arguments": [
+          "u64:3",
+          "str:CustomProject",
+          "u8:255"
+        ],
+        "gasLimit": "4,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Meme rarity and custom category needs to be empty",
+        "out": [],
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "4",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:bidCutPercentage": "1000",
+            "str:minBidStart": "5",
+
+            "str:memeRarity|u64:2": "1",
+            "str:customMemeCategory|u64:3": "str:CustomProject"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-auction.wasm"
+        }
+      }
+    }
+  ]
+}

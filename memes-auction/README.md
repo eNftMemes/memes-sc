@@ -21,13 +21,13 @@ First decode voting contract address to hex using erdpy:
 
 Then deploy:
 
-`erdpy --verbose contract deploy --project=memes-auction --pem="devnet.pem" --gas-limit=50000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-auction.json" --recall-nonce --chain="D" --metadata-payable-by-sc --send --arguments "0xHEX_ADDRESS_OF_VOTING_CONTRACT" "0xHEX_ENCODING_OF_TOKEN_IDENTIFIER" "25000000000000000"`
+`erdpy --verbose contract deploy --project=memes-auction --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-auction.json" --recall-nonce --chain="D" --metadata-payable-by-sc --send --arguments "0xHEX_ADDRESS_OF_VOTING_CONTRACT" "0xHEX_ENCODING_OF_TOKEN_IDENTIFIER" "25000000000000000"`
 
 25000000000000000 - 0.025 EGLD
 
 # Upgrade
 
-`erdpy --verbose contract upgrade --project=memes-auction --pem="devnet.pem" --gas-limit=50000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-auction.json" --recall-nonce --chain="D" --metadata-payable-by-sc --send "BECH32_ADDRESS" --arguments "0xHEX_ADDRESS_OF_VOTING_CONTRACT" "0xHEX_ENCODING_OF_TOKEN_IDENTIFIER" "25000000000000000"`
+`erdpy --verbose contract upgrade --project=memes-auction --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-auction.json" --recall-nonce --chain="D" --metadata-payable-by-sc --send "BECH32_ADDRESS" --arguments "0xHEX_ADDRESS_OF_VOTING_CONTRACT" "0xHEX_ENCODING_OF_TOKEN_IDENTIFIER" "25000000000000000"`
 
 ## Issue token
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=10000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
@@ -46,3 +46,6 @@ eg: (TopNftMemes - TNFTMEMES)
 ### Then set the address of the auction contract in the voting contract!
 
 # Example calls
+
+## Set custom attributes
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" -gas-limit=4000000 --function="set_custom_attributes" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "NONCE" "CATEGORY" "RARITY"`
