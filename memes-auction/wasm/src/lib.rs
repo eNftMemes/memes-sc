@@ -8,9 +8,11 @@ elrond_wasm_node::wasm_endpoints! {
     memes_auction
     (
         callBack
+        add_custom_auction
         bid
         bid_cut_percentage
         claim_royalties
+        custom_auction_periods
         custom_meme_category
         end_auction
         issue_token

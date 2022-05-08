@@ -104,25 +104,56 @@ pub trait OwnerModule {
         );
     }
 
-    // TODO: Improve this
-    // #[only_owner]
-    // #[endpoint]
-    // fn add_custom_auction(&self, period: u64, nonce: u64) {
-    //     let block_timestamp = self.blockchain().get_block_timestamp();
-    //
-    //     require!(
-    //         block_timestamp > period && block_timestamp - period < AUCTION_TIME,
-    //         "Auction deadline has passed"
-    //     );
-    //     require!(!self.period_auctioned_memes(period).is_empty(), "Period auction does not exist");
-    //     require!(self.period_meme_auction(period, nonce).is_empty(), "Auction for this period and nonce already exists");
-    //
-    //     let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
-    //     let min_bid_start: BigUint = self.min_bid_start().get();
-    //     let multiplier: u8 = 10;
-    //
-    //     self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
-    // }
+    #[only_owner]
+    #[endpoint]
+    fn set_custom_attributes(&self, nonce: u64, category: &ManagedBuffer, rarity: &u8) {
+        require!(*rarity > 10, "Rarity needs to be higher than 10");
+
+        let meme_rarity = self.meme_rarity(nonce);
+        let custom_meme_category = self.custom_meme_category(nonce);
+
+        require!(
+            meme_rarity.is_empty() && custom_meme_category.is_empty(),
+            "Meme rarity and custom category needs to be empty"
+        );
+
+        meme_rarity.set(rarity);
+        custom_meme_category.set(category);
+    }
+
+    #[only_owner]
+    #[endpoint]
+    fn add_custom_auction(&self, period: u64, nonce: u64) {
+        let block_timestamp = self.blockchain().get_block_timestamp();
+
+        require!(
+            block_timestamp - core::cmp::min(block_timestamp, period) < AUCTION_TIME,
+            "Auction deadline has passed"
+        );
+        require!(self.period_meme_auction(period, nonce).is_empty(), "Auction for this period and nonce already exists");
+
+        // If is custom auction for a non existent period
+        if self.period_auctioned_memes(period).is_empty() {
+            let mut custom_auction_periods = self.custom_auction_periods();
+
+            // Only add new custom period if it doesn't exist yet
+            if custom_auction_periods.is_empty() {
+                custom_auction_periods.push(&period);
+            } else {
+                let last_custom_period = custom_auction_periods.get(custom_auction_periods.len());
+
+                if last_custom_period != period {
+                    custom_auction_periods.push(&period);
+                }
+            }
+        }
+
+        let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
+        let min_bid_start: BigUint = self.min_bid_start().get();
+        let multiplier: u8 = 12; // 0.3 EGLD if min bid is 0.025 EGLD
+
+        self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
+    }
 
     // private
 
@@ -148,23 +179,6 @@ pub trait OwnerModule {
 
         self.period_meme_auction(*period, *nonce).set(&auction);
         self.period_auctioned_memes(*period).push(nonce);
-    }
-
-    #[only_owner]
-    #[endpoint]
-    fn set_custom_attributes(&self, nonce: u64, category: &ManagedBuffer, rarity: &u8) {
-        require!(*rarity > 10, "Rarity needs to be higher than 10");
-
-        let meme_rarity = self.meme_rarity(nonce);
-        let custom_meme_category = self.custom_meme_category(nonce);
-
-        require!(
-            meme_rarity.is_empty() && custom_meme_category.is_empty(),
-            "Meme rarity and custom category needs to be empty"
-        );
-
-        meme_rarity.set(rarity);
-        custom_meme_category.set(category);
     }
 
     // views/storage
@@ -208,4 +222,8 @@ pub trait OwnerModule {
     #[view]
     #[storage_mapper("customMemeCategory")]
     fn custom_meme_category(&self, nonce: u64) -> SingleValueMapper<ManagedBuffer>;
+
+    #[view]
+    #[storage_mapper("customAuctionPeriods")]
+    fn custom_auction_periods(&self) -> VecMapper<u64>;
 }

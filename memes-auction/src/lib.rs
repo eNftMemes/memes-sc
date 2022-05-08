@@ -45,10 +45,6 @@ pub trait MemesAuction: owner::OwnerModule {
 			nfts.len() <= MAX_TOP_MEMES,
 			"There can't be more than 10 nfts"
 		);
-        require!(
-			self.period_auctioned_memes(period).is_empty(),
-			"There are already auctioned nfts for this period"
-		);
 
         let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
         let min_bid_start: BigUint = self.min_bid_start().get();
@@ -416,9 +412,11 @@ pub trait MemesAuction: owner::OwnerModule {
 
     #[view]
     fn period_auctions_memes_all(&self, period: u64) -> MultiValueEncoded<FullAuction<Self::Api>> {
+        let period_auctioned_memes = self.period_auctioned_memes(period);
+
         let mut result: MultiValueEncoded<FullAuction<Self::Api>> = MultiValueEncoded::new();
-        for index in 1..=self.period_auctioned_memes(period).len() {
-            let nonce = self.period_auctioned_memes(period).get(index);
+        for index in 1..=period_auctioned_memes.len() {
+            let nonce = period_auctioned_memes.get(index);
             let auction = self.period_meme_auction(period, nonce).get();
 
             let full_auction = FullAuction {
