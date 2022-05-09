@@ -98,58 +98,6 @@
     },
     {
       "step": "scCall",
-      "txId": "lock-token-auction-not-top-nonce",
-      "tx": {
-        "from": "address:my_address",
-        "to": "sc:auction_contract",
-        "function": "lock_token",
-        "value": "0",
-        "arguments": [
-          "u64:123,000"
-        ],
-        "esdt": {
-          "tokenIdentifier": "str:TMEMENFT-745e9b",
-          "nonce": "11",
-          "value": "1"
-        },
-        "gasLimit": "5,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "message": "str:Auction should have top nonce set",
-        "status": "4",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "lock-token-auction-not-top-nonce-22",
-      "tx": {
-        "from": "address:my_address",
-        "to": "sc:auction_contract",
-        "function": "lock_token",
-        "value": "0",
-        "arguments": [
-          "u64:123,000"
-        ],
-        "esdt": {
-          "tokenIdentifier": "str:TMEMENFT-745e9b",
-          "nonce": "22",
-          "value": "1"
-        },
-        "gasLimit": "5,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "message": "str:Auction should have top nonce set",
-        "status": "4",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scCall",
       "txId": "lock-token-auction-not-exists",
       "tx": {
         "from": "address:my_address",
@@ -183,7 +131,7 @@
           "owner": "address:my_address"
         },
         "address:my_address": {
-          "nonce": "4",
+          "nonce": "2",
           "balance": "1,000,000",
           "esdt": {
             "str:TMEMENFT-745e9b": {

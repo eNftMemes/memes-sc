@@ -48,4 +48,7 @@ eg: (TopNftMemes - TNFTMEMES)
 # Example calls
 
 ## Set custom attributes
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" -gas-limit=4000000 --function="set_custom_attributes" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "NONCE" "CATEGORY" "RARITY"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=4000000 --function="set_custom_attributes" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "NONCE" "CATEGORY" "RARITY"`
+
+## Add custom auction
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=5000000 --function="add_custom_auction" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "PERIOD" "NONCE"`

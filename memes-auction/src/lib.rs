@@ -98,7 +98,7 @@ pub trait MemesAuction: owner::OwnerModule {
 
             auction = self.try_get_auction(period, original_nonce);
 
-            require!(auction.top_nonce == nonce, "Auction should have top nonce set");
+            auction.top_nonce = nonce;
         } else {
             auction = self.try_get_auction(period, original_nonce);
         }
