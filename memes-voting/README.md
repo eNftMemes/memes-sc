@@ -4,9 +4,9 @@
 **Token Id: NFTMEMES-706046**
 
 ### TESTNET
-**Contract Address: erd1qqqqqqqqqqqqqpgqj3uzpmg5l7tr5we8r5xnatpchag095w5a2pqna4amj**
+**Contract Address: erd1qqqqqqqqqqqqqpgqrgn4tjr3fw4mcqt0n4elecvutjgqlqnua2pqh75q6d**
 
-**Token Id: NFTMEMES-32473b**
+**Token Id: NFTMEMES-eec2e4**
 
 ### MAINNET
 **Contract Address: TBD**
