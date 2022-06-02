@@ -123,7 +123,7 @@ pub trait OwnerModule {
 
     #[only_owner]
     #[endpoint]
-    fn add_custom_auction(&self, period: u64, nonce: u64) {
+    fn add_custom_auction(&self, period: u64, nonce: u64, multiplier_opt: OptionalValue<u8>) {
         let block_timestamp = self.blockchain().get_block_timestamp();
 
         require!(
@@ -150,7 +150,8 @@ pub trait OwnerModule {
 
         let bid_cut_percentage: u16 = self.bid_cut_percentage().get();
         let min_bid_start: BigUint = self.min_bid_start().get();
-        let multiplier: u8 = 12; // 0.3 EGLD if min bid is 0.025 EGLD
+        // 0.5 EGLD default if min bid is 0.025 EGLD
+        let multiplier: u8 = if let OptionalValue::Some(multiplier_val) = multiplier_opt { multiplier_val } else { 20 };
 
         self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
     }
