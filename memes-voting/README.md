@@ -3,16 +3,10 @@
 
 **Token Id: NFTMEMES-706046**
 
-### TESTNET
-**Contract Address: erd1qqqqqqqqqqqqqpgqrgn4tjr3fw4mcqt0n4elecvutjgqlqnua2pqh75q6d**
-
-**Token Id: NFTMEMES-eec2e4**
-
 ### MAINNET
-**Contract Address: TBD**
+**Contract Address: erd1qqqqqqqqqqqqqpgqjkjuya04mzesltxphap72k7n6jrme6w9a2pqd2r2ah**
 
-**Token Id: TBD**
-
+**Token Id: NFTMEMES-0300ba**
 
 # Deploy
 
