@@ -1,0 +1,14 @@
+[package]
+name = "memes-staking-meta"
+version = "0.0.0"
+edition = "2018"
+publish = false
+authors = [ "you",]
+
+[dev-dependencies]
+
+[dependencies.memes-staking]
+path = ".."
+
+[dependencies.elrond-wasm-debug]
+version = "0.32.0"
