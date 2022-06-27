@@ -202,6 +202,7 @@
             "str:periods.len": "2",
             "str:periods.item|u32:1": "123,000",
             "str:periods.item|u32:2": "727,800",
+            "str:periodTime": "604800",
 
             "str:periodMemes|u64:123,000|``.len": "2",
             "str:periodMemes|u64:123,000|``.item|u32:1": "1",
@@ -438,6 +439,7 @@
             "str:periods.item|u32:1": "123,000",
             "str:periods.item|u32:2": "727,800",
             "str:periods.item|u32:3": "1,332,600",
+            "str:periodTime": "604800",
 
             "str:periodMemes|u64:123,000|``.len": "2",
             "str:periodMemes|u64:123,000|``.item|u32:1": "1",
@@ -612,6 +614,7 @@
             "str:periods.item|u32:1": "123,000",
             "str:periods.item|u32:2": "727,800",
             "str:periods.item|u32:3": "1,332,600",
+            "str:periodTime": "604800",
 
             "str:periodMemes|u64:123,000|``.len": "2",
             "str:periodMemes|u64:123,000|``.item|u32:1": "1",
@@ -681,6 +684,7 @@
             "str:periods.item|u32:1": "123,000",
             "str:periods.item|u32:2": "727,800",
             "str:periods.item|u32:3": "1,332,600",
+            "str:periodTime": "604800",
 
             "str:periodMemes|u64:123,000|``.len": "2",
             "str:periodMemes|u64:123,000|``.item|u32:1": "1",
@@ -856,6 +860,7 @@
             "str:periods.item|u32:1": "123,000",
             "str:periods.item|u32:2": "727,800",
             "str:periods.item|u32:3": "1,332,600",
+            "str:periodTime": "604800",
 
             "str:periodMemes|u64:123,000|``.len": "2",
             "str:periodMemes|u64:123,000|``.item|u32:1": "1",

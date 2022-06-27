@@ -43,9 +43,13 @@ eg: (TopNftMemes - TNFTMEMES)
 # Example calls
 
 ## Set custom attributes
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=4000000 --function="set_custom_attributes" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "NONCE" "CATEGORY" "RARITY"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=4000000 --function="set_custom_attributes" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --chain="D" --arguments "NONCE" "CATEGORY" "RARITY"`
+
+Example:
+
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=4000000 --function="set_custom_attributes" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --chain="D" --arguments "2" "str:eNftMemes Official" "255"`
 
 ## Add custom auction
 The OPTIONAL_MULTIPLIER is 20 if not specified (for 0.025 min bid that's 0.025 * 20 = 0.5 EGLD).
 
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=5000000 --function="add_custom_auction" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "PERIOD" "NONCE" "OPTIONAL_MULTIPLIER"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=5000000 --function="add_custom_auction" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --chain="D" --arguments "PERIOD" "NONCE" "OPTIONAL_MULTIPLIER"`

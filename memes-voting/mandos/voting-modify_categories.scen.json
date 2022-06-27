@@ -77,6 +77,8 @@
             "str:auctionSc": "address:auction_contract",
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
+            "str:periodTime": "604800",
+
             "str:periodMemes.len": "0"
           },
           "esdt": {
@@ -169,6 +171,8 @@
             "str:auctionSc": "address:auction_contract",
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
+            "str:periodTime": "604800",
+
             "str:periodMemes.len": "0"
           },
           "esdt": {
@@ -257,6 +261,8 @@
             "str:auctionSc": "address:auction_contract",
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
+            "str:periodTime": "604800",
+
             "str:periodMemes.len": "0"
           },
           "esdt": {
@@ -368,6 +374,8 @@
             "str:auctionSc": "address:auction_contract",
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
+            "str:periodTime": "604800",
+
             "str:periodMemes.len": "0",
 
             "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"

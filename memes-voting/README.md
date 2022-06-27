@@ -48,6 +48,9 @@ On Devnet the signer is wallet address `erd1zq5zmnqjdlymzxg6av0623vw8ke6fmp8qkk4
 ## Linking auction contract
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_auction_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_AUCTION_CONTRACT"`
 
+## Set period time
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_period_time" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "PERIOD_TIME_IN_SECONDS"`
+
 # Example calls
 
 ### Query categories
@@ -55,7 +58,10 @@ On Devnet the signer is wallet address `erd1zq5zmnqjdlymzxg6av0623vw8ke6fmp8qkk4
 s://devnet-gateway.elrond.com"`
 
 ### Create Meme
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="create_meme" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments 0x746573742033 0x68747470733a2f2f697066732e6d6f72616c69732e696f3a323035332f697066732f516d645a634b7836374d4571677a64376631774e345755484253454661446f6978777046544b347175567175514d`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=50000000 --function="create_meme" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --chain="D" --arguments 0x746573742033 0x68747470733a2f2f697066732e6d6f72616c69732e696f3a323035332f697066732f516d645a634b7836374d4571677a64376631774e345755484253454661446f6978777046544b347175567175514d`
+
+## Set period time (2 weeks)
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_period_time" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --chain="D" --arguments "1209600"`
 
 ### Pause contract
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=5000000 --function="pause" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D"`

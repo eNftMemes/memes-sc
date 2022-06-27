@@ -71,6 +71,12 @@ pub trait OwnerModule {
         }
     }
 
+    #[only_owner]
+    #[endpoint]
+    fn set_period_time(&self, period_time: &u64) {
+        self.period_time().set(period_time);
+    }
+
     #[callback]
     fn init_callback(&self, #[call_result] result: ManagedAsyncCallResult<TokenIdentifier>) {
         match result {
@@ -195,4 +201,7 @@ pub trait OwnerModule {
 
     #[storage_mapper("signer")]
     fn signer(&self) -> SingleValueMapper<ManagedAddress>;
+
+    #[storage_mapper("periodTime")]
+    fn period_time(&self) -> SingleValueMapper<u64>;
 }

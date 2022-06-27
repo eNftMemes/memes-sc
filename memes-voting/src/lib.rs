@@ -13,7 +13,6 @@ mod meme;
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
 const NFT_AMOUNT: u32 = 1;
 const PER_PAGE: usize = 10;
-const PERIOD_TIME: u64 = 604800; // 1 week in seconds
 const VOTES_PER_ADDRESS_PER_PERIOD: u8 = 20;
 
 const ROYALTIES: u16 = 1000; // 10%
@@ -36,6 +35,10 @@ pub trait MemesVoting: owner::OwnerModule
 	fn init(&self, period: &u64) {
 		if self.periods().len() == 0 {
 			self.periods().push(period);
+		}
+
+		if self.period_time().is_empty() {
+			self.period_time().set(604800); // 1 week in seconds
 		}
 	}
 
@@ -185,8 +188,10 @@ pub trait MemesVoting: owner::OwnerModule
 		let block_timestamp: u64 = self.blockchain().get_block_timestamp();
 		let period: u64 = self.current_period();
 
-		if block_timestamp > period && block_timestamp - period >= PERIOD_TIME {
-			let new_period: u64 = period + PERIOD_TIME;
+		let period_time = self.period_time().get();
+
+		if block_timestamp > period && block_timestamp - period >= period_time {
+			let new_period: u64 = period + period_time;
 
 			self.periods().push(&new_period);
 

@@ -93,7 +93,8 @@
           "storage": {
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
-            "str:periodMemes.len": "0"
+            "str:periodMemes.len": "0",
+            "str:periodTime": "604800"
           },
           "code": "file:../output/memes-voting.wasm"
         }
@@ -129,7 +130,8 @@
 
             "str:periods.len": "1",
             "str:periods.item|u32:1": "123,000",
-            "str:periodMemes.len": "0"
+            "str:periodMemes.len": "0",
+            "str:periodTime": "604800"
           },
           "owner": "address:my_address",
           "code": "file:../output/memes-voting.wasm"

@@ -32,6 +32,7 @@ elrond_wasm_node::wasm_endpoints! {
         periods
         set_auction_sc
         set_local_roles
+        set_period_time
         set_signer
         token_identifier
         unpause
