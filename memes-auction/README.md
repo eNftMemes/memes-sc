@@ -3,15 +3,10 @@
 
 **Top Token Id: TNFTMEMES-db928b**
 
-### TESTNET
-**Contract Address: erd1qqqqqqqqqqqqqpgqxs0hnym50kule2jlthmzcvdmdfgyzyrya2pqdk5cx4**
-
-**Top Token Id: TBD**
-
 ### MAINNET
-**Contract Address: TBD**
+**Contract Address: erd1qqqqqqqqqqqqqpgq9drfegafhccp4sqe67leu80gkcz8keuza2pqete3vd**
 
-**Token Id: TBD**
+**Token Id: TNFTMEMES-7e0cde**
 
 # Deploy
 
