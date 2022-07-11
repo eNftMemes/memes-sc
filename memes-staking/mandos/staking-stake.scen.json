@@ -1,0 +1,116 @@
+{
+  "name": "staking stake nft",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "staking-init.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "stake",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "stake",
+        "value": "0",
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:TMEMENFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {},
+          "esdt": {
+            "str:TMEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:METASMEME-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "100",
+                  "hash": "",
+                  "attributes": "address:my_address|u64:1"
+                }
+              ],
+              "roles": []
+            }
+          }
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:staking_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:auctionSc": "address:auction_contract",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:farm_token_id": "str:METASMEME-745e9b",
+            "str:minimumLockEpochs": "3",
+            "str:division_safety_constant": "1000000000",
+            "str:farm_token_supply": "100",
+
+            "str:stakedRarity|address:my_address": "1"
+          },
+          "code": "file:../output/memes-staking.wasm",
+          "esdt": {
+            "str:METASMEME-745e9b": {
+              "instances": [],
+              "lastNonce": "1",
+              "roles": [
+                "ESDTRoleNFTCreate",
+                "ESDTRoleNFTBurn",
+                "ESDTRoleNFTAddQuantity"
+              ]
+            },
+            "str:TMEMENFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": ["str:nft-create-uri"]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

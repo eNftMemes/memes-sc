@@ -10,8 +10,7 @@ mod owner;
 
 mod auction;
 
-const PERCENTAGE_TOTAL: u64 = 10_000;
-// 100%
+const PERCENTAGE_TOTAL: u64 = 10_000; // 100%
 const NFT_AMOUNT: u32 = 1;
 const MAX_TOP_MEMES: usize = 10;
 
