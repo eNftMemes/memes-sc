@@ -85,7 +85,7 @@
             "str:auctionSc": "address:auction_contract",
             "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
 
-            "str:minimumLockEpochs": "3",
+            "str:minimumLockBlocks": "43,200",
             "str:division_safety_constant": "1000000000"
           },
           "code": "file:../output/memes-staking.wasm"

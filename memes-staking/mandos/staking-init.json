@@ -3,6 +3,9 @@
   "steps": [
     {
       "step": "setState",
+      "currentBlockInfo": {
+        "blockNonce": "u64:1"
+      },
       "accounts": {
         "address:my_address": {
           "nonce": "0",
@@ -49,10 +52,12 @@
             "str:auctionSc": "address:auction_contract",
             "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
 
-            "str:farm_token_id": "str:METASMEME-745e9b",
-            "str:minimumLockEpochs": "3",
-            "str:division_safety_constant": "1000000000"
+            "str:minimumLockBlocks": "43,200",
+            "str:division_safety_constant": "1000000000",
+
+            "str:farm_token_id": "str:METASMEME-745e9b"
           },
+          "owner": "address:my_address",
           "code": "file:../output/memes-staking.wasm",
           "esdt": {
             "str:METASMEME-745e9b": {

@@ -6,13 +6,13 @@ elrond_wasm::derive_imports!();
 pub trait OwnerModule {
     #[only_owner]
     #[endpoint]
-    fn set_minimum_lock_epochs(&self, epochs: u8) {
-        self.minimum_lock_epochs().set(&epochs);
+    fn set_minimum_lock_blocks(&self, blocks: u64) {
+        self.minimum_lock_blocks().set(&blocks);
     }
 
     #[view]
-    #[storage_mapper("minimumLockEpochs")]
-    fn minimum_lock_epochs(&self) -> SingleValueMapper<u8>;
+    #[storage_mapper("minimumLockBlocks")]
+    fn minimum_lock_blocks(&self) -> SingleValueMapper<u64>;
 
     // From Farm contract Config Module
 

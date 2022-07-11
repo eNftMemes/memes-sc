@@ -26,11 +26,11 @@ pub struct FarmToken<M: ManagedTypeApi> {
     Debug,
 )]
 pub struct StakingFarmTokenAttributes<M: ManagedTypeApi> {
-    // pub reward_per_share: BigUint<M>,
-    // pub compounded_reward: BigUint<M>,
-    // pub current_farm_amount: BigUint<M>,
+    pub reward_per_share: BigUint<M>,
+    pub current_farm_amount: BigUint<M>,
     pub staker: ManagedAddress<M>,
     pub nft_nonce: Nonce,
+    pub staked_block: u64
 }
 
 #[elrond_wasm::module]
