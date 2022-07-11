@@ -65,10 +65,10 @@ pub trait OwnerModule {
             }
             ManagedAsyncCallResult::Err(_) => {
                 let caller = self.blockchain().get_owner_address();
-                let (returned_tokens, token_id) = self.call_value().payment_token_pair();
-                if token_id.is_egld() && returned_tokens > 0 {
+                let returned = self.call_value().egld_or_single_esdt();
+                if returned.token_identifier.is_egld() && returned.amount > 0 {
                     self.send()
-                        .direct(&caller, &token_id, 0, &returned_tokens, &[]);
+                        .direct(&caller, &returned.token_identifier, 0, &returned.amount);
                 }
             }
         }
@@ -93,15 +93,11 @@ pub trait OwnerModule {
     fn claim_royalties(&self) {
         let caller = self.blockchain().get_caller();
 
-        let mut to_send = self.blockchain().get_sc_balance(&TokenIdentifier::egld(), 0);
+        let mut to_send = self.blockchain().get_sc_balance(&EgldOrEsdtTokenIdentifier::egld(), 0);
 
         to_send = &to_send - &self.auction_funds().get();
 
-        self.send().direct_egld(
-            &caller,
-            &to_send,
-            b"claiming success"
-        );
+        self.send().direct_egld(&caller, &to_send);
     }
 
     #[only_owner]
