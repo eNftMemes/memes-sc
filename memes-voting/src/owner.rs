@@ -85,10 +85,10 @@ pub trait OwnerModule {
             }
             ManagedAsyncCallResult::Err(_) => {
                 let caller = self.blockchain().get_owner_address();
-                let (returned_tokens, token_id) = self.call_value().payment_token_pair();
-                if token_id.is_egld() && returned_tokens > 0 {
+                let returned = self.call_value().egld_or_single_esdt();
+                if returned.token_identifier.is_egld() && returned.amount > 0 {
                     self.send()
-                        .direct(&caller, &token_id, 0, &returned_tokens, &[]);
+                        .direct(&caller, &returned.token_identifier, 0, &returned.amount);
                 }
             }
         }
@@ -124,8 +124,7 @@ pub trait OwnerModule {
 
         self.send().direct_egld(
             &caller,
-            &self.blockchain().get_sc_balance(&TokenIdentifier::egld(), 0),
-            b"claiming success"
+            &self.blockchain().get_sc_balance(&EgldOrEsdtTokenIdentifier::egld(), 0)
         );
     }
 
@@ -140,7 +139,13 @@ pub trait OwnerModule {
         data.append(url);
 
         let signer: ManagedAddress = self.signer().get();
-        let valid_signature = self.crypto().verify_ed25519_managed::<MAX_SIGNATURE_DATA_LEN>(
+        // TODO: Update to new version after release to mainnet
+        // let valid_signature = self.crypto().verify_ed25519(
+        //     signer.as_managed_buffer(),
+        //     &data,
+        //     signature.as_managed_buffer(),
+        // );
+        let valid_signature = self.crypto().verify_ed25519_legacy_managed::<MAX_SIGNATURE_DATA_LEN>(
             signer.as_managed_byte_array(),
             &data,
             signature,
@@ -161,7 +166,13 @@ pub trait OwnerModule {
         data.append(&self.decimal_to_ascii(*nb_votes));
 
         let signer: ManagedAddress = self.signer().get();
-        let valid_signature = self.crypto().verify_ed25519_managed::<MAX_SIGNATURE_DATA_LEN>(
+        // TODO: Update to new version after release to mainnet
+        // let valid_signature = self.crypto().verify_ed25519(
+        //     signer.as_managed_buffer(),
+        //     &data,
+        //     signature.as_managed_buffer(),
+        // );
+        let valid_signature = self.crypto().verify_ed25519_legacy_managed::<MAX_SIGNATURE_DATA_LEN>(
             signer.as_managed_byte_array(),
             &data,
             signature,

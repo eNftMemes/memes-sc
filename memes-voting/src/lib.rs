@@ -86,7 +86,7 @@ pub trait MemesVoting: owner::OwnerModule
 			&urls
 		);
 
-		self.send().direct(&address, nft_token, nonce, amount, &[]);
+		self.send().direct_esdt(&address, nft_token, nonce, amount);
 
 		self.period_memes(current_period).push(&nonce);
 

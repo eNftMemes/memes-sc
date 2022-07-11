@@ -63,6 +63,9 @@ s://devnet-gateway.elrond.com"`
 ## Set period time (2 weeks)
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_period_time" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --chain="D" --arguments "1209600"`
 
+## Set period time (4 weeks)
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_period_time" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --chain="D" --arguments "2419200"`
+
 ### Pause contract
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=5000000 --function="pause" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D"`
 
