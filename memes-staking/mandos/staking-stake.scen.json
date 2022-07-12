@@ -83,6 +83,7 @@
 
             "str:farm_token_id": "str:METASMEME-745e9b",
             "str:farm_token_supply": "100",
+            "str:last_reward_block_nonce": "1",
 
             "str:stakedRarity|address:my_address": "1"
           },

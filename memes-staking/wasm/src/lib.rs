@@ -10,22 +10,23 @@ elrond_wasm_node::wasm_endpoints! {
         callBack
         auction_sc
         calculateRewardsForGivenPosition
+        calculateRewardsForGivenPositionAndTokens
         getAccumulatedRewards
         getAllRewardCapacity
         getDivisionSafetyConstant
         getFarmTokenId
         getFarmTokenSupply
         getLastRewardBlockNonce
-        getMinUnbondEpochs
+        getPrevRewardCapacity
         getRewardCapacity
         getRewardPerShare
+        getRewardTokens
         isPaused
         minimum_lock_blocks
         number_of_referals
         pause
         referer
         registerFarmToken
-        setMinUnbondEpochs
         set_minimum_lock_blocks
         stake
         staked_rarity

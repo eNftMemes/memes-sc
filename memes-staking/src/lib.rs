@@ -4,6 +4,7 @@
 use staking::TopMemeAttributes;
 use farm_token::*;
 use crate::common_structs::Nonce;
+use crate::custom_rewards::MAX_PERCENT;
 
 elrond_wasm::imports!();
 
@@ -202,6 +203,7 @@ pub trait StakingContract: owner::OwnerModule
         require!(amount > 0, "Zero liquidity input");
         let farm_token_supply = self.farm_token_supply().get();
         require!(farm_token_supply >= amount, "Not enough supply");
+        require!(amount == attributes.current_farm_amount, "Amount should be equal to attributes current_farm_amount");
 
         let last_reward_nonce = self.last_reward_block_nonce().get();
         let current_block_nonce = self.blockchain().get_block_nonce();
@@ -219,6 +221,65 @@ pub trait StakingContract: owner::OwnerModule
             &future_reward_per_share,
             &attributes.reward_per_share,
         )
+    }
+
+    #[view(calculateRewardsForGivenPositionAndTokens)]
+    fn calculate_rewards_for_given_position_and_tokens(
+        &self,
+        amount: BigUint,
+        attributes: StakingFarmTokenAttributes<Self::Api>,
+    ) -> MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)> {
+        require!(amount > 0, "Zero liquidity input");
+        let farm_token_supply = self.farm_token_supply().get();
+        require!(farm_token_supply >= amount, "Not enough supply");
+        require!(amount == attributes.current_farm_amount, "Amount should be equal to attributes current_farm_amount");
+
+        let last_reward_nonce = self.last_reward_block_nonce().get();
+        let current_block_nonce = self.blockchain().get_block_nonce();
+
+        let reward_increase =
+            self.calculate_per_block_rewards(current_block_nonce, last_reward_nonce);
+
+        let reward_per_share_increase =
+            self.calculate_reward_per_share_increase(&reward_increase, &farm_token_supply);
+
+        let reward_per_share = self.reward_per_share().get();
+        let future_reward_per_share = &reward_per_share + &reward_per_share_increase;
+
+        let accumulated_rewards = &self.accumulated_rewards().get();
+        let max_percent = &BigUint::from(MAX_PERCENT);
+        let zero = BigUint::zero();
+
+        let mut result: MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)> = MultiValueEncoded::new();
+        for token in self.reward_tokens().iter() {
+            let reward_capacity = self.reward_capacity(&token).get();
+
+            let prev_reward_capacity = self.prev_reward_capacity(&token);
+            let mut prev_reward_capacity_struct = prev_reward_capacity.get();
+
+            if prev_reward_capacity_struct.end_reward_per_share == zero {
+                let percent = &(accumulated_rewards - &prev_reward_capacity_struct.accumulated_rewards);
+                let actual_accumulated_rewards = core::cmp::min(max_percent, percent);
+
+                // Send end_reward_per_share to appropriate value
+                if actual_accumulated_rewards.eq(max_percent) {
+                    prev_reward_capacity_struct.end_reward_per_share = reward_per_share.clone();
+                }
+            }
+
+            let amount = self.calculate_reward_token(
+                &amount,
+                attributes.staked_block,
+                &future_reward_per_share,
+                &attributes.reward_per_share,
+                &prev_reward_capacity_struct,
+                &reward_capacity
+            );
+
+            result.push((token, amount));
+        }
+
+        return result;
     }
 
     #[view]

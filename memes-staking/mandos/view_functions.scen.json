@@ -6,12 +6,6 @@
       "path": "staking-stake.scen.json"
     },
     {
-      "step": "setState",
-      "currentBlockInfo": {
-        "blockNonce": "0"
-      }
-    },
-    {
       "step": "scQuery",
       "txId": "calculateRewardsForGivenPosition",
       "tx": {
@@ -97,11 +91,21 @@
 
             "str:farm_token_id": "str:METASMEME-745e9b",
             "str:farm_token_supply": "100",
+            "str:last_reward_block_nonce": "1",
 
             "str:stakedRarity|address:my_address": "1",
 
             "str:all_reward_capacity": "10_000_000",
-            "str:reward_capacity|nested:str:EGLD": "10000"
+            "str:reward_capacity|nested:str:EGLD": "10000",
+            "str:reward_tokens.len": "1",
+            "str:reward_tokens.item|u32:1": "str:EGLD",
+            "str:prev_reward_capacity|nested:str:EGLD": {
+              "0-block_nonce": "u64:1",
+              "1-accumulated_rewards": "biguint:0",
+              "2-reward_per_share": "biguint:0",
+              "3-end_reward_per_share": "biguint:0",
+              "4-reward_capacity": "biguint:0"
+            }
           },
           "code": "file:../output/memes-staking.wasm",
           "esdt": {
@@ -133,7 +137,7 @@
     {
       "step": "setState",
       "currentBlockInfo": {
-        "blockNonce": "u64:14,400"
+        "blockNonce": "u64:14,401"
       }
     },
     {
@@ -146,6 +150,42 @@
       },
       "expect": {
         "out": ["216,000"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "calculateRewardsForGivenPositionAndTokens",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "calculateRewardsForGivenPositionAndTokens",
+        "arguments": ["100", "biguint:0|biguint:100|address:my_address|u64:1|u64:1"]
+      },
+      "expect": {
+        "out": [
+          "nested:str:EGLD|biguint:216"
+        ],
+        "status": "0"
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockNonce": "u64:21,601"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "calculateRewardsForGivenPositionAndTokens",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "calculateRewardsForGivenPositionAndTokens",
+        "arguments": ["100", "biguint:0|biguint:100|address:my_address|u64:1|u64:1"]
+      },
+      "expect": {
+        "out": [
+          "nested:str:EGLD|biguint:324"
+        ],
         "status": "0"
       }
     }
