@@ -3,9 +3,15 @@ use crate::{farm_token, owner};
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
 
-pub const MAX_PERCENT: u64 = 10_000_000; // 100%, reached in 46.2962 days for 15 per block (216000 per day)
-pub const PERCENT_PER_BLOCK: u64 = 15; // 0.00015% per block = 2.16% per day
-pub const PERCENT_TO_ADD_MORE: u64 = 100_000; // 10%, if less than this % of rewards remains, inscrease the time for rewards
+pub const MAX_PERCENT: u64 = 10_000_000; // 100%, reached in 69.4444 days for 10 per block (144000 per day)
+pub const PERCENT_PER_BLOCK: u64 = 10; // 0.0001% per block = 1.44% per day (14400 blocks per day)
+
+#[derive(TopEncode, TopDecode, TypeAbi)]
+pub struct Token<M: ManagedTypeApi> {
+    pub start_rewards_block: u64,
+    pub end_rewards_block: u64,
+    pub total_rewards: BigUint<M>,
+}
 
 #[elrond_wasm::module]
 pub trait CustomRewardsModule:
@@ -16,54 +22,64 @@ pub trait CustomRewardsModule:
 {
     #[only_owner]
     #[payable("*")]
-    #[endpoint(topUpRewards)]
+    #[endpoint]
     fn top_up_rewards(
         &self,
         #[payment_token] payment_token: EgldOrEsdtTokenIdentifier,
         #[payment_amount] payment_amount: BigUint
     ) {
-        // self.generate_aggregated_rewards();
-        //
-        // let reward_capacity = self.reward_capacity(&payment_token);
-        // let all_reward_capacity = self.all_reward_capacity();
-        // let current_nonce = self.blockchain().get_block_nonce();
-        // let accumulated_rewards = self.accumulated_rewards().get();
-        // let reward_per_share = self.reward_per_share().get();
-        //
-        // self.prev_reward_capacity(&payment_token).set(&RewardCapacity {
-        //     block_nonce: current_nonce,
-        //     accumulated_rewards: accumulated_rewards.clone(),
-        //     reward_per_share,
-        //     end_reward_per_share: BigUint::zero(),
-        //     reward_capacity: reward_capacity.get(),
-        // });
-        //
-        // // Start producing rewards when topping up first time
-        // if all_reward_capacity.is_empty() {
-        //     self.last_reward_block_nonce().set(&current_nonce);
-        // }
-        //
-        // if reward_capacity.is_empty() {
-        //     all_reward_capacity.update(|r| *r += MAX_PERCENT);
-        //
-        //     self.reward_tokens().push(&payment_token);
-        // } else {
-        //     let all_capacity = all_reward_capacity.get();
-        //
-        //     // Start producing rewards again if topping up after accumulated rewards stopped
-        //     if accumulated_rewards >= all_capacity {
-        //         self.last_reward_block_nonce().set(&current_nonce);
-        //     }
-        //
-        //     if accumulated_rewards > (all_capacity - PERCENT_TO_ADD_MORE) {
-        //         all_reward_capacity.update(|r| *r += MAX_PERCENT);
-        //     }
-        // }
-        //
-        // reward_capacity.update(|r| *r += payment_amount);
+        let reward_token = self.reward_tokens(&payment_token);
+
+        let current_block = self.blockchain().get_block_nonce();
+
+        // Add new token if it doesn't exist
+        if reward_token.is_empty() {
+            self.all_reward_tokens().push(&payment_token);
+
+            let token = &Token{
+                start_rewards_block: current_block,
+                end_rewards_block: current_block + MAX_PERCENT / PERCENT_PER_BLOCK,
+                total_rewards: payment_amount
+            };
+
+            reward_token.set(token);
+
+            return;
+        }
+
+        let token = reward_token.get();
+
+        // If adding tokens after rewards ended, reset token
+        if current_block > token.end_rewards_block {
+            reward_token.set(
+                &Token{
+                    start_rewards_block: current_block,
+                    end_rewards_block: current_block + MAX_PERCENT / PERCENT_PER_BLOCK,
+                    total_rewards: payment_amount
+                }
+            );
+
+            return;
+        }
+
+        // Else calculate the number of blocks to extend by so the rewards per block remain the same
+        let new_total_rewards: BigUint = &token.total_rewards + &payment_amount;
+        let new_end_rewards_block: BigUint = &new_total_rewards * &BigUint::from(token.end_rewards_block) / &token.total_rewards;
+
+        reward_token.set(
+            &Token{
+                start_rewards_block: token.start_rewards_block,
+                end_rewards_block: new_end_rewards_block.to_u64().unwrap(),
+                total_rewards: new_total_rewards,
+            }
+        );
     }
 
-    #[view(getRewardTokens)]
+    #[view]
     #[storage_mapper("reward_tokens")]
-    fn reward_tokens(&self) -> VecMapper<EgldOrEsdtTokenIdentifier>;
+    fn reward_tokens(&self, token: &EgldOrEsdtTokenIdentifier) -> SingleValueMapper<Token<Self::Api>>;
+
+    #[view]
+    #[storage_mapper("all_reward_tokens")]
+    fn all_reward_tokens(&self) -> VecMapper<EgldOrEsdtTokenIdentifier>;
 }

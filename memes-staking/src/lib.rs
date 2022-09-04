@@ -1,7 +1,6 @@
 #![no_std]
 #![feature(generic_associated_types)]
 
-use crate::custom_rewards::MAX_PERCENT;
 use crate::farm_token::{StakingFarmTokenAttributes, TOP_RARITY};
 
 elrond_wasm::imports!();
