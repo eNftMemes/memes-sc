@@ -82,6 +82,7 @@ pub trait StakingContract: owner::OwnerModule
             staker: caller,
             nft_nonce: nonce,
             staked_block: self.blockchain().get_block_nonce(),
+            reward_per_share: self.reward_per_share().get(),
         };
 
         let farm_token = self.farm_token().get_token_id();
@@ -165,6 +166,66 @@ pub trait StakingContract: owner::OwnerModule
         number_of_referals.update(|r| *r = *r + 1);
 
         // TODO: Call voting & auction contracts
+    }
+
+    #[view]
+    fn calculate_rewards_for_given_position(
+        &self,
+        attributes: StakingFarmTokenAttributes<Self::Api>,
+    ) -> MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)> {
+        let stake_modifier = self.calculate_stake_modifier(attributes.rarity);
+        let stake_modifier_total = self.stake_modifier_total().get();
+        require!(stake_modifier_total >= (stake_modifier as u32), "Not enough supply");
+
+        let last_reward_nonce = self.last_reward_block_nonce().get();
+        let current_block_nonce = self.blockchain().get_block_nonce();
+
+        let reward_increase = self.calculate_per_block_rewards(current_block_nonce, last_reward_nonce);
+        let reward_per_share_increase =
+            self.calculate_reward_per_share_increase(&reward_increase, &stake_modifier_total);
+
+        let future_reward_per_share = self.reward_per_share().get() + reward_per_share_increase;
+
+        let mut result: MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)> = MultiValueEncoded::new();
+
+        for token in self.all_reward_tokens().iter() {
+            let reward_token = self.reward_tokens(&token).get();
+
+            // Prevent accumulation of too many rewards
+            if current_block_nonce > reward_token.end_rewards_block {
+                let token_reward_increase = self.calculate_per_block_rewards(reward_token.end_rewards_block, last_reward_nonce);
+                let token_reward_per_share_increase =
+                    self.calculate_reward_per_share_increase(&token_reward_increase, &stake_modifier_total);
+
+                let token_future_reward_per_share = self.reward_per_share().get() + token_reward_per_share_increase;
+
+                let amount = self.calculate_reward(
+                    &BigUint::from(stake_modifier as u16),
+                    attributes.staked_block,
+                    &token_future_reward_per_share,
+                    &attributes.reward_per_share,
+                    &token,
+                    &reward_token
+                );
+
+                result.push((token, amount));
+
+                continue;
+            }
+
+            let amount = self.calculate_reward(
+                &BigUint::from(stake_modifier as u16),
+                attributes.staked_block,
+                &future_reward_per_share,
+                &attributes.reward_per_share,
+                &token,
+                &reward_token
+            );
+
+            result.push((token, amount));
+        }
+
+        return result;
     }
 
     #[view]

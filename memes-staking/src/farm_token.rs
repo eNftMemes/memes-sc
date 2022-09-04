@@ -20,7 +20,8 @@ pub struct StakingFarmTokenAttributes<M: ManagedTypeApi> {
     pub rarity: u8,
     pub staker: ManagedAddress<M>,
     pub nft_nonce: u64,
-    pub staked_block: u64
+    pub staked_block: u64,
+    pub reward_per_share: BigUint<M>,
 }
 
 pub const TOP_RARITY: u8 = 10;
@@ -91,4 +92,8 @@ pub trait FarmTokenModule:
     #[view(getFarmTokenId)]
     #[storage_mapper("farm_token_id")]
     fn farm_token(&self) -> NonFungibleTokenMapper<Self::Api>;
+
+    #[view(getStakeModifierTotal)]
+    #[storage_mapper("stake_modifier_total")]
+    fn stake_modifier_total(&self) -> SingleValueMapper<BigUint>;
 }

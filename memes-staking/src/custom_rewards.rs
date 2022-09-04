@@ -34,6 +34,11 @@ pub trait CustomRewardsModule:
 
         // Add new token if it doesn't exist
         if reward_token.is_empty() {
+            // If adding the first token, set last_reward_block_nonce to appropriate value
+            if self.last_reward_block_nonce().is_empty() {
+                self.last_reward_block_nonce().set(current_block);
+            }
+
             self.all_reward_tokens().push(&payment_token);
 
             let token = &Token{
@@ -43,6 +48,8 @@ pub trait CustomRewardsModule:
             };
 
             reward_token.set(token);
+
+            self.start_reward_per_share_token(&payment_token).set(self.reward_per_share().get());
 
             return;
         }
@@ -73,7 +80,70 @@ pub trait CustomRewardsModule:
                 total_rewards: new_total_rewards,
             }
         );
+
+        self.start_reward_per_share_token(&payment_token).set(self.reward_per_share().get());
     }
+
+    // TODO: Add generate_aggregated_rewards() function which gets called in multiple places
+
+    fn calculate_per_block_rewards(
+        &self,
+        current_block_nonce: u64,
+        last_reward_block_nonce: u64,
+    ) -> BigUint {
+        if current_block_nonce <= last_reward_block_nonce || self.is_paused() {
+            return BigUint::zero();
+        }
+
+        let block_nonce_diff = current_block_nonce - last_reward_block_nonce;
+
+        BigUint::from(PERCENT_PER_BLOCK) * block_nonce_diff
+    }
+
+    fn calculate_reward_per_share_increase(
+        &self,
+        reward_increase: &BigUint,
+        stake_modifier_total: &BigUint,
+    ) -> BigUint {
+        &(reward_increase * &self.division_safety_constant().get()) / stake_modifier_total
+    }
+
+    fn calculate_reward(
+        &self,
+        stake_modifier: &BigUint,
+        staked_block: u64,
+        current_reward_per_share: &BigUint,
+        initial_reward_per_share: &BigUint,
+        token: &EgldOrEsdtTokenIdentifier,
+        reward_token: &Token<Self::Api>
+    ) -> BigUint {
+        if current_reward_per_share <= initial_reward_per_share {
+            return BigUint::zero();
+        }
+
+        // Staked after rewards ended
+        if staked_block > reward_token.end_rewards_block {
+            return BigUint::zero();
+        }
+
+        let start_reward_per_share = &self.start_reward_per_share_token(token).get();
+        let end_reward_per_share_mapper = self.end_reward_per_share_token(token);
+        let end_reward_per_share_value = &end_reward_per_share_mapper.get();
+        let end_reward_per_share = if !end_reward_per_share_mapper.is_empty() { end_reward_per_share_value } else { current_reward_per_share };
+
+        let token_current_reward_per_share = if current_reward_per_share > end_reward_per_share { end_reward_per_share } else { current_reward_per_share };
+        let token_initial_reward_per_share = if initial_reward_per_share < start_reward_per_share { start_reward_per_share } else { initial_reward_per_share };
+
+        let reward_per_share_diff = token_current_reward_per_share - token_initial_reward_per_share;
+
+        let percentage = stake_modifier * &reward_per_share_diff / self.division_safety_constant().get();
+
+        return &reward_token.total_rewards * &percentage / &BigUint::from(MAX_PERCENT);
+    }
+
+    #[view(getDivisionSafetyConstant)]
+    #[storage_mapper("division_safety_constant")]
+    fn division_safety_constant(&self) -> SingleValueMapper<BigUint>;
 
     #[view]
     #[storage_mapper("reward_tokens")]
@@ -82,4 +152,21 @@ pub trait CustomRewardsModule:
     #[view]
     #[storage_mapper("all_reward_tokens")]
     fn all_reward_tokens(&self) -> VecMapper<EgldOrEsdtTokenIdentifier>;
+
+    #[view]
+    #[storage_mapper("last_reward_block_nonce")]
+    fn last_reward_block_nonce(&self) -> SingleValueMapper<u64>;
+
+    // Is stored in percentage increases, where MAX_PERCENT is 100%
+    #[view(getRewardPerShare)]
+    #[storage_mapper("reward_per_share")]
+    fn reward_per_share(&self) -> SingleValueMapper<BigUint>;
+
+    #[view]
+    #[storage_mapper("start_reward_per_share_token")]
+    fn start_reward_per_share_token(&self, token: &EgldOrEsdtTokenIdentifier) -> SingleValueMapper<BigUint>;
+
+    #[view]
+    #[storage_mapper("end_reward_per_share_token")]
+    fn end_reward_per_share_token(&self, token: &EgldOrEsdtTokenIdentifier) -> SingleValueMapper<BigUint>;
 }

@@ -113,7 +113,11 @@
 
             "str:reward_tokens|nested:str:EGLD": "u64:1|u64:1000001|biguint:100,000",
             "str:all_reward_tokens.len": "1",
-            "str:all_reward_tokens.item|u32:1": "str:EGLD"
+            "str:all_reward_tokens.item|u32:1": "str:EGLD",
+
+            "str:start_reward_per_share_token|nested:str:EGLD": "0",
+
+            "str:last_reward_block_nonce": "1"
           },
           "owner": "address:my_address",
           "code": "file:../output/memes-staking.wasm",
@@ -212,7 +216,11 @@
 
             "str:reward_tokens|nested:str:EGLD": "u64:1|u64:1500001|biguint:150,000",
             "str:all_reward_tokens.len": "1",
-            "str:all_reward_tokens.item|u32:1": "str:EGLD"
+            "str:all_reward_tokens.item|u32:1": "str:EGLD",
+
+            "str:start_reward_per_share_token|nested:str:EGLD": "0",
+
+            "str:last_reward_block_nonce": "1"
           },
           "owner": "address:my_address",
           "code": "file:../output/memes-staking.wasm",
@@ -311,7 +319,11 @@
 
             "str:reward_tokens|nested:str:EGLD": "u64:1500002|u64:2500002|biguint:25,000",
             "str:all_reward_tokens.len": "1",
-            "str:all_reward_tokens.item|u32:1": "str:EGLD"
+            "str:all_reward_tokens.item|u32:1": "str:EGLD",
+
+            "str:start_reward_per_share_token|nested:str:EGLD": "0",
+
+            "str:last_reward_block_nonce": "1"
           },
           "owner": "address:my_address",
           "code": "file:../output/memes-staking.wasm",
@@ -410,7 +422,12 @@
             "str:reward_tokens|nested:str:OTOKEN-123456": "u64:1500002|u64:2500002|biguint:10,000",
             "str:all_reward_tokens.len": "2",
             "str:all_reward_tokens.item|u32:1": "str:EGLD",
-            "str:all_reward_tokens.item|u32:2": "str:OTOKEN-123456"
+            "str:all_reward_tokens.item|u32:2": "str:OTOKEN-123456",
+
+            "str:start_reward_per_share_token|nested:str:EGLD": "0",
+            "str:start_reward_per_share_token|nested:str:OTOKEN-123456": "0",
+
+            "str:last_reward_block_nonce": "1"
           },
           "owner": "address:my_address",
           "code": "file:../output/memes-staking.wasm",

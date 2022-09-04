@@ -1,0 +1,58 @@
+{
+  "name": "staking view functions",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "staking-init.json"
+    },
+    {
+      "step": "scQuery",
+      "txId": "calculateRewardsForGivenPosition",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "calculate_rewards_for_given_position",
+        "arguments": ["u8:1|address:my_address|u64:1|u64:1|biguint:0"]
+      },
+      "expect": {
+        "message": "str:Not enough supply",
+        "status": "4"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "stake",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "stake",
+        "value": "0",
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:TMEMENFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "calculateRewardsForGivenPosition",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "calculate_rewards_for_given_position",
+        "arguments": ["u8:1|address:my_address|u64:1|u64:1|biguint:0"]
+      },
+      "expect": {
+        "out": [],
+        "status": "0"
+      }
+    }
+  ]
+}

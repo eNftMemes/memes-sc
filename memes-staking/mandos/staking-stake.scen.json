@@ -48,7 +48,7 @@
                   "nonce": "1",
                   "balance": "1",
                   "hash": "",
-                  "attributes": "u8:1|address:my_address|u64:1|u64:1"
+                  "attributes": "u8:1|address:my_address|u64:1|u64:1|biguint:0"
                 }
               ],
               "roles": []
