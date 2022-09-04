@@ -11,7 +11,7 @@
       "tx": {
         "to": "sc:staking_contract",
         "function": "calculateRewardsForGivenPosition",
-        "arguments": ["100", "biguint:0|biguint:100|address:my_address|u64:1|u64:1"]
+        "arguments": ["biguint:0|u8:1|address:my_address|u64:1|u64:1"]
       },
       "expect": {
         "out": ["0"],
@@ -54,9 +54,9 @@
               "instances": [
                 {
                   "nonce": "1",
-                  "balance": "100",
+                  "balance": "1",
                   "hash": "",
-                  "attributes": "biguint:0|biguint:100|address:my_address|u64:1|u64:1"
+                  "attributes": "biguint:0|u8:1|address:my_address|u64:1|u64:1"
                 }
               ],
               "roles": []
@@ -146,7 +146,7 @@
       "tx": {
         "to": "sc:staking_contract",
         "function": "calculateRewardsForGivenPosition",
-        "arguments": ["100", "biguint:0|biguint:100|address:my_address|u64:1|u64:1"]
+        "arguments": ["biguint:0|u8:1|address:my_address|u64:1|u64:1"]
       },
       "expect": {
         "out": ["216,000"],
@@ -159,7 +159,7 @@
       "tx": {
         "to": "sc:staking_contract",
         "function": "calculateRewardsForGivenPositionAndTokens",
-        "arguments": ["100", "biguint:0|biguint:100|address:my_address|u64:1|u64:1"]
+        "arguments": ["biguint:0|u8:1|address:my_address|u64:1|u64:1"]
       },
       "expect": {
         "out": [
@@ -180,7 +180,7 @@
       "tx": {
         "to": "sc:staking_contract",
         "function": "calculateRewardsForGivenPositionAndTokens",
-        "arguments": ["100", "biguint:0|biguint:100|address:my_address|u64:1|u64:1"]
+        "arguments": ["biguint:0|u8:1|address:my_address|u64:1|u64:1"]
       },
       "expect": {
         "out": [

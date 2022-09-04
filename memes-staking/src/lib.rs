@@ -2,9 +2,9 @@
 #![feature(generic_associated_types)]
 
 use staking::TopMemeAttributes;
-use farm_token::*;
 use crate::common_structs::Nonce;
 use crate::custom_rewards::MAX_PERCENT;
+use crate::farm_token::{StakingFarmTokenAttributes, TOP_RARITY};
 
 elrond_wasm::imports!();
 
@@ -16,19 +16,13 @@ mod custom_rewards;
 
 const NFT_AMOUNT: u32 = 1;
 
-const BASE_STAKE_MODIFIER: u16 = 100; // 1x
-const INCREMENT_STAKE_MODIFIER: u16 = 10; // 0.1x
-const TOP_RARITY_STAKE_MODIFIER: u16 = 200; // 2x
-const SUPER_RARE_STAKE_MODIFIER: u16 = 220; // 2.2x
-const TOP_RARITY: u16 = 10;
-
-const DEFAULT_MINUMUM_LOCK_BLOCKS: u64 = 3 * 14_400; // ~3 days (3 * 14400 blocks)
+const DEFAULT_MINUMUM_LOCK_BLOCKS: u64 = 5 * 14_400; // ~5 days (3 * 14400 blocks)
 
 const DIVISION_SAFETY_CONSTANT: u32 = 1000000000;
 
-const BASE_REFERER_PERSONS: u16 = 15;
-const INCREMENT_REFERER_PERSONS: u16 = 5;
-const SUPER_RARE_REFERER_PERSONS: u16 = 100;
+const BASE_REFERER_PERSONS: u8 = 15;
+const INCREMENT_REFERER_PERSONS: u8 = 5;
+const SUPER_RARE_REFERER_PERSONS: u8 = 100;
 
 
 #[elrond_wasm::contract]
@@ -67,11 +61,6 @@ pub trait StakingContract: owner::OwnerModule
 
         require!(nft_type == token_identifier_top, "Nft is not of the correct type");
 
-        let caller = self.blockchain().get_caller();
-        let staked_rarity = self.staked_rarity(&caller);
-
-        require!(staked_rarity.is_empty(), "Address already has an NFT staked");
-
         let own_address: ManagedAddress = self.blockchain().get_sc_address();
         let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(
             &own_address,
@@ -80,32 +69,23 @@ pub trait StakingContract: owner::OwnerModule
         );
         let nft_attributes = token_data.decode_attributes::<TopMemeAttributes<Self::Api>>();
 
-        staked_rarity.set(nft_attributes.rarity);
+        let caller = self.blockchain().get_caller();
+
+        self.staked_rarity(&caller).update(|value| *value += nft_attributes.rarity);
 
         self.generate_aggregated_rewards();
 
-        let farm_token = self.farm_token().get_token_id();
-
-        let rarity = nft_attributes.rarity as u16;
-        let mut amount = BASE_STAKE_MODIFIER;
-
-        if TOP_RARITY == rarity {
-            amount = TOP_RARITY_STAKE_MODIFIER;
-        } else if TOP_RARITY < rarity {
-            amount = SUPER_RARE_STAKE_MODIFIER;
-        } else if 1 > rarity {
-            amount = amount + INCREMENT_STAKE_MODIFIER * (rarity - 1);
-        }
-
         let attributes = StakingFarmTokenAttributes {
             reward_per_share: self.reward_per_share().get(),
-            current_farm_amount: BigUint::from(amount),
+            rarity: nft_attributes.rarity,
             staker: caller,
             nft_nonce: nonce,
             staked_block: self.blockchain().get_block_nonce(),
         };
 
-        let new_rokens = self.mint_farm_tokens(farm_token, BigUint::from(amount), &attributes);
+        let farm_token = self.farm_token().get_token_id();
+
+        let new_rokens = self.mint_farm_token(farm_token, &attributes);
 
         self.send().direct_esdt(&self.blockchain().get_caller(), &new_rokens.token_identifier, new_rokens.token_nonce, &new_rokens.amount);
     }
@@ -136,7 +116,6 @@ pub trait StakingContract: owner::OwnerModule
         );
         let farm_attributes = token_data.decode_attributes::<StakingFarmTokenAttributes<Self::Api>>();
 
-        require!(payment_amount == farm_attributes.current_farm_amount, "Can only unstake the whole farm amount");
         require!(
             self.blockchain().get_block_nonce() > farm_attributes.staked_block + self.minimum_lock_blocks().get(),
             "Minimum lock time has not yet passed"
@@ -145,9 +124,9 @@ pub trait StakingContract: owner::OwnerModule
         self.generate_aggregated_rewards();
 
         let caller = self.blockchain().get_caller();
-        self.burn_farm_tokens(&token_identifier, token_nonce, &payment_amount);
+        self.burn_farm_tokens(&token_identifier, token_nonce, &payment_amount, farm_attributes.rarity);
 
-        self.staked_rarity(&farm_attributes.staker).clear();
+        self.staked_rarity(&farm_attributes.staker).update(|value| *value -= farm_attributes.rarity);
 
         let nft_amount = BigUint::from(NFT_AMOUNT);
         self.send().direct_esdt(&caller, &self.token_identifier_top().get(), farm_attributes.nft_nonce, &nft_amount);
@@ -176,7 +155,7 @@ pub trait StakingContract: owner::OwnerModule
         require!(referer.is_empty(), "You already have a referer set");
 
         let number_of_referals = self.number_of_referals(&referer_address);
-        let rarity = staked_rarity.get() as u16;
+        let rarity = staked_rarity.get();
 
         let mut max_referals = BASE_REFERER_PERSONS;
 
@@ -197,13 +176,13 @@ pub trait StakingContract: owner::OwnerModule
     #[view(calculateRewardsForGivenPosition)]
     fn calculate_rewards_for_given_position(
         &self,
-        amount: BigUint,
         attributes: StakingFarmTokenAttributes<Self::Api>,
     ) -> BigUint {
-        require!(amount > 0, "Zero liquidity input");
-        let farm_token_supply = self.farm_token_supply().get();
-        require!(farm_token_supply >= amount, "Not enough supply");
-        require!(amount == attributes.current_farm_amount, "Amount should be equal to attributes current_farm_amount");
+        let stake_modifier = self.calculate_stake_modifier(attributes.rarity);
+
+        require!(stake_modifier > 0, "Zero liquidity input");
+        let stake_modifier_supply = self.stake_modifier_total().get();
+        require!(stake_modifier_supply >= (stake_modifier as u32), "Not enough supply");
 
         let last_reward_nonce = self.last_reward_block_nonce().get();
         let current_block_nonce = self.blockchain().get_block_nonce();
@@ -212,12 +191,12 @@ pub trait StakingContract: owner::OwnerModule
             self.calculate_per_block_rewards(current_block_nonce, last_reward_nonce);
 
         let reward_per_share_increase =
-            self.calculate_reward_per_share_increase(&reward_increase, &farm_token_supply);
+            self.calculate_reward_per_share_increase(&reward_increase, &stake_modifier_supply);
 
         let future_reward_per_share = self.reward_per_share().get() + reward_per_share_increase;
 
         self.calculate_reward(
-            &amount,
+            &BigUint::from(stake_modifier),
             &future_reward_per_share,
             &attributes.reward_per_share,
         )
@@ -226,13 +205,13 @@ pub trait StakingContract: owner::OwnerModule
     #[view(calculateRewardsForGivenPositionAndTokens)]
     fn calculate_rewards_for_given_position_and_tokens(
         &self,
-        amount: BigUint,
         attributes: StakingFarmTokenAttributes<Self::Api>,
     ) -> MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)> {
-        require!(amount > 0, "Zero liquidity input");
-        let farm_token_supply = self.farm_token_supply().get();
-        require!(farm_token_supply >= amount, "Not enough supply");
-        require!(amount == attributes.current_farm_amount, "Amount should be equal to attributes current_farm_amount");
+        let stake_modifier = self.calculate_stake_modifier(attributes.rarity);
+
+        require!(stake_modifier > 0, "Zero liquidity input");
+        let farm_token_supply = self.stake_modifier_total().get();
+        require!(farm_token_supply >= (stake_modifier as u32), "Not enough supply");
 
         let last_reward_nonce = self.last_reward_block_nonce().get();
         let current_block_nonce = self.blockchain().get_block_nonce();
@@ -268,7 +247,7 @@ pub trait StakingContract: owner::OwnerModule
             }
 
             let amount = self.calculate_reward_token(
-                &amount,
+                &BigUint::from(stake_modifier),
                 attributes.staked_block,
                 &future_reward_per_share,
                 &attributes.reward_per_share,
@@ -304,5 +283,5 @@ pub trait StakingContract: owner::OwnerModule
 
     #[view]
     #[storage_mapper("numberOfReferals")]
-    fn number_of_referals(&self, address: &ManagedAddress) -> SingleValueMapper<u16>;
+    fn number_of_referals(&self, address: &ManagedAddress) -> SingleValueMapper<u8>;
 }

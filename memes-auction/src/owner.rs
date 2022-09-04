@@ -88,8 +88,8 @@ pub trait OwnerModule {
         self.min_bid_start().set(min_bid_start);
     }
 
-    #[endpoint]
     #[only_owner]
+    #[endpoint]
     fn claim_royalties(&self) {
         let caller = self.blockchain().get_caller();
 

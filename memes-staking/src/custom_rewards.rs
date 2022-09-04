@@ -64,7 +64,8 @@ pub trait CustomRewardsModule:
     }
 
     /*
-        TODO: Users should claim all previous rewards before adding new rewards???
+        TODO: The first top up should set the rewards per block, and then subsequent top ups should use those rewards per block and maybe end of rewards time.
+        The calculation of the stake should NOT take into consideration the reward_capacity!
      */
     #[only_owner]
     #[payable("*")]
@@ -130,7 +131,7 @@ pub trait CustomRewardsModule:
     }
 
     fn update_reward_per_share(&self, reward_increase: &BigUint) {
-        let farm_token_supply = self.farm_token_supply().get();
+        let farm_token_supply = self.stake_modifier_total().get();
         if farm_token_supply > 0 {
             let increase =
                 self.calculate_reward_per_share_increase(reward_increase, &farm_token_supply);

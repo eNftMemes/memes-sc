@@ -117,8 +117,8 @@ pub trait OwnerModule {
         self.signer().set(&new_signer);
     }
 
-    #[endpoint]
     #[only_owner]
+    #[endpoint]
     fn claim_royalties(&self) {
         let caller = self.blockchain().get_caller();
 

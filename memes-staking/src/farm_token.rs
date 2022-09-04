@@ -1,5 +1,3 @@
-use elrond_wasm::elrond_codec::TopEncode;
-
 use crate::common_structs::{FarmTokenAttributes, Nonce};
 use crate::owner;
 
@@ -27,11 +25,18 @@ pub struct FarmToken<M: ManagedTypeApi> {
 )]
 pub struct StakingFarmTokenAttributes<M: ManagedTypeApi> {
     pub reward_per_share: BigUint<M>,
-    pub current_farm_amount: BigUint<M>,
+    pub rarity: u8,
     pub staker: ManagedAddress<M>,
     pub nft_nonce: Nonce,
     pub staked_block: u64
 }
+
+pub const TOP_RARITY: u8 = 10;
+
+const BASE_STAKE_MODIFIER: u8 = 100; // 1x
+const INCREMENT_STAKE_MODIFIER: u8 = 10; // 0.1x
+const TOP_RARITY_STAKE_MODIFIER: u8 = 200; // 2x
+const SUPER_RARE_STAKE_MODIFIER: u8 = 225; // 2.25x
 
 #[elrond_wasm::module]
 pub trait FarmTokenModule:
@@ -65,26 +70,41 @@ pub trait FarmTokenModule:
                 .esdt_local_burn(&entry.token_identifier, entry.token_nonce, &entry.amount);
         }
 
-        self.farm_token_supply().update(|x| *x -= total_amount);
+        self.stake_modifier_total().update(|x| *x -= total_amount);
     }
 
-    fn mint_farm_tokens<T: TopEncode>(
+    fn mint_farm_token(
         &self,
         token_id: TokenIdentifier,
-        amount: BigUint,
-        attributes: &T,
+        attributes: &StakingFarmTokenAttributes<Self::Api>,
     ) -> EsdtTokenPayment<Self::Api> {
+        let amount = BigUint::from(1u8);
         let new_nonce = self
             .send()
             .esdt_nft_create_compact(&token_id, &amount, attributes);
-        self.farm_token_supply().update(|x| *x += &amount);
+        self.stake_modifier_total().update(|x| *x += &BigUint::from(self.calculate_stake_modifier(attributes.rarity)));
 
         EsdtTokenPayment::new(token_id, new_nonce, amount)
     }
 
-    fn burn_farm_tokens(&self, token_id: &TokenIdentifier, nonce: Nonce, amount: &BigUint) {
+    fn calculate_stake_modifier(&self, rarity: u8) -> u8 {
+        // Rare(10) NFT
+        if TOP_RARITY == rarity {
+            return TOP_RARITY_STAKE_MODIFIER;
+        }
+
+        // Super Rare NFT
+        if TOP_RARITY < rarity {
+            return SUPER_RARE_STAKE_MODIFIER;
+        }
+
+        // Rare(1-9) NFT
+        return BASE_STAKE_MODIFIER + INCREMENT_STAKE_MODIFIER * (rarity - 1);
+    }
+
+    fn burn_farm_tokens(&self, token_id: &TokenIdentifier, nonce: Nonce, amount: &BigUint, rarity: u8) {
         self.send().esdt_local_burn(token_id, nonce, amount);
-        self.farm_token_supply().update(|x| *x -= amount);
+        self.stake_modifier_total().update(|x| *x -= &BigUint::from(self.calculate_stake_modifier(rarity)));
     }
 
     fn get_farm_token_attributes<T: TopDecode>(

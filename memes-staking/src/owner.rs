@@ -18,7 +18,7 @@ pub trait OwnerModule {
 
     #[view(getFarmTokenSupply)]
     #[storage_mapper("farm_token_supply")]
-    fn farm_token_supply(&self) -> SingleValueMapper<BigUint>;
+    fn stake_modifier_total(&self) -> SingleValueMapper<BigUint>;
 
     #[view(getDivisionSafetyConstant)]
     #[storage_mapper("division_safety_constant")]

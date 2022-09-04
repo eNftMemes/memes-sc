@@ -23,7 +23,7 @@
         "esdt": {
           "tokenIdentifier": "str:METASMEME-745e9b",
           "nonce": "1",
-          "value": "100"
+          "value": "1"
         },
         "gasLimit": "5,000,000",
         "gasPrice": "0"
@@ -53,7 +53,7 @@
         "esdt": {
           "tokenIdentifier": "str:METASMEME-745e9b",
           "nonce": "1",
-          "value": "100"
+          "value": "1"
         },
         "gasLimit": "5,000,000",
         "gasPrice": "0"
