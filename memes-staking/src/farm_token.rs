@@ -1,16 +1,9 @@
-use crate::common_structs::{FarmTokenAttributes, Nonce};
 use crate::owner;
 
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
 
 const META_NUM_DECIMALS: usize = 0;
-
-#[derive(ManagedVecItem, Clone)]
-pub struct FarmToken<M: ManagedTypeApi> {
-    pub payment: EsdtTokenPayment<M>,
-    pub attributes: FarmTokenAttributes<M>,
-}
 
 #[derive(
     ManagedVecItem,
@@ -24,10 +17,9 @@ pub struct FarmToken<M: ManagedTypeApi> {
     Debug,
 )]
 pub struct StakingFarmTokenAttributes<M: ManagedTypeApi> {
-    pub reward_per_share: BigUint<M>,
     pub rarity: u8,
     pub staker: ManagedAddress<M>,
-    pub nft_nonce: Nonce,
+    pub nft_nonce: u64,
     pub staked_block: u64
 }
 
@@ -62,17 +54,6 @@ pub trait FarmTokenModule:
         );
     }
 
-    fn burn_farm_tokens_from_payments(&self, payments: &ManagedVec<EsdtTokenPayment<Self::Api>>) {
-        let mut total_amount = BigUint::zero();
-        for entry in payments.iter() {
-            total_amount += &entry.amount;
-            self.send()
-                .esdt_local_burn(&entry.token_identifier, entry.token_nonce, &entry.amount);
-        }
-
-        self.stake_modifier_total().update(|x| *x -= total_amount);
-    }
-
     fn mint_farm_token(
         &self,
         token_id: TokenIdentifier,
@@ -85,6 +66,11 @@ pub trait FarmTokenModule:
         self.stake_modifier_total().update(|x| *x += &BigUint::from(self.calculate_stake_modifier(attributes.rarity)));
 
         EsdtTokenPayment::new(token_id, new_nonce, amount)
+    }
+
+    fn burn_farm_tokens(&self, token_id: &TokenIdentifier, nonce: u64, amount: &BigUint, rarity: u8) {
+        self.send().esdt_local_burn(token_id, nonce, amount);
+        self.stake_modifier_total().update(|x| *x -= &BigUint::from(self.calculate_stake_modifier(rarity)));
     }
 
     fn calculate_stake_modifier(&self, rarity: u8) -> u8 {
@@ -100,25 +86,6 @@ pub trait FarmTokenModule:
 
         // Rare(1-9) NFT
         return BASE_STAKE_MODIFIER + INCREMENT_STAKE_MODIFIER * (rarity - 1);
-    }
-
-    fn burn_farm_tokens(&self, token_id: &TokenIdentifier, nonce: Nonce, amount: &BigUint, rarity: u8) {
-        self.send().esdt_local_burn(token_id, nonce, amount);
-        self.stake_modifier_total().update(|x| *x -= &BigUint::from(self.calculate_stake_modifier(rarity)));
-    }
-
-    fn get_farm_token_attributes<T: TopDecode>(
-        &self,
-        token_id: &TokenIdentifier,
-        token_nonce: u64,
-    ) -> T {
-        let token_info = self.blockchain().get_esdt_token_data(
-            &self.blockchain().get_sc_address(),
-            token_id,
-            token_nonce,
-        );
-
-        token_info.decode_attributes()
     }
 
     #[view(getFarmTokenId)]

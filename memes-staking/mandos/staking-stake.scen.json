@@ -48,7 +48,7 @@
                   "nonce": "1",
                   "balance": "1",
                   "hash": "",
-                  "attributes": "biguint:0|u8:1|address:my_address|u64:1|u64:1"
+                  "attributes": "u8:1|address:my_address|u64:1|u64:1"
                 }
               ],
               "roles": []
@@ -82,8 +82,7 @@
             "str:division_safety_constant": "1000000000",
 
             "str:farm_token_id": "str:METASMEME-745e9b",
-            "str:farm_token_supply": "100",
-            "str:last_reward_block_nonce": "1",
+            "str:stake_modifier_total": "100",
 
             "str:stakedRarity|address:my_address": "1"
           },

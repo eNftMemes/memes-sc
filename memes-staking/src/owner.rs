@@ -1,4 +1,3 @@
-use crate::common_structs::Nonce;
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
 
@@ -16,8 +15,8 @@ pub trait OwnerModule {
 
     // From Farm contract Config Module
 
-    #[view(getFarmTokenSupply)]
-    #[storage_mapper("farm_token_supply")]
+    #[view(getStakeModifierTotal)]
+    #[storage_mapper("stake_modifier_total")]
     fn stake_modifier_total(&self) -> SingleValueMapper<BigUint>;
 
     #[view(getDivisionSafetyConstant)]
@@ -26,5 +25,5 @@ pub trait OwnerModule {
 
     #[view(getLastRewardBlockNonce)]
     #[storage_mapper("last_reward_block_nonce")]
-    fn last_reward_block_nonce(&self) -> SingleValueMapper<Nonce>;
+    fn last_reward_block_nonce(&self) -> SingleValueMapper<u64>;
 }

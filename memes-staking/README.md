@@ -27,9 +27,9 @@ Mainnet:
 ## Issue farm token
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="registerFarmToken" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
 
-eg: (MetaStakedMemes - METASMEMES)
+eg: (MetaStakedMeme - METASMEME)
 
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="registerFarmToken" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "str:MetaStakedMemes" "str:METASMEMES"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=100000000 --function="registerFarmToken" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "str:MetaStakedMeme" "str:METASMEME"`
 
 ## Query token id
 

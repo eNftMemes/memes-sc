@@ -116,8 +116,7 @@
             "str:division_safety_constant": "1000000000",
 
             "str:farm_token_id": "str:METASMEME-745e9b",
-            "str:farm_token_supply": "0",
-            "str:last_reward_block_nonce": "43,202",
+            "str:stake_modifier_total": "0",
 
             "str:stakedRarity|address:my_address": "0"
           },

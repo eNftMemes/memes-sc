@@ -1,17 +1,14 @@
 #![no_std]
 #![feature(generic_associated_types)]
 
-use staking::TopMemeAttributes;
-use crate::common_structs::Nonce;
 use crate::custom_rewards::MAX_PERCENT;
 use crate::farm_token::{StakingFarmTokenAttributes, TOP_RARITY};
 
 elrond_wasm::imports!();
+elrond_wasm::derive_imports!();
 
 mod owner;
-mod staking;
 mod farm_token;
-mod common_structs;
 mod custom_rewards;
 
 const NFT_AMOUNT: u32 = 1;
@@ -24,6 +21,14 @@ const BASE_REFERER_PERSONS: u8 = 15;
 const INCREMENT_REFERER_PERSONS: u8 = 5;
 const SUPER_RARE_REFERER_PERSONS: u8 = 100;
 
+#[derive(TopEncode, TopDecode, TypeAbi)]
+pub struct TopMemeAttributes<M: ManagedTypeApi> {
+    pub rarity: u8,
+    pub original_nonce: u64,
+    pub period: u64,
+    pub category: ManagedBuffer<M>,
+    pub creator: ManagedAddress<M>,
+}
 
 #[elrond_wasm::contract]
 pub trait StakingContract: owner::OwnerModule
@@ -73,10 +78,7 @@ pub trait StakingContract: owner::OwnerModule
 
         self.staked_rarity(&caller).update(|value| *value += nft_attributes.rarity);
 
-        self.generate_aggregated_rewards();
-
         let attributes = StakingFarmTokenAttributes {
-            reward_per_share: self.reward_per_share().get(),
             rarity: nft_attributes.rarity,
             staker: caller,
             nft_nonce: nonce,
@@ -95,7 +97,7 @@ pub trait StakingContract: owner::OwnerModule
     fn unstake(
         &self,
         #[payment_token] payment_token_id: EgldOrEsdtTokenIdentifier,
-        #[payment_nonce] token_nonce: Nonce,
+        #[payment_nonce] token_nonce: u64,
         #[payment_amount] payment_amount: BigUint,
     ) {
         require!(!self.is_paused(), "Paused");
@@ -121,8 +123,6 @@ pub trait StakingContract: owner::OwnerModule
             "Minimum lock time has not yet passed"
         );
 
-        self.generate_aggregated_rewards();
-
         let caller = self.blockchain().get_caller();
         self.burn_farm_tokens(&token_identifier, token_nonce, &payment_amount, farm_attributes.rarity);
 
@@ -131,23 +131,14 @@ pub trait StakingContract: owner::OwnerModule
         let nft_amount = BigUint::from(NFT_AMOUNT);
         self.send().direct_esdt(&caller, &self.token_identifier_top().get(), farm_attributes.nft_nonce, &nft_amount);
 
-        // let reward = self.calculate_reward(
-        //     &payment_amount,
-        //     &self.reward_per_share().get(),
-        //     &farm_attributes.reward_per_share,
-        // );
-
         // TODO: Send rewards if any
-        // let farm_token_payment = self.create_and_send_unbond_tokens(&caller, farm_token_id, payment_amount);
-        //
-        // self.send_rewards(&reward_token_id, &reward, &caller);
     }
 
     #[endpoint]
     fn use_referer(&self, referer_address: &ManagedAddress) {
         let staked_rarity = self.staked_rarity(referer_address);
 
-        require!(!staked_rarity.is_empty(), "Referer doesn't have an NFT staked currently");
+        require!(!staked_rarity.is_empty(), "Referer doesn't have any NFT staked currently");
 
         let caller = self.blockchain().get_caller();
         let referer = self.referer(&caller);
@@ -171,94 +162,6 @@ pub trait StakingContract: owner::OwnerModule
         number_of_referals.update(|r| *r = *r + 1);
 
         // TODO: Call voting & auction contracts
-    }
-
-    #[view(calculateRewardsForGivenPosition)]
-    fn calculate_rewards_for_given_position(
-        &self,
-        attributes: StakingFarmTokenAttributes<Self::Api>,
-    ) -> BigUint {
-        let stake_modifier = self.calculate_stake_modifier(attributes.rarity);
-
-        require!(stake_modifier > 0, "Zero liquidity input");
-        let stake_modifier_supply = self.stake_modifier_total().get();
-        require!(stake_modifier_supply >= (stake_modifier as u32), "Not enough supply");
-
-        let last_reward_nonce = self.last_reward_block_nonce().get();
-        let current_block_nonce = self.blockchain().get_block_nonce();
-
-        let reward_increase =
-            self.calculate_per_block_rewards(current_block_nonce, last_reward_nonce);
-
-        let reward_per_share_increase =
-            self.calculate_reward_per_share_increase(&reward_increase, &stake_modifier_supply);
-
-        let future_reward_per_share = self.reward_per_share().get() + reward_per_share_increase;
-
-        self.calculate_reward(
-            &BigUint::from(stake_modifier),
-            &future_reward_per_share,
-            &attributes.reward_per_share,
-        )
-    }
-
-    #[view(calculateRewardsForGivenPositionAndTokens)]
-    fn calculate_rewards_for_given_position_and_tokens(
-        &self,
-        attributes: StakingFarmTokenAttributes<Self::Api>,
-    ) -> MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)> {
-        let stake_modifier = self.calculate_stake_modifier(attributes.rarity);
-
-        require!(stake_modifier > 0, "Zero liquidity input");
-        let farm_token_supply = self.stake_modifier_total().get();
-        require!(farm_token_supply >= (stake_modifier as u32), "Not enough supply");
-
-        let last_reward_nonce = self.last_reward_block_nonce().get();
-        let current_block_nonce = self.blockchain().get_block_nonce();
-
-        let reward_increase =
-            self.calculate_per_block_rewards(current_block_nonce, last_reward_nonce);
-
-        let reward_per_share_increase =
-            self.calculate_reward_per_share_increase(&reward_increase, &farm_token_supply);
-
-        let reward_per_share = self.reward_per_share().get();
-        let future_reward_per_share = &reward_per_share + &reward_per_share_increase;
-
-        let accumulated_rewards = &self.accumulated_rewards().get();
-        let max_percent = &BigUint::from(MAX_PERCENT);
-        let zero = BigUint::zero();
-
-        let mut result: MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)> = MultiValueEncoded::new();
-        for token in self.reward_tokens().iter() {
-            let reward_capacity = self.reward_capacity(&token).get();
-
-            let prev_reward_capacity = self.prev_reward_capacity(&token);
-            let mut prev_reward_capacity_struct = prev_reward_capacity.get();
-
-            if prev_reward_capacity_struct.end_reward_per_share == zero {
-                let percent = &(accumulated_rewards - &prev_reward_capacity_struct.accumulated_rewards);
-                let actual_accumulated_rewards = core::cmp::min(max_percent, percent);
-
-                // Send end_reward_per_share to appropriate value
-                if actual_accumulated_rewards.eq(max_percent) {
-                    prev_reward_capacity_struct.end_reward_per_share = reward_per_share.clone();
-                }
-            }
-
-            let amount = self.calculate_reward_token(
-                &BigUint::from(stake_modifier),
-                attributes.staked_block,
-                &future_reward_per_share,
-                &attributes.reward_per_share,
-                &prev_reward_capacity_struct,
-                &reward_capacity
-            );
-
-            result.push((token, amount));
-        }
-
-        return result;
     }
 
     #[view]
