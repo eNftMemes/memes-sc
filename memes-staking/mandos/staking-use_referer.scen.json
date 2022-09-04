@@ -1,0 +1,180 @@
+{
+  "name": "staking stake nft",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "staking-stake.scen.json"
+    },
+    {
+      "step": "scCall",
+      "txId": "use_referer",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "use_referer",
+        "value": "0",
+        "arguments": [
+          "address:other_address"
+        ],
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Referer doesn't have any NFT staked currently",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use_referer",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "use_referer",
+        "value": "0",
+        "arguments": [
+          "address:my_address"
+        ],
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:You can not refer yourself",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use_referer",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:staking_contract",
+        "function": "use_referer",
+        "value": "0",
+        "arguments": [
+          "address:my_address"
+        ],
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "3",
+          "balance": "1,000,000",
+          "storage": {},
+          "esdt": {
+            "str:TMEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:METASMEME-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "hash": "",
+                  "attributes": "u8:1|address:my_address|u64:1|u64:1"
+                }
+              ],
+              "roles": []
+            }
+          }
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:staking_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:auctionSc": "address:auction_contract",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:minimumLockBlocks": "43,200",
+            "str:division_safety_constant": "1000000000",
+
+            "str:farm_token_id": "str:METASMEME-745e9b",
+            "str:stake_modifier_total": "100",
+
+            "str:stakedRarity|address:my_address": "1",
+
+            "str:referer|address:other_address": "address:my_address",
+            "str:numberOfReferals|address:my_address": "1"
+          },
+          "code": "file:../output/memes-staking.wasm",
+          "esdt": {
+            "str:METASMEME-745e9b": {
+              "instances": [],
+              "lastNonce": "1",
+              "roles": [
+                "ESDTRoleNFTCreate",
+                "ESDTRoleNFTBurn",
+                "ESDTRoleNFTAddQuantity"
+              ]
+            },
+            "str:TMEMENFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": ["str:nft-create-uri"]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use_referer",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:staking_contract",
+        "function": "use_referer",
+        "value": "0",
+        "arguments": [
+          "address:my_address"
+        ],
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:You already have a referer set",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    }
+  ]
+}

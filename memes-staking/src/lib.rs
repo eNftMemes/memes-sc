@@ -138,9 +138,12 @@ pub trait StakingContract: owner::OwnerModule
     fn use_referer(&self, referer_address: &ManagedAddress) {
         let staked_rarity = self.staked_rarity(referer_address);
 
-        require!(!staked_rarity.is_empty(), "Referer doesn't have any NFT staked currently");
+        require!(!staked_rarity.is_empty() && staked_rarity.get() > 0, "Referer doesn't have any NFT staked currently");
 
         let caller = self.blockchain().get_caller();
+
+        require!(&caller != referer_address, "You can not refer yourself");
+
         let referer = self.referer(&caller);
 
         require!(referer.is_empty(), "You already have a referer set");
@@ -156,6 +159,7 @@ pub trait StakingContract: owner::OwnerModule
             max_referals = max_referals + INCREMENT_REFERER_PERSONS * (rarity - 1);
         }
 
+        // TODO: Test this case
         require!(number_of_referals.get() < max_referals, "Maximum number of referals reached for this referer");
 
         referer.set(referer_address);
