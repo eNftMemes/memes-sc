@@ -234,7 +234,7 @@ pub trait CustomRewardsModule:
             let percent = &(accumulated_rewards - &prev_reward_capacity_struct.accumulated_rewards);
             let actual_accumulated_rewards = core::cmp::min(max_percent, percent);
 
-            // Send end_reward_per_share to appropriate value
+            // Set end_reward_per_share to appropriate value
             if actual_accumulated_rewards.eq(max_percent) {
                 prev_reward_capacity.set(&RewardCapacity {
                     block_nonce: prev_reward_capacity_struct.block_nonce,
