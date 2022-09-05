@@ -7,7 +7,6 @@ pub const AUCTION_TIME: u64 = 432000; // 5 days in seconds (time the owner of th
 
 #[elrond_wasm::module]
 pub trait OwnerModule {
-    // TODO: Test this function with Mandos after it is supported to issue tokens
     #[endpoint]
     #[only_owner]
     #[payable("EGLD")]
@@ -39,7 +38,6 @@ pub trait OwnerModule {
             .call_and_exit()
     }
 
-    // TODO: Test this function with Mandos after it is supported to issue tokens
     #[endpoint]
     #[only_owner]
     fn set_local_roles(&self) {

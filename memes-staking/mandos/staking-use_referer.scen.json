@@ -126,7 +126,9 @@
             "str:stakedRarity|address:my_address": "1",
 
             "str:referer|address:other_address": "address:my_address",
-            "str:numberOfReferals|address:my_address": "1"
+            "str:numberOfReferals|address:my_address": "1",
+
+            "str:last_reward_block_nonce": "1"
           },
           "code": "file:../output/memes-staking.wasm",
           "esdt": {

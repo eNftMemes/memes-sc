@@ -77,6 +77,8 @@ pub trait StakingContract: owner::OwnerModule
 
         self.staked_rarity(&caller).update(|value| *value += nft_attributes.rarity);
 
+        self.generate_aggregated_rewards();
+
         let attributes = StakingFarmTokenAttributes {
             rarity: nft_attributes.rarity,
             staker: caller,
@@ -122,6 +124,8 @@ pub trait StakingContract: owner::OwnerModule
             self.blockchain().get_block_nonce() > farm_attributes.staked_block + self.minimum_lock_blocks().get(),
             "Minimum lock time has not yet passed"
         );
+
+        self.generate_aggregated_rewards();
 
         let caller = self.blockchain().get_caller();
         self.burn_farm_tokens(&token_identifier, token_nonce, &payment_amount, farm_attributes.rarity);
