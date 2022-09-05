@@ -11,6 +11,7 @@ elrond_wasm_node::wasm_endpoints! {
         all_reward_tokens
         auction_sc
         calculate_rewards_for_given_position
+        claim_rewards
         end_reward_per_share_token
         getDivisionSafetyConstant
         getFarmTokenId

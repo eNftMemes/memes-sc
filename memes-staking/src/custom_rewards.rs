@@ -73,6 +73,9 @@ pub trait CustomRewardsModule:
                 }
             );
 
+            self.start_reward_per_share_token(&payment_token).set(self.reward_per_share().get());
+            self.end_reward_per_share_token(&payment_token).clear();
+
             return;
         }
 
@@ -93,12 +96,16 @@ pub trait CustomRewardsModule:
     fn generate_aggregated_rewards(&self) {
         let current_block_nonce = self.blockchain().get_block_nonce();
 
+        // TODO: Improve the performance of these initial values
+        let initial_last_reward_block = self.last_reward_block_nonce().get();
         let extra_rewards = self.calculate_extra_rewards_since_last_allocation(current_block_nonce);
 
         if extra_rewards <= 0 {
             return;
         }
 
+        // TODO: Improve the performance of these initial values
+        let initial_reward_per_share = self.reward_per_share().get();
         let new_reward_per_share = self.update_reward_per_share(&extra_rewards);
 
         if new_reward_per_share <= 0 {
@@ -106,7 +113,7 @@ pub trait CustomRewardsModule:
         }
 
         // Check if rewards has ended for every token
-        self.update_end_reward_per_share(current_block_nonce, &new_reward_per_share);
+        self.update_end_reward_per_share(current_block_nonce, initial_last_reward_block, &initial_reward_per_share);
     }
 
     fn calculate_extra_rewards_since_last_allocation(&self, current_block_nonce: u64) -> BigUint {
@@ -136,7 +143,7 @@ pub trait CustomRewardsModule:
             self.calculate_reward_per_share_increase(reward_increase, &stake_modifier_total);
 
         let reward_per_share_mapper = self.reward_per_share();
-        let mut reward_per_share = self.reward_per_share().get();
+        let mut reward_per_share = reward_per_share_mapper.get();
 
         reward_per_share = &reward_per_share + &increase;
 
@@ -145,7 +152,7 @@ pub trait CustomRewardsModule:
         return reward_per_share;
     }
 
-    fn update_end_reward_per_share(&self, current_block_nonce: u64, reward_per_share: &BigUint) {
+    fn update_end_reward_per_share(&self, current_block_nonce: u64, initial_last_reward_block: u64, initial_reward_per_share: &BigUint) {
         for token in self.all_reward_tokens().iter() {
             let end_reward_per_share_mapper = self.end_reward_per_share_token(&token);
 
@@ -159,7 +166,16 @@ pub trait CustomRewardsModule:
                 continue;
             }
 
-            end_reward_per_share_mapper.set(reward_per_share);
+            // TODO: Improve this
+            let extra_rewards =
+                self.calculate_per_block_rewards(token_data.end_rewards_block, initial_last_reward_block);
+            let stake_modifier_total = self.stake_modifier_total().get();
+            let increase =
+                self.calculate_reward_per_share_increase(&extra_rewards, &stake_modifier_total);
+
+            let new_reward_per_share = initial_reward_per_share + &increase;
+
+            end_reward_per_share_mapper.set(&new_reward_per_share);
         }
     }
 

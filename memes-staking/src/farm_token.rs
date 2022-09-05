@@ -59,19 +59,26 @@ pub trait FarmTokenModule:
         &self,
         token_id: TokenIdentifier,
         attributes: &StakingFarmTokenAttributes<Self::Api>,
+        update_total: Option<bool>
     ) -> EsdtTokenPayment<Self::Api> {
         let amount = BigUint::from(1u8);
         let new_nonce = self
             .send()
             .esdt_nft_create_compact(&token_id, &amount, attributes);
-        self.stake_modifier_total().update(|x| *x += &BigUint::from(self.calculate_stake_modifier(attributes.rarity)));
+
+        if update_total.is_some() && update_total.unwrap() {
+            self.stake_modifier_total().update(|x| *x += &BigUint::from(self.calculate_stake_modifier(attributes.rarity)));
+        }
 
         EsdtTokenPayment::new(token_id, new_nonce, amount)
     }
 
-    fn burn_farm_tokens(&self, token_id: &TokenIdentifier, nonce: u64, amount: &BigUint, rarity: u8) {
+    fn burn_farm_tokens(&self, token_id: &TokenIdentifier, nonce: u64, amount: &BigUint, rarity: Option<u8>) {
         self.send().esdt_local_burn(token_id, nonce, amount);
-        self.stake_modifier_total().update(|x| *x -= &BigUint::from(self.calculate_stake_modifier(rarity)));
+
+        if rarity.is_some() {
+            self.stake_modifier_total().update(|x| *x -= &BigUint::from(self.calculate_stake_modifier(rarity.unwrap())));
+        }
     }
 
     fn calculate_stake_modifier(&self, rarity: u8) -> u8 {

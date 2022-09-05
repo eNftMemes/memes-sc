@@ -89,7 +89,7 @@ pub trait StakingContract: owner::OwnerModule
 
         let farm_token = self.farm_token().get_token_id();
 
-        let new_rokens = self.mint_farm_token(farm_token, &attributes);
+        let new_rokens = self.mint_farm_token(farm_token, &attributes, Option::Some(true));
 
         self.send().direct_esdt(&self.blockchain().get_caller(), &new_rokens.token_identifier, new_rokens.token_nonce, &new_rokens.amount);
     }
@@ -128,14 +128,68 @@ pub trait StakingContract: owner::OwnerModule
         self.generate_aggregated_rewards();
 
         let caller = self.blockchain().get_caller();
-        self.burn_farm_tokens(&token_identifier, token_nonce, &payment_amount, farm_attributes.rarity);
+        let current_reward_per_share = self.reward_per_share().get();
+        let mut payments = self.claim_rewards_common(
+            &caller,
+            &farm_attributes,
+            &current_reward_per_share
+        );
+
+        self.burn_farm_tokens(&token_identifier, token_nonce, &payment_amount, Option::Some(farm_attributes.rarity));
 
         self.staked_rarity(&farm_attributes.staker).update(|value| *value -= farm_attributes.rarity);
 
-        let nft_amount = BigUint::from(NFT_AMOUNT);
-        self.send().direct_esdt(&caller, &self.token_identifier_top().get(), farm_attributes.nft_nonce, &nft_amount);
+        payments.push(EsdtTokenPayment::new(self.token_identifier_top().get(), farm_attributes.nft_nonce, BigUint::from(NFT_AMOUNT)));
 
-        // TODO: Send rewards if any
+        self.send().direct_multi(&caller, &payments);
+    }
+
+    #[payable("*")]
+    #[endpoint]
+    fn claim_rewards(&self) {
+        require!(!self.is_paused(), "Paused");
+
+        let farm_token_id = self.farm_token().get_token_id();
+
+        require!(farm_token_id.is_valid_esdt_identifier(), "No farm token");
+
+        let (token_identifier, token_nonce, payment_amount) = self.call_value().single_esdt().into_tuple();
+        require!(payment_amount > 0u32, "Zero amount");
+        require!(token_identifier == farm_token_id, "Unknown farm token");
+
+        self.generate_aggregated_rewards();
+
+        let own_address: ManagedAddress = self.blockchain().get_sc_address();
+        let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(
+            &own_address,
+            &token_identifier,
+            token_nonce
+        );
+        let attributes = token_data.decode_attributes::<StakingFarmTokenAttributes<Self::Api>>();
+
+        let caller = self.blockchain().get_caller();
+        let current_reward_per_share = self.reward_per_share().get();
+        let mut payments = self.claim_rewards_common(
+            &caller,
+            &attributes,
+            &current_reward_per_share
+        );
+
+        let new_attributes = StakingFarmTokenAttributes {
+            rarity: attributes.rarity,
+            staker: attributes.staker,
+            nft_nonce: attributes.nft_nonce,
+            staked_block: self.blockchain().get_block_nonce(),
+            reward_per_share: current_reward_per_share,
+        };
+
+        self.burn_farm_tokens(&token_identifier, token_nonce, &payment_amount, Option::None);
+
+        let new_rokens = self.mint_farm_token(token_identifier, &new_attributes, Option::None);
+
+        payments.push(EsdtTokenPayment::new(new_rokens.token_identifier, new_rokens.token_nonce, new_rokens.amount));
+
+        self.send().direct_multi(&caller, &payments);
     }
 
     #[endpoint]
@@ -172,10 +226,44 @@ pub trait StakingContract: owner::OwnerModule
         // TODO: Call voting & auction contracts
     }
 
+    fn claim_rewards_common(
+        &self,
+        caller: &ManagedAddress,
+        attributes: &StakingFarmTokenAttributes<Self::Api>,
+        current_reward_per_share: &BigUint,
+    ) -> ManagedVec<EsdtTokenPayment<Self::Api>> {
+        let stake_modifier = self.calculate_stake_modifier(attributes.rarity);
+
+        let mut payments = ManagedVec::new();
+
+        for token in self.all_reward_tokens().iter() {
+            let reward_token = self.reward_tokens(&token).get();
+
+            let amount = self.calculate_reward(
+                &BigUint::from(stake_modifier as u16),
+                attributes.staked_block,
+                current_reward_per_share,
+                &attributes.reward_per_share,
+                &token,
+                &reward_token
+            );
+
+            if amount > 0 {
+                if token.is_egld() {
+                    self.send().direct_egld(caller, &amount);
+                } else {
+                    payments.push(EsdtTokenPayment::new(token.into_esdt_option().unwrap(), 0, amount));
+                }
+            }
+        }
+
+        return payments;
+    }
+
     #[view]
     fn calculate_rewards_for_given_position(
         &self,
-        attributes: StakingFarmTokenAttributes<Self::Api>,
+        attributes: &StakingFarmTokenAttributes<Self::Api>,
     ) -> MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)> {
         let stake_modifier = self.calculate_stake_modifier(attributes.rarity);
         let stake_modifier_total = self.stake_modifier_total().get();
