@@ -1,0 +1,151 @@
+{
+  "name": "staking use referer",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "staking-init.json"
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "3",
+          "balance": "1,000,000",
+          "storage": {},
+          "esdt": {
+            "str:TMEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:METASMEME-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "hash": "",
+                  "attributes": "u8:9|address:my_address|u64:2|u64:1|biguint:0"
+                },
+                {
+                  "nonce": "2",
+                  "balance": "1",
+                  "hash": "",
+                  "attributes": "u8:1|address:my_address|u64:1|u64:1|biguint:0"
+                },
+                {
+                  "nonce": "3",
+                  "balance": "1",
+                  "hash": "",
+                  "attributes": "u8:1|address:my_address|u64:3|u64:1|biguint:0"
+                }
+              ],
+              "roles": []
+            }
+          }
+        },
+        "sc:staking_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:auctionSc": "address:auction_contract",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:minimumLockBlocks": "43,200",
+            "str:division_safety_constant": "1000000000",
+
+            "str:farm_token_id": "str:METASMEME-745e9b",
+            "str:stake_modifier_total": "380",
+
+            "str:reward_tokens|nested:str:EGLD": "u64:1|u64:1000001|biguint:25,000|biguint:25,000,000",
+            "str:reward_tokens|nested:str:OTOKEN-123456": "u64:1|u64:1000001|biguint:10,000|biguint:10,000,000",
+            "str:all_reward_tokens.len": "2",
+            "str:all_reward_tokens.item|u32:1": "str:EGLD",
+            "str:all_reward_tokens.item|u32:2": "str:OTOKEN-123456",
+
+            "str:start_reward_per_share_token|nested:str:EGLD": "0",
+            "str:start_reward_per_share_token|nested:str:OTOKEN-123456": "0",
+
+            "str:stakedRarity|address:my_address": "11",
+
+            "str:last_reward_block_nonce": "1"
+          },
+          "code": "file:../output/memes-staking.wasm",
+          "owner": "address:my_address",
+          "esdt": {
+            "str:METASMEME-745e9b": {
+              "instances": [],
+              "lastNonce": "3",
+              "roles": [
+                "ESDTRoleNFTCreate",
+                "ESDTRoleNFTBurn",
+                "ESDTRoleNFTAddQuantity"
+              ]
+            },
+            "str:TMEMENFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": ["str:nft-create-uri"]
+                },
+                {
+                  "nonce": "2",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:9|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": ["str:nft-create-uri"]
+                },
+                {
+                  "nonce": "3",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": ["str:nft-create-uri"]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockNonce": "u64:14,401"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "getStakeModifierInfo",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "get_stake_modifier_info",
+        "arguments": ["u8:1", "u8:9", "u8:10", "u8:11"]
+      },
+      "expect": {
+        "out": ["u8:100", "u8:180", "u8:200", "u8:225"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "calculateRewardsForMultiplePositions",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "calculate_rewards_for_multiple_positions",
+        "arguments": ["u8:9|address:my_address|u64:2|u64:1|biguint:0", "u8:1|address:my_address|u64:1|u64:1|biguint:0", "u8:1|address:my_address|u64:3|u64:1|biguint:0"]
+      },
+      "expect": {
+        "out": ["nested:str:EGLD|biguint:170", "nested:str:OTOKEN-123456|biguint:68", "nested:str:EGLD|biguint:94", "nested:str:OTOKEN-123456|biguint:37", "nested:str:EGLD|biguint:94", "nested:str:OTOKEN-123456|biguint:37"],
+        "status": "0"
+      }
+    }
+  ]
+}

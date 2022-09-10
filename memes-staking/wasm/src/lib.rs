@@ -11,12 +11,15 @@ elrond_wasm_node::wasm_endpoints! {
         all_reward_tokens
         auction_sc
         calculate_rewards_for_given_position
+        calculate_rewards_for_multiple_positions
         claim_rewards
         end_reward_per_share_token
         getDivisionSafetyConstant
         getFarmTokenId
         getRewardPerShare
         getStakeModifierTotal
+        get_max_referals_info
+        get_stake_modifier_info
         isPaused
         last_reward_block_nonce
         minimum_lock_blocks

@@ -1,4 +1,4 @@
-use crate::{farm_token, owner};
+use crate::{farm_token, base};
 
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
@@ -16,7 +16,7 @@ pub struct Token<M: ManagedTypeApi> {
 
 #[elrond_wasm::module]
 pub trait CustomRewardsModule:
-    owner::OwnerModule
+    base::BaseModule
     + farm_token::FarmTokenModule
     + elrond_wasm_modules::default_issue_callbacks::DefaultIssueCallbacksModule
     + elrond_wasm_modules::pause::PauseModule
@@ -29,11 +29,12 @@ pub trait CustomRewardsModule:
         #[payment_token] payment_token: EgldOrEsdtTokenIdentifier,
         #[payment_amount] payment_amount: BigUint
     ) {
-        self.generate_aggregated_rewards();
+        let current_block_nonce = self.blockchain().get_block_nonce();
+
+        self.generate_aggregated_rewards(current_block_nonce);
 
         let reward_token = self.reward_tokens(&payment_token);
 
-        let current_block = self.blockchain().get_block_nonce();
         let reward_per_block = (&payment_amount * &BigUint::from(PERCENT_PER_BLOCK) * &self.division_safety_constant().get())
             / &BigUint::from(MAX_PERCENT);
 
@@ -41,14 +42,14 @@ pub trait CustomRewardsModule:
         if reward_token.is_empty() {
             // If adding the first token, set last_reward_block_nonce to appropriate value
             if self.last_reward_block_nonce().is_empty() {
-                self.last_reward_block_nonce().set(current_block);
+                self.last_reward_block_nonce().set(current_block_nonce);
             }
 
             self.all_reward_tokens().push(&payment_token);
 
             let token = &Token{
-                start_rewards_block: current_block,
-                end_rewards_block: current_block + MAX_PERCENT / PERCENT_PER_BLOCK,
+                start_rewards_block: current_block_nonce,
+                end_rewards_block: current_block_nonce + MAX_PERCENT / PERCENT_PER_BLOCK,
                 total_rewards: payment_amount,
                 reward_per_block,
             };
@@ -63,11 +64,11 @@ pub trait CustomRewardsModule:
         let token = reward_token.get();
 
         // If adding tokens after rewards ended, reset token
-        if current_block > token.end_rewards_block {
+        if current_block_nonce > token.end_rewards_block {
             reward_token.set(
                 &Token{
-                    start_rewards_block: current_block,
-                    end_rewards_block: current_block + MAX_PERCENT / PERCENT_PER_BLOCK,
+                    start_rewards_block: current_block_nonce,
+                    end_rewards_block: current_block_nonce + MAX_PERCENT / PERCENT_PER_BLOCK,
                     total_rewards: payment_amount,
                     reward_per_block,
                 }
@@ -93,12 +94,12 @@ pub trait CustomRewardsModule:
         );
     }
 
-    fn generate_aggregated_rewards(&self) {
-        let current_block_nonce = self.blockchain().get_block_nonce();
-
+    fn generate_aggregated_rewards(&self, current_block_nonce: u64) {
         // TODO: Improve the performance of these initial values
-        let initial_last_reward_block = self.last_reward_block_nonce().get();
-        let extra_rewards = self.calculate_extra_rewards_since_last_allocation(current_block_nonce);
+        let last_reward_nonce_mapper = self.last_reward_block_nonce();
+
+        let initial_last_reward_block = last_reward_nonce_mapper.get();
+        let extra_rewards = self.calculate_extra_rewards_since_last_allocation(current_block_nonce, &last_reward_nonce_mapper, initial_last_reward_block);
 
         if extra_rewards <= 0 {
             return;
@@ -116,10 +117,12 @@ pub trait CustomRewardsModule:
         self.update_end_reward_per_share(current_block_nonce, initial_last_reward_block, &initial_reward_per_share);
     }
 
-    fn calculate_extra_rewards_since_last_allocation(&self, current_block_nonce: u64) -> BigUint {
-        let last_reward_nonce_mapper = self.last_reward_block_nonce();
-        let last_reward_nonce = last_reward_nonce_mapper.get();
-
+    fn calculate_extra_rewards_since_last_allocation(
+        &self,
+        current_block_nonce: u64,
+        last_reward_nonce_mapper: &SingleValueMapper<u64>,
+        last_reward_nonce: u64
+    ) -> BigUint {
         if current_block_nonce <= last_reward_nonce {
             return BigUint::zero();
         }

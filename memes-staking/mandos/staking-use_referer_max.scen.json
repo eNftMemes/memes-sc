@@ -1,0 +1,203 @@
+{
+  "name": "staking use referer",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "staking-init.json"
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {},
+          "esdt": {
+            "str:TMEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:METASMEME-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "hash": "",
+                  "attributes": "u8:2|address:my_address|u64:1|u64:1|biguint:0"
+                }
+              ],
+              "roles": []
+            }
+          }
+        },
+        "sc:staking_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:auctionSc": "address:auction_contract",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:minimumLockBlocks": "43,200",
+            "str:division_safety_constant": "1000000000",
+
+            "str:farm_token_id": "str:METASMEME-745e9b",
+            "str:stake_modifier_total": "110",
+
+            "str:stakedRarity|address:my_address": "2",
+
+            "str:last_reward_block_nonce": "1"
+          },
+          "code": "file:../output/memes-staking.wasm",
+          "owner": "address:my_address",
+          "esdt": {
+            "str:METASMEME-745e9b": {
+              "instances": [],
+              "lastNonce": "1",
+              "roles": [
+                "ESDTRoleNFTCreate",
+                "ESDTRoleNFTBurn",
+                "ESDTRoleNFTAddQuantity"
+              ]
+            },
+            "str:TMEMENFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:2|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": ["str:nft-create-uri"]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "getReferalsInfo",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "get_max_referals_info",
+        "arguments": ["address:my_address"]
+      },
+      "expect": {
+        "out": ["", "u8:25"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {},
+          "esdt": {
+            "str:TMEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:METASMEME-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "hash": "",
+                  "attributes": "u8:2|address:my_address|u64:1|u64:1|biguint:0"
+                }
+              ],
+              "roles": []
+            }
+          }
+        },
+        "sc:staking_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:auctionSc": "address:auction_contract",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:minimumLockBlocks": "43,200",
+            "str:division_safety_constant": "1000000000",
+
+            "str:farm_token_id": "str:METASMEME-745e9b",
+            "str:stake_modifier_total": "110",
+
+            "str:stakedRarity|address:my_address": "2",
+            "str:numberOfReferals|address:my_address": "25",
+
+            "str:last_reward_block_nonce": "1"
+          },
+          "code": "file:../output/memes-staking.wasm",
+          "owner": "address:my_address",
+          "esdt": {
+            "str:METASMEME-745e9b": {
+              "instances": [],
+              "lastNonce": "1",
+              "roles": [
+                "ESDTRoleNFTCreate",
+                "ESDTRoleNFTBurn",
+                "ESDTRoleNFTAddQuantity"
+              ]
+            },
+            "str:TMEMENFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:2|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": ["str:nft-create-uri"]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "getReferalsInfo",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "get_max_referals_info",
+        "arguments": ["address:my_address"]
+      },
+      "expect": {
+        "out": ["u8:25", "u8:25"],
+        "status": "0"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use_referer",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:staking_contract",
+        "function": "use_referer",
+        "value": "0",
+        "arguments": [
+          "address:my_address"
+        ],
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Maximum number of referals reached for this referer",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    }
+  ]
+}

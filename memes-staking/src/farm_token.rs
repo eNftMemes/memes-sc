@@ -1,4 +1,4 @@
-use crate::owner;
+use crate::base;
 
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
@@ -24,16 +24,9 @@ pub struct StakingFarmTokenAttributes<M: ManagedTypeApi> {
     pub reward_per_share: BigUint<M>,
 }
 
-pub const TOP_RARITY: u8 = 10;
-
-const BASE_STAKE_MODIFIER: u8 = 100; // 1x
-const INCREMENT_STAKE_MODIFIER: u8 = 10; // 0.1x
-const TOP_RARITY_STAKE_MODIFIER: u8 = 200; // 2x
-const SUPER_RARE_STAKE_MODIFIER: u8 = 225; // 2.25x
-
 #[elrond_wasm::module]
 pub trait FarmTokenModule:
-    owner::OwnerModule
+    base::BaseModule
     + elrond_wasm_modules::default_issue_callbacks::DefaultIssueCallbacksModule
 {
     #[only_owner]
@@ -79,21 +72,6 @@ pub trait FarmTokenModule:
         if rarity.is_some() {
             self.stake_modifier_total().update(|x| *x -= &BigUint::from(self.calculate_stake_modifier(rarity.unwrap())));
         }
-    }
-
-    fn calculate_stake_modifier(&self, rarity: u8) -> u8 {
-        // Rare(10) NFT
-        if TOP_RARITY == rarity {
-            return TOP_RARITY_STAKE_MODIFIER;
-        }
-
-        // Super Rare NFT
-        if TOP_RARITY < rarity {
-            return SUPER_RARE_STAKE_MODIFIER;
-        }
-
-        // Rare(1-9) NFT
-        return BASE_STAKE_MODIFIER + INCREMENT_STAKE_MODIFIER * (rarity - 1);
     }
 
     #[view(getFarmTokenId)]

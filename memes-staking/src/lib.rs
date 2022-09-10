@@ -1,24 +1,18 @@
 #![no_std]
 #![feature(generic_associated_types)]
 
-use crate::farm_token::{StakingFarmTokenAttributes, TOP_RARITY};
+use crate::farm_token::{StakingFarmTokenAttributes};
 
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
 
-mod owner;
+mod base;
 mod farm_token;
 mod custom_rewards;
 
 const NFT_AMOUNT: u32 = 1;
-
 const DEFAULT_MINUMUM_LOCK_BLOCKS: u64 = 5 * 14_400; // ~5 days (3 * 14400 blocks)
-
 const DIVISION_SAFETY_CONSTANT: u32 = 1000000000;
-
-const BASE_REFERER_PERSONS: u8 = 15;
-const INCREMENT_REFERER_PERSONS: u8 = 5;
-const SUPER_RARE_REFERER_PERSONS: u8 = 100;
 
 #[derive(TopEncode, TopDecode, TypeAbi)]
 pub struct TopMemeAttributes<M: ManagedTypeApi> {
@@ -30,7 +24,7 @@ pub struct TopMemeAttributes<M: ManagedTypeApi> {
 }
 
 #[elrond_wasm::contract]
-pub trait StakingContract: owner::OwnerModule
+pub trait StakingContract: base::BaseModule
     + elrond_wasm_modules::pause::PauseModule
     + farm_token::FarmTokenModule
     + custom_rewards::CustomRewardsModule
@@ -51,13 +45,10 @@ pub trait StakingContract: owner::OwnerModule
 
     #[payable("*")]
     #[endpoint]
-    fn stake(
-        &self,
-        #[payment_token] nft_type: EgldOrEsdtTokenIdentifier,
-        #[payment_nonce] nonce: u64,
-        #[payment_amount] nft_amount: BigUint,
-    ) {
+    fn stake(&self) {
         require!(self.not_paused(), "Contract paused, can't stake NFTs");
+
+        let (nft_type, nonce, nft_amount) = self.call_value().single_esdt().into_tuple();
 
         require!(nft_amount == NFT_AMOUNT, "Nft amount should be 1");
 
@@ -68,7 +59,7 @@ pub trait StakingContract: owner::OwnerModule
         let own_address: ManagedAddress = self.blockchain().get_sc_address();
         let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(
             &own_address,
-            &nft_type.into_esdt_option().unwrap(),
+            &nft_type,
             nonce
         );
         let nft_attributes = token_data.decode_attributes::<TopMemeAttributes<Self::Api>>();
@@ -77,13 +68,15 @@ pub trait StakingContract: owner::OwnerModule
 
         self.staked_rarity(&caller).update(|value| *value += nft_attributes.rarity);
 
-        self.generate_aggregated_rewards();
+        let current_block_nonce = self.blockchain().get_block_nonce();
+
+        self.generate_aggregated_rewards(current_block_nonce);
 
         let attributes = StakingFarmTokenAttributes {
             rarity: nft_attributes.rarity,
             staker: caller,
             nft_nonce: nonce,
-            staked_block: self.blockchain().get_block_nonce(),
+            staked_block: current_block_nonce,
             reward_per_share: self.reward_per_share().get(),
         };
 
@@ -102,7 +95,7 @@ pub trait StakingContract: owner::OwnerModule
         #[payment_nonce] token_nonce: u64,
         #[payment_amount] payment_amount: BigUint,
     ) {
-        require!(!self.is_paused(), "Paused");
+        require!(self.not_paused(), "Contract paused, can't unstake NFTs");
 
         let farm_token_id = self.farm_token().get_token_id();
 
@@ -120,12 +113,14 @@ pub trait StakingContract: owner::OwnerModule
         );
         let farm_attributes = token_data.decode_attributes::<StakingFarmTokenAttributes<Self::Api>>();
 
+        let current_block_nonce = self.blockchain().get_block_nonce();
+
         require!(
-            self.blockchain().get_block_nonce() > farm_attributes.staked_block + self.minimum_lock_blocks().get(),
+            current_block_nonce > farm_attributes.staked_block + self.minimum_lock_blocks().get(),
             "Minimum lock time has not yet passed"
         );
 
-        self.generate_aggregated_rewards();
+        self.generate_aggregated_rewards(current_block_nonce);
 
         let caller = self.blockchain().get_caller();
         let current_reward_per_share = self.reward_per_share().get();
@@ -147,7 +142,7 @@ pub trait StakingContract: owner::OwnerModule
     #[payable("*")]
     #[endpoint]
     fn claim_rewards(&self) {
-        require!(!self.is_paused(), "Paused");
+        require!(self.not_paused(), "Contract paused, can't claim rewards");
 
         let farm_token_id = self.farm_token().get_token_id();
 
@@ -157,7 +152,9 @@ pub trait StakingContract: owner::OwnerModule
         require!(payment_amount > 0u32, "Zero amount");
         require!(token_identifier == farm_token_id, "Unknown farm token");
 
-        self.generate_aggregated_rewards();
+        let current_block_nonce = self.blockchain().get_block_nonce();
+
+        self.generate_aggregated_rewards(current_block_nonce);
 
         let own_address: ManagedAddress = self.blockchain().get_sc_address();
         let token_data: EsdtTokenData<Self::Api> = self.blockchain().get_esdt_token_data(
@@ -179,7 +176,7 @@ pub trait StakingContract: owner::OwnerModule
             rarity: attributes.rarity,
             staker: attributes.staker,
             nft_nonce: attributes.nft_nonce,
-            staked_block: self.blockchain().get_block_nonce(),
+            staked_block: current_block_nonce,
             reward_per_share: current_reward_per_share,
         };
 
@@ -194,9 +191,11 @@ pub trait StakingContract: owner::OwnerModule
 
     #[endpoint]
     fn use_referer(&self, referer_address: &ManagedAddress) {
-        let staked_rarity = self.staked_rarity(referer_address);
+        require!(self.not_paused(), "Contract paused, can't use referer");
 
-        require!(!staked_rarity.is_empty() && staked_rarity.get() > 0, "Referer doesn't have any NFT staked currently");
+        let staked_rarity = self.staked_rarity(referer_address).get();
+
+        require!(staked_rarity > 0, "Referer doesn't have any NFT staked currently");
 
         let caller = self.blockchain().get_caller();
 
@@ -207,17 +206,8 @@ pub trait StakingContract: owner::OwnerModule
         require!(referer.is_empty(), "You already have a referer set");
 
         let number_of_referals = self.number_of_referals(&referer_address);
-        let rarity = staked_rarity.get();
+        let max_referals = self.calculate_max_referals(staked_rarity);
 
-        let mut max_referals = BASE_REFERER_PERSONS;
-
-        if TOP_RARITY < rarity {
-            max_referals = SUPER_RARE_REFERER_PERSONS;
-        } else if 1 > rarity {
-            max_referals = max_referals + INCREMENT_REFERER_PERSONS * (rarity - 1);
-        }
-
-        // TODO: Test this case
         require!(number_of_referals.get() < max_referals, "Maximum number of referals reached for this referer");
 
         referer.set(referer_address);
@@ -258,6 +248,20 @@ pub trait StakingContract: owner::OwnerModule
         }
 
         return payments;
+    }
+
+    #[view]
+    fn calculate_rewards_for_multiple_positions(
+        &self,
+        all_attributes: MultiValueEncoded<StakingFarmTokenAttributes<Self::Api>>
+    ) -> MultiValueEncoded<MultiValueEncoded<(EgldOrEsdtTokenIdentifier, BigUint)>> {
+        let mut rewards_for_positions = MultiValueEncoded::new();
+
+        for attributes in all_attributes.into_iter() {
+            rewards_for_positions.push(self.calculate_rewards_for_given_position(&attributes));
+        }
+
+        return rewards_for_positions;
     }
 
     #[view]
@@ -318,6 +322,26 @@ pub trait StakingContract: owner::OwnerModule
         }
 
         return result;
+    }
+
+    #[view]
+    fn get_stake_modifier_info(&self, rarities: MultiValueEncoded<u8>) -> MultiValueEncoded<u8> {
+        let mut stake_modifiers = MultiValueEncoded::new();
+
+        for rarity in rarities.into_iter() {
+            stake_modifiers.push(self.calculate_stake_modifier(rarity));
+        }
+
+        return stake_modifiers;
+    }
+
+    #[view]
+    fn get_max_referals_info(&self, address: &ManagedAddress) -> MultiValue2<u8, u8> {
+        let staked_rarity = self.staked_rarity(address).get();
+        let number_of_referals = self.number_of_referals(address).get();
+        let max_referals = self.calculate_max_referals(staked_rarity);
+
+        return MultiValue2::from((number_of_referals, max_referals));
     }
 
     #[view]

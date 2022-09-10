@@ -1,26 +1,47 @@
 {
-  "name": "staking use referer",
+  "name": "staking stake nft",
   "steps": [
     {
       "step": "externalSteps",
-      "path": "staking-stake.scen.json"
+      "path": "staking-init.json"
     },
     {
       "step": "scCall",
-      "txId": "use_referer",
+      "txId": "pause",
       "tx": {
         "from": "address:my_address",
         "to": "sc:staking_contract",
-        "function": "use_referer",
+        "function": "pause",
         "value": "0",
-        "arguments": [
-          "address:other_address"
-        ],
+        "arguments": [],
         "gasLimit": "7,000,000",
         "gasPrice": "0"
       },
       "expect": {
-        "message": "str:Referer doesn't have any NFT staked currently",
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "stake",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "stake",
+        "value": "0",
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:TMEMENFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Contract paused, can't stake NFTs",
         "status": "4",
         "gas": "*",
         "refund": "*"
@@ -28,20 +49,23 @@
     },
     {
       "step": "scCall",
-      "txId": "use_referer",
+      "txId": "unstake",
       "tx": {
         "from": "address:my_address",
         "to": "sc:staking_contract",
-        "function": "use_referer",
+        "function": "unstake",
         "value": "0",
-        "arguments": [
-          "address:my_address"
-        ],
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:TMEMENFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
         "gasLimit": "7,000,000",
         "gasPrice": "0"
       },
       "expect": {
-        "message": "str:You can not refer yourself",
+        "message": "str:Contract paused, can't unstake NFTs",
         "status": "4",
         "gas": "*",
         "refund": "*"
@@ -49,15 +73,91 @@
     },
     {
       "step": "scCall",
-      "txId": "use_referer",
+      "txId": "claimRewards",
       "tx": {
-        "from": "address:other_address",
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "claim_rewards",
+        "value": "0",
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:TMEMENFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Contract paused, can't claim rewards",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "useReferer",
+      "tx": {
+        "from": "address:my_address",
         "to": "sc:staking_contract",
         "function": "use_referer",
         "value": "0",
-        "arguments": [
-          "address:my_address"
-        ],
+        "arguments": ["address:other_address"],
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Contract paused, can't use referer",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scQuery",
+      "txId": "isPaused",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "isPaused",
+        "arguments": []
+      },
+      "expect": {
+        "out": ["1"]
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "unpause",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "unpause",
+        "value": "0",
+        "arguments": [],
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "stake",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "stake",
+        "value": "0",
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:TMEMENFT-745e9b",
+          "nonce": "1",
+          "value": "1"
+        },
         "gasLimit": "7,000,000",
         "gasPrice": "0"
       },
@@ -71,7 +171,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "3",
+          "nonce": "7",
           "balance": "1,000,000",
           "storage": {},
           "esdt": {
@@ -95,7 +195,7 @@
           }
         },
         "address:other_address": {
-          "nonce": "1",
+          "nonce": "0",
           "balance": "1,000,000",
           "storage": {}
         },
@@ -125,9 +225,6 @@
 
             "str:stakedRarity|address:my_address": "1",
 
-            "str:referer|address:other_address": "address:my_address",
-            "str:numberOfReferals|address:my_address": "1",
-
             "str:last_reward_block_nonce": "1"
           },
           "code": "file:../output/memes-staking.wasm",
@@ -155,40 +252,6 @@
             }
           }
         }
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "use_referer",
-      "tx": {
-        "from": "address:other_address",
-        "to": "sc:staking_contract",
-        "function": "use_referer",
-        "value": "0",
-        "arguments": [
-          "address:my_address"
-        ],
-        "gasLimit": "7,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
-        "message": "str:You already have a referer set",
-        "status": "4",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "scQuery",
-      "txId": "getReferalsInfo",
-      "tx": {
-        "to": "sc:staking_contract",
-        "function": "get_max_referals_info",
-        "arguments": ["address:my_address"]
-      },
-      "expect": {
-        "out": ["u8:1", "u8:20"],
-        "status": "0"
       }
     }
   ]
