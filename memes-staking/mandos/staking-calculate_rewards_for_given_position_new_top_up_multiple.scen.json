@@ -276,7 +276,7 @@
         "function": "top_up_rewards",
         "value": "50,000",
         "arguments": [],
-        "gasLimit": "7,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {

@@ -45,7 +45,7 @@
           "address:auction_contract",
           "str:TMEMENFT-745e9b"
         ],
-        "gasLimit": "100,000,000",
+        "gasLimit": "50,000,000",
         "gasPrice": "0"
       },
       "expect": {

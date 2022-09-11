@@ -16,7 +16,7 @@
         "arguments": [
           "address:other_address"
         ],
-        "gasLimit": "7,000,000",
+        "gasLimit": "6,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -37,7 +37,7 @@
         "arguments": [
           "address:my_address"
         ],
-        "gasLimit": "7,000,000",
+        "gasLimit": "6,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -58,7 +58,7 @@
         "arguments": [
           "address:my_address"
         ],
-        "gasLimit": "7,000,000",
+        "gasLimit": "6,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -168,7 +168,7 @@
         "arguments": [
           "address:my_address"
         ],
-        "gasLimit": "7,000,000",
+        "gasLimit": "6,000,000",
         "gasPrice": "0"
       },
       "expect": {

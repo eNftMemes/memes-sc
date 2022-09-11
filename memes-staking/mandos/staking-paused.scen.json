@@ -14,7 +14,7 @@
         "function": "pause",
         "value": "0",
         "arguments": [],
-        "gasLimit": "7,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -85,7 +85,7 @@
           "nonce": "1",
           "value": "1"
         },
-        "gasLimit": "7,000,000",
+        "gasLimit": "8,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -135,7 +135,7 @@
         "function": "unpause",
         "value": "0",
         "arguments": [],
-        "gasLimit": "7,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {

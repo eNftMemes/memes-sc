@@ -46,7 +46,7 @@
         "function": "top_up_rewards",
         "value": "100,000",
         "arguments": [],
-        "gasLimit": "7,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -149,7 +149,7 @@
         "function": "top_up_rewards",
         "value": "50,000",
         "arguments": [],
-        "gasLimit": "7,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -252,7 +252,7 @@
         "function": "top_up_rewards",
         "value": "25,000",
         "arguments": [],
-        "gasLimit": "7,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -353,7 +353,7 @@
           "tokenIdentifier": "str:OTOKEN-123456",
           "value": "10,000"
         },
-        "gasLimit": "7,000,000",
+        "gasLimit": "5,000,000",
         "gasPrice": "0"
       },
       "expect": {
