@@ -1,12 +1,12 @@
 ### DEVNET
 **Contract Address: erd1qqqqqqqqqqqqqpgqgu5h3wwlza4p5k6nqh9vfr9plfa87sj5lqpsa98mr6**
 
-**Farm Token Id: METASMEMES-b6d9cf**
+**Meta Staking Token Id: METASMEMES-b6d9cf**
 
 ### MAINNET
 **Contract Address: TBD**
 
-**Farm Token Id: TBD**
+**Meta Staking Token Id: TBD**
 
 # Deploy
 
@@ -42,7 +42,7 @@ eg: (MetaStakedMeme - METASMEME)
 
 - ESDT:
 
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=5000000 --function="ESDTTransfer" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "str:TOKEN" "VALUE_BIGUINT" "str:top_up_rewards"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=5000000 --function="ESDTTransfer" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "str:TOKEN" "VALUE_BIGUINT" "str:top_up_rewards"`
 
 ## Query token id
 

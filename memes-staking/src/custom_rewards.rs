@@ -82,7 +82,8 @@ pub trait CustomRewardsModule:
 
         // Else calculate the number of blocks to extend by so the rewards per block remain the same
         let new_total_rewards: BigUint = &token.total_rewards + &payment_amount;
-        let new_end_rewards_block: BigUint = &new_total_rewards * &BigUint::from(token.end_rewards_block) / &token.total_rewards;
+        let new_end_rewards_block: BigUint = &new_total_rewards * &BigUint::from(token.end_rewards_block - token.start_rewards_block) / &token.total_rewards
+            + &BigUint::from(token.start_rewards_block);
 
         reward_token.set(
             &Token{
@@ -234,6 +235,7 @@ pub trait CustomRewardsModule:
     #[storage_mapper("division_safety_constant")]
     fn division_safety_constant(&self) -> SingleValueMapper<BigUint>;
 
+    // TODO: Add a view to get all tokens info and also the current block nonce?
     #[view]
     #[storage_mapper("reward_tokens")]
     fn reward_tokens(&self, token: &EgldOrEsdtTokenIdentifier) -> SingleValueMapper<Token<Self::Api>>;

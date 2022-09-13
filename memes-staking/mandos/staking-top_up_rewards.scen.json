@@ -1,5 +1,5 @@
 {
-  "name": "staking stake nft",
+  "name": "staking top up rewards",
   "steps": [
     {
       "step": "externalSteps",
@@ -39,7 +39,7 @@
     },
     {
       "step": "scCall",
-      "txId": "stakeEgldFirst",
+      "txId": "topUpEgldFirst",
       "tx": {
         "from": "address:my_address",
         "to": "sc:staking_contract",
@@ -142,7 +142,7 @@
     },
     {
       "step": "scCall",
-      "txId": "stakeEgldInProgress",
+      "txId": "topUpEgldInProgress",
       "tx": {
         "from": "address:my_address",
         "to": "sc:staking_contract",
@@ -245,7 +245,7 @@
     },
     {
       "step": "scCall",
-      "txId": "stakeEgldNew",
+      "txId": "topUpEgldNew",
       "tx": {
         "from": "address:my_address",
         "to": "sc:staking_contract",
@@ -342,7 +342,7 @@
     },
     {
       "step": "scCall",
-      "txId": "stakeOtherEsdt",
+      "txId": "topUpOtherEsdt",
       "tx": {
         "from": "address:my_address",
         "to": "sc:staking_contract",

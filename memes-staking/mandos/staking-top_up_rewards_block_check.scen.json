@@ -1,0 +1,185 @@
+{
+  "name": "staking top up rewards",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "staking-init.json"
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockNonce": "u64:250,000"
+      }
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "topUpEgldFirst",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "top_up_rewards",
+        "value": "100,000",
+        "arguments": [],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "900,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:staking_contract": {
+          "nonce": "0",
+          "balance": "100,000",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:auctionSc": "address:auction_contract",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:minimumLockBlocks": "43,200",
+            "str:division_safety_constant": "1000000000",
+
+            "str:farm_token_id": "str:METASMEME-745e9b",
+
+            "str:reward_tokens|nested:str:EGLD": "u64:250,000|u64:1,250,000|biguint:100,000|biguint:100,000,000",
+            "str:all_reward_tokens.len": "1",
+            "str:all_reward_tokens.item|u32:1": "str:EGLD",
+
+            "str:start_reward_per_share_token|nested:str:EGLD": "0",
+
+            "str:last_reward_block_nonce": "250,000"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-staking.wasm",
+          "esdt": {
+            "str:METASMEME-745e9b": {
+              "instances": [],
+              "roles": [
+                "ESDTRoleNFTCreate",
+                "ESDTRoleNFTBurn",
+                "ESDTRoleNFTAddQuantity"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": "setState",
+      "currentBlockInfo": {
+        "blockNonce": "u64:750,000"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "topUpEgldInProgress",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "top_up_rewards",
+        "value": "50,000",
+        "arguments": [],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "2",
+          "balance": "850,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:staking_contract": {
+          "nonce": "0",
+          "balance": "150,000",
+          "storage": {
+            "str:votingSc": "address:voting_contract",
+            "str:auctionSc": "address:auction_contract",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:minimumLockBlocks": "43,200",
+            "str:division_safety_constant": "1000000000",
+
+            "str:farm_token_id": "str:METASMEME-745e9b",
+
+            "str:reward_tokens|nested:str:EGLD": "u64:250,000|u64:1,750,000|biguint:150,000|biguint:100,000,000",
+            "str:all_reward_tokens.len": "1",
+            "str:all_reward_tokens.item|u32:1": "str:EGLD",
+
+            "str:start_reward_per_share_token|nested:str:EGLD": "0",
+
+            "str:last_reward_block_nonce": "750,000"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-staking.wasm",
+          "esdt": {
+            "str:METASMEME-745e9b": {
+              "instances": [],
+              "roles": [
+                "ESDTRoleNFTCreate",
+                "ESDTRoleNFTBurn",
+                "ESDTRoleNFTAddQuantity"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
