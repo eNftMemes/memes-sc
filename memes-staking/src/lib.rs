@@ -66,7 +66,7 @@ pub trait StakingContract: base::BaseModule
 
         let caller = self.blockchain().get_caller();
 
-        self.staked_rarity(&caller).update(|value| *value += nft_attributes.rarity);
+        self.staked_rarity(&caller).update(|value| *value += nft_attributes.rarity as u16);
 
         let current_block_nonce = self.blockchain().get_block_nonce();
 
@@ -132,7 +132,7 @@ pub trait StakingContract: base::BaseModule
 
         self.burn_farm_tokens(&token_identifier, token_nonce, &payment_amount, Option::Some(farm_attributes.rarity));
 
-        self.staked_rarity(&farm_attributes.staker).update(|value| *value -= farm_attributes.rarity);
+        self.staked_rarity(&farm_attributes.staker).update(|value| *value -= farm_attributes.rarity as u16);
 
         payments.push(EsdtTokenPayment::new(self.token_identifier_top().get(), farm_attributes.nft_nonce, BigUint::from(NFT_AMOUNT)));
 
@@ -358,7 +358,7 @@ pub trait StakingContract: base::BaseModule
 
     #[view]
     #[storage_mapper("stakedRarity")]
-    fn staked_rarity(&self, address: &ManagedAddress) -> SingleValueMapper<u8>;
+    fn staked_rarity(&self, address: &ManagedAddress) -> SingleValueMapper<u16>;
 
     #[view]
     #[storage_mapper("referer")]

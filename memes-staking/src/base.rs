@@ -28,6 +28,11 @@ const SUPER_RARE_REFERER_PERSONS: u8 = 100;
 #[elrond_wasm::module]
 pub trait BaseModule {
     fn calculate_stake_modifier(&self, rarity: u8) -> u8 {
+        // Safety check, should not happen
+        if 0 == rarity {
+            return 0;
+        }
+
         // Rare (10) NFT
         if TOP_RARITY == rarity {
             return TOP_RARITY_STAKE_MODIFIER;
@@ -42,19 +47,24 @@ pub trait BaseModule {
         return BASE_STAKE_MODIFIER + INCREMENT_STAKE_MODIFIER * (rarity - 1);
     }
 
-    fn calculate_max_referals(&self, staked_rarity: u8) -> u8 {
+    fn calculate_max_referals(&self, staked_rarity: u16) -> u8 {
+        // Can happen for view functions
+        if 0 == staked_rarity {
+            return 0;
+        }
+
         // Rare (10) NFT
-        if TOP_RARITY == staked_rarity {
+        if (TOP_RARITY as u16) == staked_rarity {
             return TOP_RARITY_REFERER_PERSONS;
         }
 
         // Super Rare NFT
-        if TOP_RARITY < staked_rarity {
+        if (TOP_RARITY as u16) < staked_rarity {
             return SUPER_RARE_REFERER_PERSONS;
         }
 
         // Rare (1-9) NFT
-        return BASE_REFERER_PERSONS + INCREMENT_REFERER_PERSONS * (staked_rarity - 1);
+        return BASE_REFERER_PERSONS + INCREMENT_REFERER_PERSONS * ((staked_rarity as u8) - 1);
     }
 
     #[only_owner]

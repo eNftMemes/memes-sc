@@ -6,6 +6,19 @@
       "path": "staking-init.json"
     },
     {
+      "step": "scQuery",
+      "txId": "getReferalsInfo",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "get_max_referals_info",
+        "arguments": ["address:my_address"]
+      },
+      "expect": {
+        "out": ["", ""],
+        "status": "0"
+      }
+    },
+    {
       "step": "setState",
       "accounts": {
         "address:my_address": {

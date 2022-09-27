@@ -235,7 +235,7 @@ pub trait CustomRewardsModule:
     #[storage_mapper("division_safety_constant")]
     fn division_safety_constant(&self) -> SingleValueMapper<BigUint>;
 
-    // TODO: Add a view to get all tokens info and also the current block nonce?
+    // TODO: Add a view to get all tokens info
     #[view]
     #[storage_mapper("reward_tokens")]
     fn reward_tokens(&self, token: &EgldOrEsdtTokenIdentifier) -> SingleValueMapper<Token<Self::Api>>;
