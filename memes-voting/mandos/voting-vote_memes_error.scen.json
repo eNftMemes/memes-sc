@@ -97,166 +97,10 @@
         "gasPrice": "0"
       },
       "expect": {
-        "status": "0",
-        "gas": "*",
-        "refund": "*"
-      }
-    },
-    {
-      "step": "checkState",
-      "accounts": {
-        "address:my_address": {
-          "nonce": "10",
-          "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "1",
-                  "balance": "1",
-                  "creator": "sc:voting_contract",
-                  "royalties": "1000",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:funny|address:my_address",
-                  "uri": [
-                    "str:nft-create-uri"
-                  ]
-                },
-                {
-                  "nonce": "3",
-                  "balance": "1",
-                  "creator": "sc:voting_contract",
-                  "royalties": "1000",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|address:my_address",
-                  "uri": [
-                    "str:nft-create-uri3"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
-        },
-        "address:other_address": {
-          "nonce": "3",
-          "balance": "1,000,000",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [
-                {
-                  "nonce": "2",
-                  "balance": "1",
-                  "creator": "sc:voting_contract",
-                  "royalties": "1000",
-                  "hash": "",
-                  "attributes": "u64:123,000|nested:str:random|address:other_address",
-                  "uri": [
-                    "str:nft-create-uri2"
-                  ]
-                },
-                {
-                  "nonce": "4",
-                  "balance": "1",
-                  "creator": "sc:voting_contract",
-                  "royalties": "1000",
-                  "hash": "",
-                  "attributes": "u64:727,800|nested:str:random|address:other_address",
-                  "uri": [
-                    "str:nft-create-uri4"
-                  ]
-                }
-              ],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "0"
-            }
-          }
-        },
-        "address:auction_contract": {
-          "nonce": "0",
-          "balance": "0",
-          "owner": "address:my_address"
-        },
-        "sc:voting_contract": {
-          "nonce": "0",
-          "balance": "0",
-          "storage": {
-            "str:tokenIdentifier": "str:MEMENFT-745e9b",
-
-            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
-            "str:categories|``.value|u32:1": "str:funny",
-            "str:categories|``.node_id|nested:str:funny": "1",
-
-            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
-            "str:categories|``.value|u32:2": "str:random",
-            "str:categories|``.node_id|nested:str:random": "2",
-            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
-
-            "str:addressLastMemeTime|address:my_address": "728,800",
-            "str:addressLastMemeTime|address:other_address": "728,800",
-
-            "str:auctionSc": "address:auction_contract",
-            "str:periods.len": "2",
-            "str:periods.item|u32:1": "123,000",
-            "str:periods.item|u32:2": "727,800",
-            "str:periodTime": "604800",
-
-            "str:periodMemes|u64:123,000|``.len": "2",
-            "str:periodMemes|u64:123,000|``.item|u32:1": "1",
-            "str:periodMemes|u64:123,000|``.item|u32:2": "2",
-
-            "str:periodMemes|u64:727,800|``.len": "2",
-            "str:periodMemes|u64:727,800|``.item|u32:1": "3",
-            "str:periodMemes|u64:727,800|``.item|u32:2": "4",
-
-            "str:memeVotesTotal|u64:1": "11",
-            "str:memeVotesTotal|u64:2": "9",
-
-            "str:memeVotes|u64:1|u64:727,800": "11",
-            "str:memeVotes|u64:2|u64:727,800": "9",
-
-            "str:addressVotes|address:my_address": "u64:727,800|u8:1",
-            "str:addressVotes|address:other_address": "u64:727,800|u8:19",
-            "str:periodTopMemes|u64:727,800": "u64:1|u32:11|u64:2|u32:9",
-
-            "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
-          },
-          "code": "file:../output/memes-voting.wasm",
-          "esdt": {
-            "str:MEMENFT-745e9b": {
-              "instances": [],
-              "nonce": "0",
-              "balance": "0",
-              "lastNonce": "4",
-              "roles": [
-                "ESDTRoleNFTCreate"
-              ]
-            }
-          }
-        }
-      }
-    },
-    {
-      "step": "scCall",
-      "txId": "vote-memes-41",
-      "tx": {
-        "from": "address:my_address",
-        "to": "sc:voting_contract",
-        "function": "vote_memes",
-        "arguments": [
-          "0x9762234c4408e600e30321bb3263f0970bb0a2c4a88f77702f665d5e3ba7e193e93514fce94926c1d374d8f1740c6d5bda73b4c152f694cf3ca4bf41d879c00b", "u64:1", "u64:2"
-        ],
-        "gasLimit": "10,000,000",
-        "gasPrice": "0"
-      },
-      "expect": {
+        "message": "str:Not enough votes left currently",
         "status": "4",
         "gas": "*",
-        "refund": "*",
-        "message": "str:Not enough votes left currently"
+        "refund": "*"
       }
     },
     {
@@ -331,7 +175,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "14",
+          "nonce": "13",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -452,18 +296,18 @@
             "str:periodMemes|u64:1,332,600|``.len": "1",
             "str:periodMemes|u64:1,332,600|``.item|u32:1": "5",
 
-            "str:memeVotesTotal|u64:1": "12",
-            "str:memeVotesTotal|u64:2": "10",
+            "str:memeVotesTotal|u64:1": "4",
+            "str:memeVotesTotal|u64:2": "2",
 
-            "str:memeVotes|u64:1|u64:727,800": "11",
-            "str:memeVotes|u64:2|u64:727,800": "9",
+            "str:memeVotes|u64:1|u64:727,800": "3",
+            "str:memeVotes|u64:2|u64:727,800": "1",
 
             "str:memeVotes|u64:1|u64:1,332,600": "1",
             "str:memeVotes|u64:2|u64:1,332,600": "1",
 
-            "str:addressVotes|address:my_address": "u64:1,332,600|u8:18",
-            "str:addressVotes|address:other_address": "u64:727,800|u8:19",
-            "str:periodTopMemes|u64:727,800": "u64:1|u32:11|u64:2|u32:9",
+            "str:addressVotes|address:my_address": "u64:1,332,600|u8:8",
+            "str:addressVotes|address:other_address": "u64:727,800|u8:9",
+            "str:periodTopMemes|u64:727,800": "u64:1|u32:3|u64:2|u32:1",
             "str:periodTopMemes|u64:1,332,600": "u64:2|u32:1|u64:1|u32:1",
 
             "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
@@ -506,7 +350,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "14",
+          "nonce": "13",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {
@@ -627,18 +471,18 @@
             "str:periodMemes|u64:1,332,600|``.len": "1",
             "str:periodMemes|u64:1,332,600|``.item|u32:1": "5",
 
-            "str:memeVotesTotal|u64:1": "14",
-            "str:memeVotesTotal|u64:2": "11",
+            "str:memeVotesTotal|u64:1": "6",
+            "str:memeVotesTotal|u64:2": "3",
 
-            "str:memeVotes|u64:1|u64:727,800": "11",
-            "str:memeVotes|u64:2|u64:727,800": "9",
+            "str:memeVotes|u64:1|u64:727,800": "3",
+            "str:memeVotes|u64:2|u64:727,800": "1",
 
             "str:memeVotes|u64:1|u64:1,332,600": "3",
             "str:memeVotes|u64:2|u64:1,332,600": "2",
 
-            "str:addressVotes|address:my_address": "u64:1,332,600|u8:18",
-            "str:addressVotes|address:other_address": "u64:1,332,600|u8:17",
-            "str:periodTopMemes|u64:727,800": "u64:1|u32:11|u64:2|u32:9",
+            "str:addressVotes|address:my_address": "u64:1,332,600|u8:8",
+            "str:addressVotes|address:other_address": "u64:1,332,600|u8:7",
+            "str:periodTopMemes|u64:727,800": "u64:1|u32:3|u64:2|u32:1",
             "str:periodTopMemes|u64:1,332,600": "u64:1|u32:3|u64:2|u32:2",
 
             "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
@@ -752,7 +596,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "15",
+          "nonce": "14",
           "balance": "1,000,000",
           "esdt": {
             "str:MEMENFT-745e9b": {

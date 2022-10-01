@@ -140,7 +140,7 @@
             "str:memeVotes|u64:1|u64:727,800": "1",
             "str:memeVotes|u64:2|u64:727,800": "1",
 
-            "str:addressVotes|address:my_address": "u64:727,800|u8:18",
+            "str:addressVotes|address:my_address": "u64:727,800|u8:8",
             "str:periodTopMemes|u64:727,800": "u64:2|u32:1|u64:1|u32:1",
 
             "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
@@ -295,7 +295,7 @@
             "str:memeVotes|u64:1|u64:727,800": "2",
             "str:memeVotes|u64:2|u64:727,800": "1",
 
-            "str:addressVotes|address:my_address": "u64:727,800|u8:17",
+            "str:addressVotes|address:my_address": "u64:727,800|u8:7",
             "str:periodTopMemes|u64:727,800": "u64:1|u32:2|u64:2|u32:1",
 
             "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"
@@ -450,8 +450,8 @@
             "str:memeVotes|u64:1|u64:727,800": "3",
             "str:memeVotes|u64:2|u64:727,800": "1",
 
-            "str:addressVotes|address:my_address": "u64:727,800|u8:17",
-            "str:addressVotes|address:other_address": "u64:727,800|u8:19",
+            "str:addressVotes|address:my_address": "u64:727,800|u8:7",
+            "str:addressVotes|address:other_address": "u64:727,800|u8:9",
             "str:periodTopMemes|u64:727,800": "u64:1|u32:3|u64:2|u32:1",
 
             "str:signer": "0x10282dcc126fc9b1191aeb1fa5458e3db3a4ec2705ad5f826f42d53363aaddd5"

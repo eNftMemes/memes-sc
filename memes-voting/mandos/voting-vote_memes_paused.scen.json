@@ -336,7 +336,7 @@
             "str:memeVotes|u64:1|u64:727,800": "1",
             "str:memeVotes|u64:2|u64:727,800": "1",
 
-            "str:addressVotes|address:my_address": "u64:727,800|u8:18",
+            "str:addressVotes|address:my_address": "u64:727,800|u8:8",
             "str:periodTopMemes|u64:727,800": "u64:2|u32:1|u64:1|u32:1",
 
             "str:pause_module:paused": "0",

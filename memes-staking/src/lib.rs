@@ -205,13 +205,17 @@ pub trait StakingContract: base::BaseModule
 
         require!(referer.is_empty(), "You already have a referer set");
 
-        let number_of_referals = self.number_of_referals(&referer_address);
+        let number_of_referals_mapper = self.number_of_referals(&referer_address);
         let max_referals = self.calculate_max_referals(staked_rarity);
+        let mut number_of_referals = number_of_referals_mapper.get();
 
-        require!(number_of_referals.get() < max_referals, "Maximum number of referals reached for this referer");
+        require!(number_of_referals < max_referals, "Maximum number of referals reached for this referer");
 
         referer.set(referer_address);
-        number_of_referals.update(|r| *r = *r + 1);
+
+        number_of_referals += 1;
+
+        number_of_referals_mapper.set(number_of_referals);
 
         // TODO: Call voting & auction contracts
     }

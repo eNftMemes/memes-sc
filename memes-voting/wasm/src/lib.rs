@@ -8,6 +8,7 @@ elrond_wasm_node::wasm_endpoints! {
     memes_voting
     (
         callBack
+        address_extra_votes_per_period
         address_last_meme_time
         address_votes
         auction_sc
@@ -30,12 +31,16 @@ elrond_wasm_node::wasm_endpoints! {
         period_memes_latest
         period_top_memes
         periods
+        referer
         set_auction_sc
         set_local_roles
         set_period_time
         set_signer
+        set_staking_sc
+        staking_sc
         token_identifier
         unpause
+        use_referer
         vote_memes
     )
 }

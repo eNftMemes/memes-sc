@@ -3,17 +3,17 @@
 
 use meme::*;
 use owner::*;
+use base::*;
 
 elrond_wasm::imports!();
 
 mod owner;
-
 mod meme;
+mod base;
 
 const THROTTLE_MEME_TIME: u64 = 600; // 10 minutes in seconds
 const NFT_AMOUNT: u32 = 1;
 const PER_PAGE: usize = 10;
-const VOTES_PER_ADDRESS_PER_PERIOD: u8 = 20;
 
 const ROYALTIES: u16 = 1000; // 10%
 
@@ -29,6 +29,7 @@ mod auction_proxy {
 
 #[elrond_wasm::contract]
 pub trait MemesVoting: owner::OwnerModule
+	+ base::BaseModule
 	+ elrond_wasm_modules::pause::PauseModule
 {
 	#[init]
@@ -104,11 +105,12 @@ pub trait MemesVoting: owner::OwnerModule
 		let address_votes: SingleValueMapper<AddressVotes> = self.address_votes(&caller);
 		let current_period: u64 = self.current_period();
 		let reset_address_votes = address_votes.is_empty() || address_votes.get().period != current_period;
+		let address_current_votes = if reset_address_votes { self.get_address_total_votes(&caller) } else { address_votes.get().votes };
 		let nb_nfts: usize = nft_nonces.len();
 
 		require!(nb_nfts > 0, "At least an nft needs to be voted");
 		require!(
-			reset_address_votes || (address_votes.get().votes >= nb_nfts as u8),
+			address_current_votes >= nb_nfts as u8,
 			"Not enough votes left currently"
 		);
 
@@ -156,10 +158,28 @@ pub trait MemesVoting: owner::OwnerModule
 
 		address_votes.set(&AddressVotes {
 			period: current_period,
-			votes: (if reset_address_votes { VOTES_PER_ADDRESS_PER_PERIOD } else { address_votes.get().votes }) - (nb_nfts as u8),
+			votes: address_current_votes - (nb_nfts as u8),
 		});
 
 		self.alter_period_top_memes(&mut new_meme_votes, &current_period);
+	}
+
+	#[endpoint]
+	fn use_referer(&self, address: &ManagedAddress, referer_address: &ManagedAddress, number_of_referals: u8) {
+		require!(self.not_paused(), "Contract paused, can't use referer");
+
+		let caller = self.blockchain().get_caller();
+
+		require!(caller == self.staking_sc().get(), "Only staking contract can call this");
+
+		let referer = self.referer(&address);
+
+		require!(referer.is_empty(), "Address already has a referer set");
+
+		referer.set(referer_address);
+
+		self.add_address_votes(address, EXTRA_VOTES_IF_REFERRED);
+		self.add_address_votes(referer_address, self.calculate_extra_votes_for_referers(number_of_referals));
 	}
 
 	// private
@@ -338,10 +358,6 @@ pub trait MemesVoting: owner::OwnerModule
 	#[storage_mapper("periodTopMemes")]
 	fn period_top_memes(&self, period: u64) -> SingleValueMapper<ArrayVec<MemeVotes, 10>>;
 
-	#[view]
-	#[storage_mapper("addressVotes")]
-	fn address_votes(&self, address: &ManagedAddress) -> SingleValueMapper<AddressVotes>;
-
 	// TODO: Remove this if data is indexed on microservice side?
 	#[storage_mapper("periodMemes")]
 	fn period_memes(&self, period: u64) -> VecMapper<u64>;
@@ -353,4 +369,8 @@ pub trait MemesVoting: owner::OwnerModule
 	#[view]
 	#[storage_mapper("memeVotes")]
 	fn meme_votes(&self, nft_nonce: u64, period: u64) -> SingleValueMapper<u32>;
+
+	#[view]
+	#[storage_mapper("referer")]
+	fn referer(&self, address: &ManagedAddress) -> SingleValueMapper<ManagedAddress>;
 }

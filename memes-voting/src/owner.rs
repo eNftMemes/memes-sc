@@ -1,7 +1,7 @@
+use elrond_wasm::api::ED25519_SIGNATURE_BYTE_LEN;
+
 elrond_wasm::imports!();
 elrond_wasm::derive_imports!();
-
-use elrond_wasm::api::ED25519_SIGNATURE_BYTE_LEN;
 
 // caller + url + some extra
 // 32 + (4 + 74) + 16
@@ -111,6 +111,12 @@ pub trait OwnerModule {
 
     #[only_owner]
     #[endpoint]
+    fn set_staking_sc(&self, sc: &ManagedAddress) {
+        self.staking_sc().set(sc);
+    }
+
+    #[only_owner]
+    #[endpoint]
     fn set_signer(&self, new_signer: ManagedAddress) {
         self.signer().set(&new_signer);
     }
@@ -207,6 +213,10 @@ pub trait OwnerModule {
     #[view]
     #[storage_mapper("auctionSc")]
     fn auction_sc(&self) -> SingleValueMapper<ManagedAddress>;
+
+    #[view]
+    #[storage_mapper("stakingSc")]
+    fn staking_sc(&self) -> SingleValueMapper<ManagedAddress>;
 
     #[storage_mapper("signer")]
     fn signer(&self) -> SingleValueMapper<ManagedAddress>;
