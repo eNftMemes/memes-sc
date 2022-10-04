@@ -16,7 +16,10 @@
 
 `erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --chain="D" --metadata-payable-by-sc --send "BECH32_ADDRESS" --arguments START_PERIOD_TIMESTAMP`
 
-Contracts are upgradable by default. START_PERIOD_TIMESTAMP will be ignored for upgrades 
+Contracts are upgradable by default. START_PERIOD_TIMESTAMP will be ignored for upgrades
+
+Devnet:
+`erdpy --verbose contract upgrade --project=memes-voting --pem="devnet.pem" --gas-limit=100000000 --proxy="https://devnet-gateway.elrond.com" --outfile="memes-voting.json" --recall-nonce --chain="D" --metadata-payable-by-sc --send "erd1qqqqqqqqqqqqqpgqw6fdmgw7hk4tw6ljjrxymh8ah9lryq4flqpsgu6d86" --arguments 0`
 
 ## Issue token
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --value=50000000000000000 --gas-limit=10000000 --function="issue_token" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xHEX_ENCODING_OF_NAME" "0xHEX_ENCODING_OF_TICKER"`
