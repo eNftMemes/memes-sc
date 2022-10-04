@@ -223,6 +223,19 @@ pub trait MemesAuction: owner::OwnerModule {
         self.convert_to_top_nft(&self.blockchain().get_caller(), &nonce);
     }
 
+    #[endpoint]
+    fn use_referer(&self, address: &ManagedAddress, referer_address: &ManagedAddress, _number_of_referals: u8) {
+        let caller = self.blockchain().get_caller();
+
+        require!(caller == self.staking_sc().get(), "Only staking contract can call this");
+
+        let referer = self.referer(&address);
+
+        require!(referer.is_empty(), "Address already has a referer set");
+
+        referer.set(referer_address);
+    }
+
     // private
 
     fn try_get_auction(&self, period: u64, nonce: u64) -> Auction<Self::Api> {
@@ -436,4 +449,8 @@ pub trait MemesAuction: owner::OwnerModule {
     #[view]
     #[storage_mapper("tokenIdentifier")]
     fn token_identifier(&self) -> SingleValueMapper<TokenIdentifier>;
+
+    #[view]
+    #[storage_mapper("referer")]
+    fn referer(&self, address: &ManagedAddress) -> SingleValueMapper<ManagedAddress>;
 }

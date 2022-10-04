@@ -23,6 +23,26 @@ pub struct TopMemeAttributes<M: ManagedTypeApi> {
     pub creator: ManagedAddress<M>,
 }
 
+mod voting_proxy {
+    elrond_wasm::imports!();
+
+    #[elrond_wasm::proxy]
+    pub trait Voting {
+        #[endpoint]
+        fn use_referer(&self, address: &ManagedAddress, referer_address: &ManagedAddress, _number_of_referals: u8);
+    }
+}
+
+mod auction_proxy {
+    elrond_wasm::imports!();
+
+    #[elrond_wasm::proxy]
+    pub trait Auction {
+        #[endpoint]
+        fn use_referer(&self, address: &ManagedAddress, referer_address: &ManagedAddress, _number_of_referals: u8);
+    }
+}
+
 #[elrond_wasm::contract]
 pub trait StakingContract: base::BaseModule
     + elrond_wasm_modules::pause::PauseModule
@@ -217,8 +237,24 @@ pub trait StakingContract: base::BaseModule
 
         number_of_referals_mapper.set(number_of_referals);
 
-        // TODO: Call voting & auction contracts
+        let () = self.voting_proxy()
+            .contract(self.voting_sc().get())
+            .use_referer(&caller, referer_address, number_of_referals)
+            .execute_on_dest_context();
+
+        let () = self.auction_proxy()
+            .contract(self.auction_sc().get())
+            .use_referer(&caller, referer_address, number_of_referals)
+            .execute_on_dest_context();
     }
+
+    #[proxy]
+    fn voting_proxy(&self) -> voting_proxy::Proxy<Self::Api>;
+
+    #[proxy]
+    fn auction_proxy(&self) -> auction_proxy::Proxy<Self::Api>;
+
+    // private
 
     fn claim_rewards_common(
         &self,

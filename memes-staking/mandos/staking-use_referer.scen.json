@@ -6,6 +6,146 @@
       "path": "staking-stake.scen.json"
     },
     {
+      "step": "setState",
+      "accounts": {
+        "sc:staking_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingSc": "sc:voting_contract",
+            "str:auctionSc": "sc:auction_contract",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+
+            "str:minimumLockBlocks": "43,200",
+            "str:division_safety_constant": "1000000000",
+
+            "str:farm_token_id": "str:METASMEME-745e9b",
+            "str:stake_modifier_total": "100",
+
+            "str:stakedRarity|address:my_address": "1",
+
+            "str:last_reward_block_nonce": "1"
+          },
+          "code": "file:../output/memes-staking.wasm",
+          "esdt": {
+            "str:METASMEME-745e9b": {
+              "instances": [],
+              "lastNonce": "1",
+              "roles": [
+                "ESDTRoleNFTCreate",
+                "ESDTRoleNFTBurn",
+                "ESDTRoleNFTAddQuantity"
+              ]
+            },
+            "str:TMEMENFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": ["str:nft-create-uri"]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "newAddresses": [
+        {
+          "creatorAddress": "address:my_address",
+          "creatorNonce": "1",
+          "newAddress": "sc:voting_contract"
+        },
+        {
+          "creatorAddress": "address:my_address",
+          "creatorNonce": "2",
+          "newAddress": "sc:auction_contract"
+        }
+      ]
+    },
+    {
+      "step": "scDeploy",
+      "txId": "deploy",
+      "tx": {
+        "from": "address:my_address",
+        "contractCode": "file:../../memes-voting/output/memes-voting.wasm",
+        "value": "0",
+        "arguments": [
+          "123,000"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scDeploy",
+      "txId": "deploy",
+      "tx": {
+        "from": "address:my_address",
+        "contractCode": "file:../../memes-auction/output/memes-auction.wasm",
+        "value": "0",
+        "arguments": [
+          "sc:voting_contract",
+          "str:MEMENFT-745e9b",
+          "5"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-staking-sc-voting",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:voting_contract",
+        "function": "set_staking_sc",
+        "arguments": [
+          "sc:staking_contract"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": [],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-staking-sc-auction",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "set_staking_sc",
+        "arguments": [
+          "sc:staking_contract"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": [],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
       "step": "scCall",
       "txId": "use_referer",
       "tx": {
@@ -49,7 +189,7 @@
     },
     {
       "step": "scCall",
-      "txId": "use_referer",
+      "txId": "use_referer-other_address",
       "tx": {
         "from": "address:other_address",
         "to": "sc:staking_contract",
@@ -58,7 +198,7 @@
         "arguments": [
           "address:my_address"
         ],
-        "gasLimit": "6,000,000",
+        "gasLimit": "13,000,000",
         "gasPrice": "0"
       },
       "expect": {
@@ -71,7 +211,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "3",
+          "nonce": "7",
           "balance": "1,000,000",
           "storage": {},
           "esdt": {
@@ -109,12 +249,46 @@
           "balance": "0",
           "owner": "address:my_address"
         },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:stakingSc": "sc:staking_contract",
+
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes.len": "0",
+            "str:periodTime": "604800",
+
+            "str:addressExtraVotesPerPeriod|address:other_address": "u8:15",
+            "str:addressExtraVotesPerPeriod|address:my_address": "u8:1",
+
+            "str:referer|address:other_address": "address:my_address"
+          },
+          "owner": "address:my_address",
+          "code": "file:../../memes-voting/output/memes-voting.wasm"
+        },
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "sc:voting_contract",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:bidCutPercentage": "1000",
+            "str:minBidStart": "5",
+
+            "str:stakingSc": "sc:staking_contract",
+
+            "str:referer|address:other_address": "address:my_address"
+          },
+          "code": "file:../../memes-auction/output/memes-auction.wasm"
+        },
         "sc:staking_contract": {
           "nonce": "0",
           "balance": "0",
           "storage": {
-            "str:votingSc": "address:voting_contract",
-            "str:auctionSc": "address:auction_contract",
+            "str:votingSc": "sc:voting_contract",
+            "str:auctionSc": "sc:auction_contract",
             "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
 
             "str:minimumLockBlocks": "43,200",

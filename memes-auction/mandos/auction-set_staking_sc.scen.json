@@ -1,0 +1,97 @@
+{
+  "name": "creator set nft signer",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "auction-init.json"
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "address:staking_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-staking-sc-error",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:auction_contract",
+        "function": "set_staking_sc",
+        "arguments": ["address:staking_contract"],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Endpoint can only be called by owner",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "set-staking-sc",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:auction_contract",
+        "function": "set_staking_sc",
+        "arguments": [
+          "address:staking_contract"
+        ],
+        "gasLimit": "100,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "out": [],
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {}
+        },
+        "address:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:staking_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "storage": {
+            "str:votingContract": "address:voting_contract",
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+            "str:tokenIdentifierTop": "str:TMEMENFT-745e9b",
+            "str:bidCutPercentage": "1000",
+            "str:minBidStart": "5",
+
+            "str:stakingSc": "address:staking_contract"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-auction.wasm"
+        }
+      }
+    }
+  ]
+}

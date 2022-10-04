@@ -23,14 +23,18 @@ elrond_wasm_node::wasm_endpoints! {
         period_auctioned_memes
         period_auctions_memes_all
         period_meme_auction
+        referer
         set_bid_cut_percentage
         set_custom_attributes
         set_local_roles
         set_min_bid_start
+        set_staking_sc
+        staking_sc
         start_auction
         token_identifier
         token_identifier_top
         upgrade_token
+        use_referer
         voting_contract
     )
 }

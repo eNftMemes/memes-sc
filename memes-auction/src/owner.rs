@@ -150,6 +150,12 @@ pub trait OwnerModule {
         self.add_auction(&period, &bid_cut_percentage, &min_bid_start, &multiplier, &nonce);
     }
 
+    #[only_owner]
+    #[endpoint]
+    fn set_staking_sc(&self, sc: &ManagedAddress) {
+        self.staking_sc().set(sc);
+    }
+
     // private
 
     fn add_auction(&self, period: &u64, bid_cut_percentage: &u16, min_bid_start: &BigUint, multiplier: &u8, nonce: &u64) {
@@ -220,4 +226,8 @@ pub trait OwnerModule {
     #[view]
     #[storage_mapper("customAuctionPeriods")]
     fn custom_auction_periods(&self) -> VecMapper<u64>;
+
+    #[view]
+    #[storage_mapper("stakingSc")]
+    fn staking_sc(&self) -> SingleValueMapper<ManagedAddress>;
 }
