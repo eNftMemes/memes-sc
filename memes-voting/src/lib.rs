@@ -179,7 +179,10 @@ pub trait MemesVoting: owner::OwnerModule
 		referer.set(referer_address);
 
 		self.add_address_votes(address, EXTRA_VOTES_IF_REFERRED);
-		self.add_address_votes(referer_address, self.calculate_extra_votes_for_referers(number_of_referals));
+
+		if self.should_add_vote_for_referal(number_of_referals) {
+			self.add_address_votes(referer_address, EXTRA_VOTES_PER_REFERAL);
+		}
 	}
 
 	// private

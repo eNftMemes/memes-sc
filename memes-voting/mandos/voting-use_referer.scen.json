@@ -1,0 +1,450 @@
+{
+  "name": "voting use referer",
+  "steps": [
+    {
+      "step": "externalSteps",
+      "path": "voting-set_staking_sc.scen.json"
+    },
+    {
+      "step": "setState",
+      "accounts": {
+        "address:third_address": {
+          "nonce": "0",
+          "balance": "0"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use-referer-staking-error",
+      "tx": {
+        "from": "address:other_address",
+        "to": "sc:voting_contract",
+        "function": "use_referer",
+        "arguments": ["address:other_address", "address:my_address", "u8:1"],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "4",
+        "message": "str:Only staking contract can call this",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use-referer-other_address",
+      "tx": {
+        "from": "address:staking_contract",
+        "to": "sc:voting_contract",
+        "function": "use_referer",
+        "arguments": ["address:other_address", "address:my_address", "u8:1"],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:third_address": {
+          "nonce": "0",
+          "balance": "0"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:staking_contract": {
+          "nonce": "1",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
+          "storage": {
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:auctionSc": "address:auction_contract",
+            "str:stakingSc": "address:staking_contract",
+
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes.len": "0",
+            "str:periodTime": "604800",
+
+            "str:addressExtraVotesPerPeriod|address:other_address": "u8:15",
+            "str:addressExtraVotesPerPeriod|address:my_address": "u8:1",
+
+            "str:referer|address:other_address": "address:my_address"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use-referer-other_address-again",
+      "tx": {
+        "from": "address:staking_contract",
+        "to": "sc:voting_contract",
+        "function": "use_referer",
+        "arguments": ["address:other_address", "address:my_address", "u8:1"],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Address already has a referer set",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:third_address": {
+          "nonce": "0",
+          "balance": "0"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:staking_contract": {
+          "nonce": "2",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
+          "storage": {
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:auctionSc": "address:auction_contract",
+            "str:stakingSc": "address:staking_contract",
+
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes.len": "0",
+            "str:periodTime": "604800",
+
+            "str:addressExtraVotesPerPeriod|address:other_address": "u8:15",
+            "str:addressExtraVotesPerPeriod|address:my_address": "u8:1",
+
+            "str:referer|address:other_address": "address:my_address"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use-referer-my_address",
+      "tx": {
+        "from": "address:staking_contract",
+        "to": "sc:voting_contract",
+        "function": "use_referer",
+        "arguments": ["address:my_address", "address:third_address", "u8:1"],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:third_address": {
+          "nonce": "0",
+          "balance": "0"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:staking_contract": {
+          "nonce": "3",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
+          "storage": {
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:auctionSc": "address:auction_contract",
+            "str:stakingSc": "address:staking_contract",
+
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes.len": "0",
+            "str:periodTime": "604800",
+
+            "str:addressExtraVotesPerPeriod|address:other_address": "u8:15",
+            "str:addressExtraVotesPerPeriod|address:my_address": "u8:16",
+            "str:addressExtraVotesPerPeriod|address:third_address": "u8:1",
+
+            "str:referer|address:other_address": "address:my_address",
+            "str:referer|address:my_address": "address:third_address"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "use-referer-third_address",
+      "tx": {
+        "from": "address:staking_contract",
+        "to": "sc:voting_contract",
+        "function": "use_referer",
+        "arguments": ["address:third_address", "address:my_address", "u8:2"],
+        "gasLimit": "5,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "status": "0",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
+      "step": "checkState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:other_address": {
+          "nonce": "2",
+          "balance": "1,000,000",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          },
+          "storage": {}
+        },
+        "address:third_address": {
+          "nonce": "0",
+          "balance": "0"
+        },
+        "address:auction_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "address:staking_contract": {
+          "nonce": "4",
+          "balance": "0",
+          "owner": "address:my_address"
+        },
+        "sc:voting_contract": {
+          "nonce": "0",
+          "balance": "0",
+          "esdt": {
+            "str:MEMENFT-745e9b": {
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0",
+              "roles": [
+                "ESDTRoleNFTCreate"
+              ]
+            }
+          },
+          "storage": {
+            "str:tokenIdentifier": "str:MEMENFT-745e9b",
+
+            "str:categories|``.node_links|u32:1": "u32:0|u32:2",
+            "str:categories|``.value|u32:1": "str:funny",
+            "str:categories|``.node_id|nested:str:funny": "1",
+
+            "str:categories|``.node_links|u32:2": "u32:1|u32:0",
+            "str:categories|``.value|u32:2": "str:random",
+            "str:categories|``.node_id|nested:str:random": "2",
+            "str:categories|``.info": "u32:2|u32:1|u32:2|u32:2",
+
+            "str:auctionSc": "address:auction_contract",
+            "str:stakingSc": "address:staking_contract",
+
+            "str:periods.len": "1",
+            "str:periods.item|u32:1": "123,000",
+            "str:periodMemes.len": "0",
+            "str:periodTime": "604800",
+
+            "str:addressExtraVotesPerPeriod|address:other_address": "u8:15",
+            "str:addressExtraVotesPerPeriod|address:my_address": "u8:17",
+            "str:addressExtraVotesPerPeriod|address:third_address": "u8:16",
+
+            "str:referer|address:other_address": "address:my_address",
+            "str:referer|address:my_address": "address:third_address",
+            "str:referer|address:third_address": "address:my_address"
+          },
+          "owner": "address:my_address",
+          "code": "file:../output/memes-voting.wasm"
+        }
+      }
+    }
+  ]
+}
