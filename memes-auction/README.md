@@ -39,7 +39,7 @@ eg: (TopNftMemes - TNFTMEMES)
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_local_roles" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D"`
 
 ## Linking staking contract
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_staking_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "STAKING_CONTRACT"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_staking_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "STAKING_CONTRACT"`
 
 ## Query token id
 `erdpy contract query $CONTRACT_ADDRESS --function="token_identifier_top" --proxy="https://devnet-gateway.elrond.com"`

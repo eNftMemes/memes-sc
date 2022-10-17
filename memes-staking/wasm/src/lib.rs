@@ -9,6 +9,7 @@ elrond_wasm_node::wasm_endpoints! {
     (
         callBack
         all_reward_tokens
+        all_reward_tokens_info
         auction_sc
         calculate_rewards_for_given_position
         calculate_rewards_for_multiple_positions

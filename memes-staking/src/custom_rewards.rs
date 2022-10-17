@@ -6,7 +6,7 @@ elrond_wasm::derive_imports!();
 pub const MAX_PERCENT: u64 = 10_000_000; // 100%, reached in 69.4444 days for 10 per block (144000 per day)
 pub const PERCENT_PER_BLOCK: u64 = 10; // 0.0001% per block = 1.44% per day (14400 blocks per day)
 
-#[derive(TopEncode, TopDecode, TypeAbi)]
+#[derive(TopEncode, TopDecode, NestedEncode, TypeAbi)]
 pub struct Token<M: ManagedTypeApi> {
     pub start_rewards_block: u64,
     pub end_rewards_block: u64,
@@ -231,11 +231,23 @@ pub trait CustomRewardsModule:
         return &reward_token.reward_per_block * &percentage / &BigUint::from(PERCENT_PER_BLOCK) / self.division_safety_constant().get();
     }
 
+    #[view]
+    fn all_reward_tokens_info(&self) -> MultiValueEncoded<(EgldOrEsdtTokenIdentifier, Token<Self::Api>)> {
+        let mut result: MultiValueEncoded<(EgldOrEsdtTokenIdentifier, Token<Self::Api>)> = MultiValueEncoded::new();
+
+        for token in self.all_reward_tokens().iter() {
+            let reward_token = self.reward_tokens(&token).get();
+
+            result.push((token, reward_token));
+        }
+
+        return result;
+    }
+
     #[view(getDivisionSafetyConstant)]
     #[storage_mapper("division_safety_constant")]
     fn division_safety_constant(&self) -> SingleValueMapper<BigUint>;
 
-    // TODO: Add a view to get all tokens info
     #[view]
     #[storage_mapper("reward_tokens")]
     fn reward_tokens(&self, token: &EgldOrEsdtTokenIdentifier) -> SingleValueMapper<Token<Self::Api>>;

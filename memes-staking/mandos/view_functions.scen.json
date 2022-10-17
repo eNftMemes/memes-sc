@@ -146,6 +146,18 @@
         "out": ["nested:str:EGLD|biguint:170", "nested:str:OTOKEN-123456|biguint:68", "nested:str:EGLD|biguint:94", "nested:str:OTOKEN-123456|biguint:37", "nested:str:EGLD|biguint:94", "nested:str:OTOKEN-123456|biguint:37"],
         "status": "0"
       }
+    },
+    {
+      "step": "scQuery",
+      "txId": "allRewardTokenInfo",
+      "tx": {
+        "to": "sc:staking_contract",
+        "function": "all_reward_tokens_info"
+      },
+      "expect": {
+        "out": ["nested:str:EGLD|u64:1|u64:1000001|biguint:25,000|biguint:25,000,000", "nested:str:OTOKEN-123456|u64:1|u64:1000001|biguint:10,000|biguint:10,000,000"],
+        "status": "0"
+      }
     }
   ]
 }

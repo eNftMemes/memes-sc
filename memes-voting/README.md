@@ -52,7 +52,7 @@ On Devnet the signer is wallet address `erd1zq5zmnqjdlymzxg6av0623vw8ke6fmp8qkk4
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_auction_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "0xSPECIAL_HEX_ENCODING_OF_AUCTION_CONTRACT"`
 
 ## Linking staking contract
-`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=100000000 --function="set_staking_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "STAKING_CONTRACT"`
+`erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_staking_sc" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "STAKING_CONTRACT"`
 
 ## Set period time
 `erdpy --verbose contract call $CONTRACT_ADDRESS --pem="devnet.pem" --gas-limit=10000000 --function="set_period_time" --proxy="https://devnet-gateway.elrond.com" --recall-nonce --send --chain="D" --arguments "PERIOD_TIME_IN_SECONDS"`
