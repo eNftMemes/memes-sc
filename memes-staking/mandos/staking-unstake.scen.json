@@ -68,7 +68,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "3",
+          "nonce": "4",
           "balance": "1,000,000",
           "storage": {},
           "esdt": {
@@ -81,6 +81,23 @@
                   "hash": "",
                   "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
                   "uri": ["str:nft-create-uri"]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:OMEMENFT-654321": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
                 }
               ],
               "nonce": "0",

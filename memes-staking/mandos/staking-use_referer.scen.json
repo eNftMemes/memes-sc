@@ -3,11 +3,35 @@
   "steps": [
     {
       "step": "externalSteps",
-      "path": "staking-stake.scen.json"
+      "path": "staking-init.json"
     },
     {
       "step": "setState",
       "accounts": {
+        "address:my_address": {
+          "nonce": "1",
+          "balance": "1,000,000",
+          "storage": {},
+          "esdt": {
+            "str:TMEMENFT-745e9b": {
+              "instances": [],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:METASMEME-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "hash": "",
+                  "attributes": "u8:1|address:my_address|u64:1|u64:1|biguint:0"
+                }
+              ],
+              "roles": []
+            }
+          }
+        },
         "sc:staking_contract": {
           "nonce": "0",
           "balance": "0",

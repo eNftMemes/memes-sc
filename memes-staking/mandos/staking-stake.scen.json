@@ -6,6 +6,76 @@
       "path": "staking-init.json"
     },
     {
+      "step": "setState",
+      "accounts": {
+        "address:my_address": {
+          "nonce": "0",
+          "balance": "1,000,000",
+          "storage": {},
+          "esdt": {
+            "str:TMEMENFT-745e9b": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            },
+            "str:OMEMENFT-654321": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": "scCall",
+      "txId": "stakeOther",
+      "tx": {
+        "from": "address:my_address",
+        "to": "sc:staking_contract",
+        "function": "stake",
+        "value": "0",
+        "arguments": [],
+        "esdt": {
+          "tokenIdentifier": "str:OMEMENFT-654321",
+          "nonce": "1",
+          "value": "1"
+        },
+        "gasLimit": "7,000,000",
+        "gasPrice": "0"
+      },
+      "expect": {
+        "message": "str:Nft is not of the correct type",
+        "status": "4",
+        "gas": "*",
+        "refund": "*"
+      }
+    },
+    {
       "step": "scCall",
       "txId": "stake",
       "tx": {
@@ -32,7 +102,7 @@
       "step": "checkState",
       "accounts": {
         "address:my_address": {
-          "nonce": "1",
+          "nonce": "2",
           "balance": "1,000,000",
           "storage": {},
           "esdt": {
@@ -52,6 +122,23 @@
                 }
               ],
               "roles": []
+            },
+            "str:OMEMENFT-654321": {
+              "instances": [
+                {
+                  "nonce": "1",
+                  "balance": "1",
+                  "royalties": "500",
+                  "hash": "",
+                  "attributes": "u8:1|u64:1|u64:123,000|nested:str:funny|address:my_address",
+                  "uri": [
+                    "str:nft-create-uri"
+                  ]
+                }
+              ],
+              "nonce": "0",
+              "balance": "0",
+              "lastNonce": "0"
             }
           }
         },
