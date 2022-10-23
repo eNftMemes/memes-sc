@@ -95,6 +95,8 @@ pub trait CustomRewardsModule:
         );
     }
 
+    // TODO: Add function to withdraw rewards OR modify about function to send remaining rewards when a new reward period is starting
+
     fn generate_aggregated_rewards(&self, current_block_nonce: u64) {
         let last_reward_nonce_mapper = self.last_reward_block_nonce();
 
